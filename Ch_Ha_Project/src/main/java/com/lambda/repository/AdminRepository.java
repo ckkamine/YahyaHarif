@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.lambda.entities.Administrateur;
 
-public interface adminRepo extends JpaRepository<Administrateur, Long>{
+public interface AdminRepository extends JpaRepository<Administrateur, Long>{
 
 }

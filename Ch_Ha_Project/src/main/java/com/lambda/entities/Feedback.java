@@ -19,6 +19,8 @@ public class Feedback implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long idFeedback;
+	@ManyToOne
+		@JoinColumn(name="COL_ID")
 	private Collaborateur collaborateur;
 	@ManyToOne(fetch=FetchType.LAZY)
 	  @JoinColumn(name="ENCA_ID")
@@ -128,59 +130,6 @@ public class Feedback implements Serializable{
 	}
 	public void setQualifications(Collection<Qualification> qualifications) {
 		this.qualifications = qualifications;
-	}
-	
-	
-	
-}
-@Entity
-class Qualification implements Serializable{
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long idQualification;
-	private String theme;
-	private String qualification;
-	private String remarque;
-	
-	public Qualification(){}
-
-	public Qualification(String theme, String qualification, String remarque) {
-		super();
-		this.theme = theme;
-		this.qualification = qualification;
-		this.remarque = remarque;
-	}
-
-	public Long getIdQualification() {
-		return idQualification;
-	}
-
-	public void setIdQualification(Long idQualification) {
-		this.idQualification = idQualification;
-	}
-
-	public String getTheme() {
-		return theme;
-	}
-
-	public void setTheme(String theme) {
-		this.theme = theme;
-	}
-
-	public String getQualification() {
-		return qualification;
-	}
-
-	public void setQualification(String qualification) {
-		this.qualification = qualification;
-	}
-
-	public String getRemarque() {
-		return remarque;
-	}
-
-	public void setRemarque(String remarque) {
-		this.remarque = remarque;
 	}
 	
 	
