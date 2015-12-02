@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Feedback implements Serializable{
 	@Id
@@ -65,6 +67,7 @@ public class Feedback implements Serializable{
 	public void setCollaborateur(Collaborateur collaborateur) {
 		this.collaborateur = collaborateur;
 	}
+	@JsonIgnore
 	public Encadrant getEncadrant() {
 		return encadrant;
 	}

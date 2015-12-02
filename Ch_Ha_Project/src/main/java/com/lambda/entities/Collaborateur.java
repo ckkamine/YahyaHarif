@@ -10,6 +10,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.JoinColumn;
 
 @Entity
@@ -33,7 +36,7 @@ public class Collaborateur extends User{
 	      inverseJoinColumns={ @JoinColumn(name="OBJECTIF_ID") }
 	  )
 	private Collection<Objectif> objectifs;
-	private String posteActuel;
+	
 	
 	public Collaborateur(){
 		
@@ -41,18 +44,19 @@ public class Collaborateur extends User{
 
 	public Collaborateur(String username, String password, String email) {
 		super(username, password, email);
-		this.dateProchainBap= addYear(getDateRecrutement());
+		this.dateProchainBap= addYear(this.getDateRecrutement());
 	}
 
 	public Collaborateur(String username, String password, String firstName, String lastName, String email,
 			String adresse, String telephone) {
 		super(username, password, firstName, lastName, email, adresse, telephone);
-		this.dateProchainBap= addYear(getDateRecrutement());
+		this.dateProchainBap= addYear(this.getDateRecrutement());
 	}
 
 	public Date addYear(Date d){
-		 d.setTime(d.getTime()+ 1000L * 60 * 60 * 24 * 365);
-		 return d;
+		Date r= d;
+		r.setTime(r.getTime()+ 1000L * 60 * 60 * 24 * 365);
+		 return r; 
 	}
 
 	
@@ -64,6 +68,7 @@ public class Collaborateur extends User{
 		this.dateProchainBap = dateProchainBap;
 	}
 
+	@JsonIgnore
 	public Collection<Projet> getProjets() {
 		return projets;
 	}
@@ -80,14 +85,9 @@ public class Collaborateur extends User{
 		this.objectifs = objectifs;
 	}
 
-	public String getPosteActuel() {
-		return posteActuel;
-	}
+	
 
-	public void setPosteActuel(String posteActuel) {
-		this.posteActuel = posteActuel;
-	}
-
+	@JsonIgnore
 	public BAP getBap() {
 		return bap;
 	}

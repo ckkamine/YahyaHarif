@@ -13,9 +13,23 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 @Entity
 @Inheritance(strategy= InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="TYPE", discriminatorType=DiscriminatorType.STRING, length=3)
+
+@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.PROPERTY, property="role")
+@JsonSubTypes({
+		@Type(name="MAG", value=Manager.class),
+		@Type(name="ENC", value=Encadrant.class),
+		@Type(name="COL", value=Collaborateur.class),
+		@Type(name="ADM", value=Administrateur.class)
+})
 public class User implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -31,6 +45,7 @@ public class User implements Serializable{
 	private String adresse;
 	private String telephone;
 	private Date dateRecrutement;
+	private String posteActuel;
 	
 	public User() {
 		super();
@@ -74,11 +89,12 @@ public class User implements Serializable{
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
 
+	@JsonSetter
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -129,6 +145,14 @@ public class User implements Serializable{
 
 	public void setDateRecrutement(Date dateRecrutement) {
 		this.dateRecrutement = dateRecrutement;
+	}
+
+	public String getPosteActuel() {
+		return posteActuel;
+	}
+
+	public void setPosteActuel(String posteActuel) {
+		this.posteActuel = posteActuel;
 	}
 	
 	

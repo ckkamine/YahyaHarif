@@ -8,6 +8,8 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @DiscriminatorValue("MAG")
 public class Manager extends User{
@@ -26,6 +28,7 @@ public class Manager extends User{
 		super(username, password, firstName, lastName, email, adresse, telephone);
 	}
 
+	@JsonIgnore
 	public Collection<BAP> getBaps() {
 		return baps;
 	}

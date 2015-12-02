@@ -7,12 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @DiscriminatorValue("ENC")
 public class Encadrant extends User{
 	
-	@OneToMany(mappedBy="encadrant")
-	private Collection<Feedback> feedbacks;
+
 	@OneToMany(mappedBy="chefProjet")
 	private Collection<Projet> projets;
 	
@@ -23,19 +24,13 @@ public class Encadrant extends User{
 		
 	}
 
-	public Collection<Feedback> getFeedbacks() {
-		return feedbacks;
-	}
-
-	public void setFeedbacks(Collection<Feedback> feedbacks) {
-		this.feedbacks = feedbacks;
-	}
 
 	public Encadrant(String username, String password, String firstName, String lastName, String email, String adresse,
 			String telephone) {
 		super(username, password, firstName, lastName, email, adresse, telephone);
 	}
 
+	@JsonIgnore
 	public Collection<Projet> getProjets() {
 		return projets;
 	}
