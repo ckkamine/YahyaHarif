@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lambda.entities.ArchiveBap;
 import com.lambda.entities.BAP;
 import com.lambda.entities.Bilan;
+import com.lambda.entities.Collaborateur;
+import com.lambda.entities.Encadrant;
 import com.lambda.entities.Objectif;
 import com.lambda.entities.Projet;
 import com.lambda.entities.User;
@@ -174,6 +176,16 @@ public class AdminRestService {
 	public Page<Objectif> findByMcObjectif(@RequestParam String mc,
 			@RequestParam int page) {
 		return adminMetier.findByMcObjectif(mc, page);
+	}
+	
+	@RequestMapping(value="/encadrants", method= RequestMethod.GET)
+	public List<Encadrant> getAllEncadrant() {
+		return adminMetier.getAllEncadrant();
+	}
+
+	@RequestMapping(value="/collaborateurs", method=RequestMethod.GET)
+	public List<Collaborateur> getAllCollaborateur() {
+		return adminMetier.getAllCollaborateur();
 	}
 	
 	

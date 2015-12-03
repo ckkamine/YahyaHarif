@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -38,7 +39,7 @@ public class Feedback implements Serializable{
 	private Integer totalPoids;
 	private double noteGlobal;
 	private Integer nombreJourValorise;
-	@OneToMany
+	@OneToMany(cascade=CascadeType.REMOVE)
 	  @JoinColumn(name="FEED_ID")
 	private Collection<Qualification> qualifications;
 	

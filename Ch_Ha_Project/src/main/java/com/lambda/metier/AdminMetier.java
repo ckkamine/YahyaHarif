@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import com.lambda.entities.ArchiveBap;
 import com.lambda.entities.BAP;
 import com.lambda.entities.Bilan;
+import com.lambda.entities.Collaborateur;
+import com.lambda.entities.Encadrant;
 import com.lambda.entities.Objectif;
 import com.lambda.entities.Projet;
 import com.lambda.entities.User;
@@ -45,6 +47,9 @@ public interface AdminMetier {
 	Page<ArchiveBap> findByMcArchiveBap(String mc,int page);
 	Page<Projet> findByMcProjet(String mc,int page);
 	Page<Objectif> findByMcObjectif(String mc,int page);
+	List<Encadrant> getAllEncadrant();
+	List<Collaborateur> getAllCollaborateur();
+	
 	
 	
 	

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -22,7 +23,7 @@ public class Objectif implements Serializable{
 	private Date dateCreation;
 	private String type;
 	private boolean archive;
-	@OneToMany
+	@OneToMany(cascade=CascadeType.REMOVE)
 	  @JoinColumn(name="OBJEC_ID")
 	private Collection<Description> descriptions;
 	

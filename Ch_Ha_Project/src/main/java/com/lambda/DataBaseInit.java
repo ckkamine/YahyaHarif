@@ -10,9 +10,11 @@ import org.springframework.stereotype.Component;
 import com.lambda.entities.Collaborateur;
 import com.lambda.entities.Encadrant;
 import com.lambda.entities.Feedback;
+import com.lambda.entities.Objectif;
 import com.lambda.repository.CollaborateurRepository;
 import com.lambda.repository.EncadrantRepository;
 import com.lambda.repository.FeedbackRepository;
+import com.lambda.repository.ObjectifRepository;
 
 
 
@@ -26,12 +28,15 @@ public class DataBaseInit {
 	EncadrantRepository eR;
 	@Autowired
 	FeedbackRepository fR;
+	@Autowired
+	ObjectifRepository or;
    
 		@Autowired
-		public DataBaseInit(CollaborateurRepository userDao, EncadrantRepository eR, FeedbackRepository fR) {
+		public DataBaseInit(CollaborateurRepository userDao, EncadrantRepository eR, FeedbackRepository fR, ObjectifRepository or) {
 			this.cR= userDao;
 			this.eR= eR;
 			this.fR= fR;
+			this.or= or;
 		}
 //		this.userRepository = userDao;
 //		this.cl= cr;
@@ -51,6 +56,8 @@ public class DataBaseInit {
 			fR.save(f);
 		}
 		
+		Objectif o=  new Objectif("nom", "type");
+		or.save(o);
 		
 	}
 	

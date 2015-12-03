@@ -3,6 +3,7 @@ package com.lambda.entities;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,7 +20,7 @@ import javax.persistence.JoinColumn;
 @DiscriminatorValue("COL")
 public class Collaborateur extends User{
 	
-	@OneToOne
+	@OneToOne(cascade=CascadeType.REMOVE)
 	@JoinColumn(name="BAP_ID")
 	private BAP bap;
 	
@@ -29,7 +30,7 @@ public class Collaborateur extends User{
 			joinColumns={@JoinColumn(name="COL_ID")},
 		      inverseJoinColumns={@JoinColumn(name="PROJ_ID")})
 	private Collection<Projet> projets;
-	 @OneToMany
+	 @OneToMany(cascade=CascadeType.REMOVE)
 	  @JoinTable
 	  (   name="COL_OBJECTIFS",
 	      joinColumns={ @JoinColumn(name="COL_ID") },
