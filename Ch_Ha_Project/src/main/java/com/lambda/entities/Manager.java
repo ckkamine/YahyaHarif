@@ -14,8 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @DiscriminatorValue("MAG")
 public class Manager extends User{
 	
-	@OneToMany(mappedBy= "manager", fetch= FetchType.EAGER)
-	private Collection<BAP> baps;
+	
 	
 	public Manager(){}
 
@@ -28,14 +27,7 @@ public class Manager extends User{
 		super(username, password, firstName, lastName, email, adresse, telephone);
 	}
 
-	@JsonIgnore
-	public Collection<BAP> getBaps() {
-		return baps;
-	}
-
-	public void setBaps(Collection<BAP> baps) {
-		this.baps = baps;
-	}
+	
 	
 
 }

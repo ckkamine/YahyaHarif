@@ -31,7 +31,7 @@ public class ArchiveBap implements Serializable{
 	private Collection<Objectif> objectifsSortantes;
 	@ManyToOne
 	@JoinColumn(name="MAG_ID")
-	private Manager manger;
+	private Manager manager;
 	
 	public ArchiveBap(){}
 
@@ -47,7 +47,7 @@ public class ArchiveBap implements Serializable{
 		this.feedbacks = feedbacks;
 		this.locked = locked;
 		this.objectifsSortantes = objectifsSortantes;
-		this.manger = manger;
+		this.manager = manger;
 	}
 
 	public Long getIdBap() {
@@ -115,11 +115,11 @@ public class ArchiveBap implements Serializable{
 	}
 
 	public Manager getManger() {
-		return manger;
+		return manager;
 	}
 
 	public void setManger(Manager manger) {
-		this.manger = manger;
+		this.manager = manger;
 	}
 	
 	

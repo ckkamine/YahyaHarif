@@ -28,7 +28,7 @@ public class BAP extends Bilan{
 	  @JoinColumn(name="BAP_ID_S")
 	private Collection<Objectif> objectifsSortantes;
 	private String status;
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	  @JoinColumn(name="MAG_ID")
 	private Manager manager;
 	private int compteur;
@@ -37,10 +37,10 @@ public class BAP extends Bilan{
 	
 	
 
-	public BAP(Date dateBilan, Collaborateur collaborateur, Collection<Objectif> objectifsEntrantes, String decision, boolean locked, String status, Manager manager, int compteur) {
-		super(dateBilan, collaborateur, objectifsEntrantes);
+	public BAP(Date dateBilan, Collaborateur collaborateur,   boolean locked, String status, Manager manager, int compteur) {
+		super(dateBilan, collaborateur);
 		this.locked = true;
-		this.status = EN_COURS;
+		this.status = status;
 		this.manager = manager;
 		this.compteur = 0;
 	}

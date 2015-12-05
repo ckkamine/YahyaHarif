@@ -33,7 +33,7 @@ public class CollaborateurMetierImpl implements CollaborateurMetier{
 	@Override
 	public BAP getBapCourrant(Long matricule) {
 		// TODO Auto-generated method stub
-		return bapRepository.findByCollaborateur(matricule);
+		return bapRepository.findByCollaborateurPrivate(matricule);
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class CollaborateurMetierImpl implements CollaborateurMetier{
 	@Override
 	public void envoyerObjectifs(Long matricule) {
 		BAP b= bapRepository.findByCollaborateur(matricule);
-		if(b.getCompteur()<3){
+		if(b.getCompteur() < 3){
 			b.setStatus(b.VALIDE);
 			for(Objectif o: b.getObjectifsSortantes()){
 				if(!o.isValide()){
@@ -66,8 +66,9 @@ public class CollaborateurMetierImpl implements CollaborateurMetier{
 					break;
 				}
 			}
-			b.setCompteur(b.getCompteur()+1);
+			
 		}
+		b.setCompteur(b.getCompteur()+1);
 	}
 
 	@Override

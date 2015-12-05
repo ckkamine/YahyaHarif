@@ -7,13 +7,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.lambda.entities.BAP;
 import com.lambda.entities.Collaborateur;
 import com.lambda.entities.Encadrant;
 import com.lambda.entities.Feedback;
+import com.lambda.entities.Manager;
 import com.lambda.entities.Objectif;
+import com.lambda.metier.ManagerMetier;
+import com.lambda.repository.BapRepository;
 import com.lambda.repository.CollaborateurRepository;
 import com.lambda.repository.EncadrantRepository;
 import com.lambda.repository.FeedbackRepository;
+import com.lambda.repository.ManagerRepository;
 import com.lambda.repository.ObjectifRepository;
 
 
@@ -30,13 +35,20 @@ public class DataBaseInit {
 	FeedbackRepository fR;
 	@Autowired
 	ObjectifRepository or;
+	@Autowired
+	ManagerRepository mR;
+	@Autowired
+	BapRepository br;
    
 		@Autowired
-		public DataBaseInit(CollaborateurRepository userDao, EncadrantRepository eR, FeedbackRepository fR, ObjectifRepository or) {
+		public DataBaseInit(CollaborateurRepository userDao, EncadrantRepository eR, FeedbackRepository fR, ObjectifRepository or
+				, BapRepository br, ManagerRepository mR) {
 			this.cR= userDao;
 			this.eR= eR;
 			this.fR= fR;
 			this.or= or;
+			this.br= br;
+			this.mR= mR;
 		}
 //		this.userRepository = userDao;
 //		this.cl= cr;
@@ -49,13 +61,16 @@ public class DataBaseInit {
 		Encadrant e= new Encadrant("username", "password", "email");
 		cR.save(c);
 		eR.save(e);
+		Manager m= new Manager("manager", "password", "manager@lambda.com");
+		mR.save(m);
 		for(int i=0; i<4 ; i++){
 			Feedback f= new Feedback(new Date(), new Date(), "role", "commentaire", i);
 			if(i>0) f.setEncadrant(e);
 			list.add(f);
 			fR.save(f);
 		}
-		
+		BAP b= new BAP(new Date(), c, true, "En attente", m, 0);
+		br.save(b);
 		Objectif o=  new Objectif("nom", "type");
 		o.setEmploye(c);
 		o.setArchive(true);

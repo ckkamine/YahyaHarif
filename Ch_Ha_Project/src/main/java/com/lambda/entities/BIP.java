@@ -13,7 +13,7 @@ public class BIP extends Bilan{
 	public BIP(){}
 
 	public BIP(Date dateBilan, Collaborateur collaborateur, Collection<Objectif> objectifsEntrantes) {
-		super(dateBilan, collaborateur, objectifsEntrantes);
+		super(dateBilan, collaborateur);
 		// TODO Auto-generated constructor stub
 	}
 	
