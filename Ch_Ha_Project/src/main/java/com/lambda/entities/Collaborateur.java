@@ -30,13 +30,7 @@ public class Collaborateur extends User{
 			joinColumns={@JoinColumn(name="COL_ID")},
 		      inverseJoinColumns={@JoinColumn(name="PROJ_ID")})
 	private Collection<Projet> projets;
-	 @OneToMany(cascade=CascadeType.REMOVE)
-	  @JoinTable
-	  (   name="COL_OBJECTIFS",
-	      joinColumns={ @JoinColumn(name="COL_ID") },
-	      inverseJoinColumns={ @JoinColumn(name="OBJECTIF_ID") }
-	  )
-	private Collection<Objectif> objectifs;
+	
 	
 	
 	public Collaborateur(){
@@ -78,13 +72,6 @@ public class Collaborateur extends User{
 		this.projets = projets;
 	}
 
-	public Collection<Objectif> getObjectifs() {
-		return objectifs;
-	}
-
-	public void setObjectifs(Collection<Objectif> objectifs) {
-		this.objectifs = objectifs;
-	}
 
 	
 

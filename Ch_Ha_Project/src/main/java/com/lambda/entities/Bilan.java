@@ -81,6 +81,13 @@ public abstract class Bilan implements Serializable{
 	public void setObjectifsEntrantes(Collection<Objectif> objectifsEntrantes) {
 		this.objectifsEntrantes = objectifsEntrantes;
 	}
+
+	public Bilan(Date dateBilan, Collaborateur collaborateur, Collection<Objectif> objectifsEntrantes) {
+		super();
+		this.dateBilan = new Date();
+		this.collaborateur = collaborateur;
+		this.objectifsEntrantes = objectifsEntrantes;
+	}
 	
 	
 

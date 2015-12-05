@@ -1,6 +1,7 @@
 package com.lambda.entities;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -17,6 +18,7 @@ public class BAP extends Bilan{
 	public static final String EN_COURS= "En cours";
 	public static final String VALIDE= "Validé";
 	public static final String ANNULE= "Annulé";
+	public static final String REJETE= "Rejeté";
 
 	@OneToMany
 	  @JoinColumn(name="BAP_ID")
@@ -29,8 +31,21 @@ public class BAP extends Bilan{
 	@ManyToOne(fetch=FetchType.LAZY)
 	  @JoinColumn(name="MAG_ID")
 	private Manager manager;
+	private int compteur;
 	
 	public BAP(){}
+	
+	
+
+	public BAP(Date dateBilan, Collaborateur collaborateur, Collection<Objectif> objectifsEntrantes, String decision, boolean locked, String status, Manager manager, int compteur) {
+		super(dateBilan, collaborateur, objectifsEntrantes);
+		this.locked = true;
+		this.status = EN_COURS;
+		this.manager = manager;
+		this.compteur = 0;
+	}
+
+
 
 	public Collection<Feedback> getFeedbacks() {
 		return feedbacks;
@@ -54,6 +69,20 @@ public class BAP extends Bilan{
 
 	public void setObjectifsSortantes(Collection<Objectif> objectifsSortantes) {
 		this.objectifsSortantes = objectifsSortantes;
+	}
+	
+	
+
+	public int getCompteur() {
+		return compteur;
+	}
+
+	public void setCompteur(int compteur) {
+		this.compteur = compteur;
+	}
+
+	public static String getRejete() {
+		return REJETE;
 	}
 
 	public String getStatus() {

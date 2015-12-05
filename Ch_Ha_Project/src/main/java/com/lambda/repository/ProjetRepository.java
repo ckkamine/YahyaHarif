@@ -1,5 +1,7 @@
 package com.lambda.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +15,6 @@ public interface ProjetRepository extends JpaRepository<Projet, Long>{
 	@Query("select p from Projet p where p.idProjet like :x or p.nom like :x or p.chefProjet.firstName like :x or p.chefProjet.lastName like :x")
 	Page<Projet> findByMcProjet(@Param("x") String mc, Pageable page);
 
+	@Query("select p from Projet p where p.chefProjet.matricule = :x")
+	List<Projet> getProjetsByChef(@Param("x") Long matricule);
 }

@@ -57,7 +57,13 @@ public class DataBaseInit {
 		}
 		
 		Objectif o=  new Objectif("nom", "type");
+		o.setEmploye(c);
+		o.setArchive(true);
 		or.save(o);
+		Objectif o1=  new Objectif("nom", "type");
+		o1.setEmploye(c);
+		o1.setArchive(false);
+		or.save(o1);
 		
 	}
 	

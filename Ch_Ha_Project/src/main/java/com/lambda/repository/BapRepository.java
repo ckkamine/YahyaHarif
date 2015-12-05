@@ -16,5 +16,9 @@ public interface BapRepository extends JpaRepository<BAP, Long>{
 	@Query("select b from BAP b where b.status like :x or b.decision like :x or b.collaborateur.username like :x"
 			+ " or b.collaborateur.firstName like :x or b.collaborateur.lastName like :x")
 	Page<BAP> findByMcBap(@Param("x") String mc, Pageable page);
+	
+	@Query("select b from BAP b where b.locked= false and b.collaborateur.matricule = :x")
+	BAP findByCollaborateur(@Param("x") Long matricule);
+	
 }
 

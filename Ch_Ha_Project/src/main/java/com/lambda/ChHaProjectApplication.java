@@ -28,7 +28,6 @@ import org.springframework.util.SocketUtils;
 @ComponentScan
 @EnableAutoConfiguration
 @EnableTransactionManagement
-@EnableCaching
 @EnableScheduling
 @EnableAsync
 @SpringBootApplication
