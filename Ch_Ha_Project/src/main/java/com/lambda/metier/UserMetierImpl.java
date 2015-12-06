@@ -21,5 +21,11 @@ public class UserMetierImpl implements UserMetier{
 		user.setPassword(password);
 		return user;
 	}
+	
+	@Override
+	public User findByUsername(String name) {
+		User user= userRepository.findByUsername(name);
+		return user;
+	}
 
 }

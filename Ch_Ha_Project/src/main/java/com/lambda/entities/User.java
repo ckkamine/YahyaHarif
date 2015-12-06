@@ -1,7 +1,11 @@
 package com.lambda.entities;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -12,6 +16,10 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -30,7 +38,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 		@Type(name="COL", value=Collaborateur.class),
 		@Type(name="ADM", value=Administrateur.class)
 })
-public class User implements Serializable{
+public class User implements Serializable, UserDetails{
+	
+	public static final String ROLE_ADMIN = "ADMIN";
+    public static final String ROLE_MANAGER = "MANAGER";
+    public static final String ROLE_COLLABORATEUR = "COLLABORATEUR";
+    public static final String ROLE_EVALUATEUR = "EVALUATEUR";
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long matricule;
@@ -46,6 +60,8 @@ public class User implements Serializable{
 	private String telephone;
 	private Date dateRecrutement;
 	private String posteActuel;
+	private String role;
+	private String token;
 	
 	public User() {
 		super();
@@ -82,6 +98,10 @@ public class User implements Serializable{
 		this.matricule = matricule;
 	}
 
+	public String role(String r){
+		return "ROLE_"+r;
+	}
+	
 	public String getUsername() {
 		return username;
 	}
@@ -153,6 +173,73 @@ public class User implements Serializable{
 
 	public void setPosteActuel(String posteActuel) {
 		this.posteActuel = posteActuel;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		String role = this.getRole();
+		if (role == null) {
+			return Collections.emptyList();
+		}
+		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();	
+		authorities.add(new SimpleGrantedAuthority(role(role)));
+		return authorities;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public static String getRoleAdmin() {
+		return ROLE_ADMIN;
+	}
+
+	public static String getRoleManager() {
+		return ROLE_MANAGER;
+	}
+
+	public static String getRoleCollaborateur() {
+		return ROLE_COLLABORATEUR;
+	}
+
+	public static String getRoleEvaluateur() {
+		return ROLE_EVALUATEUR;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 	
 	

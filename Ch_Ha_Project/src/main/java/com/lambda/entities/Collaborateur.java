@@ -34,18 +34,20 @@ public class Collaborateur extends User{
 	
 	
 	public Collaborateur(){
-		
+		this.setRole(ROLE_COLLABORATEUR);
 	}
 
 	public Collaborateur(String username, String password, String email) {
 		super(username, password, email);
 		this.dateProchainBap= addYear(this.getDateRecrutement());
+		this.setRole(ROLE_COLLABORATEUR);
 	}
 
 	public Collaborateur(String username, String password, String firstName, String lastName, String email,
 			String adresse, String telephone) {
 		super(username, password, firstName, lastName, email, adresse, telephone);
 		this.dateProchainBap= addYear(this.getDateRecrutement());
+		this.setRole(ROLE_COLLABORATEUR);
 	}
 
 	public Date addYear(Date d){

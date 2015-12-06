@@ -16,19 +16,19 @@ import com.lambda.entities.Projet;
 import com.lambda.metier.EncadrantMetier;
 
 @RestController
-@RequestMapping("/rest")
+@RequestMapping("/rest/encadrant")
 public class EncadrantRestService {
 
 	@Autowired
 	EncadrantMetier encadrantMetier;
 
-	@RequestMapping(value="/encadrant", method= RequestMethod.GET)
+	@RequestMapping(value="/feedbacks", method= RequestMethod.GET)
 	public Page<Feedback> getFeedbacks(@RequestParam(value="matricule") Long matricule, 
 			@RequestParam(value = "page") Integer page) {
 		return encadrantMetier.getFeedbacks(matricule, page);
 	}
 
-	@RequestMapping(value="/encadrant", method= RequestMethod.POST)
+	@RequestMapping(value="/feedback", method= RequestMethod.POST)
 	public Feedback addFeedback(@RequestBody Feedback feedback) {
 		return encadrantMetier.addFeedback(feedback);
 	}

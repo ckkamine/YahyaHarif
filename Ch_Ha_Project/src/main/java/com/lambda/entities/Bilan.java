@@ -13,13 +13,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
 @Entity
 @Inheritance
 @DiscriminatorColumn(name="TYPE",discriminatorType=DiscriminatorType.STRING, length=3)
+
+@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.PROPERTY, property="type")
+@JsonSubTypes({
+		@Type(name="BAP", value=BAP.class),
+		@Type(name="BIP", value=BIP.class)
+})
 public abstract class Bilan implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

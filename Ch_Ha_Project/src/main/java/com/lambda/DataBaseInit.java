@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.lambda.entities.BAP;
@@ -39,16 +40,20 @@ public class DataBaseInit {
 	ManagerRepository mR;
 	@Autowired
 	BapRepository br;
+	
+	@Autowired
+	PasswordEncoder passwordEncoder;
    
 		@Autowired
 		public DataBaseInit(CollaborateurRepository userDao, EncadrantRepository eR, FeedbackRepository fR, ObjectifRepository or
-				, BapRepository br, ManagerRepository mR) {
+				, BapRepository br, ManagerRepository mR, PasswordEncoder passwordEncoder) {
 			this.cR= userDao;
 			this.eR= eR;
 			this.fR= fR;
 			this.or= or;
 			this.br= br;
 			this.mR= mR;
+			this.passwordEncoder= passwordEncoder;
 		}
 //		this.userRepository = userDao;
 //		this.cl= cr;
@@ -57,11 +62,11 @@ public class DataBaseInit {
     
 	public void init () {
 		List<Feedback> list= new ArrayList<Feedback>();
-		Collaborateur c= new Collaborateur("username", "password", "email");
-		Encadrant e= new Encadrant("username", "password", "email");
+		Collaborateur c= new Collaborateur("collaborateur", passwordEncoder.encode("collaborateur"), "email");
+		Encadrant e= new Encadrant("encadrant", passwordEncoder.encode("encadrant"), "email");
 		cR.save(c);
 		eR.save(e);
-		Manager m= new Manager("manager", "password", "manager@lambda.com");
+		Manager m= new Manager("manager", passwordEncoder.encode("manager"), "manager@lambda.com");
 		mR.save(m);
 		for(int i=0; i<4 ; i++){
 			Feedback f= new Feedback(new Date(), new Date(), "role", "commentaire", i);

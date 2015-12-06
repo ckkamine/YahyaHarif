@@ -17,10 +17,13 @@ public class Encadrant extends User{
 	@OneToMany(mappedBy="chefProjet")
 	private Collection<Projet> projets;
 	
-	public Encadrant(){}
+	public Encadrant(){
+		this.setRole(ROLE_EVALUATEUR);
+	}
 
 	public Encadrant(String username, String password, String email) {
 		super(username, password, email);
+		this.setRole(ROLE_EVALUATEUR);
 		
 	}
 
@@ -28,6 +31,7 @@ public class Encadrant extends User{
 	public Encadrant(String username, String password, String firstName, String lastName, String email, String adresse,
 			String telephone) {
 		super(username, password, firstName, lastName, email, adresse, telephone);
+		this.setRole(ROLE_EVALUATEUR);
 	}
 
 	@JsonIgnore

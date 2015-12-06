@@ -1,0 +1,25 @@
+.nav-header .manager{
+        background: url("patterns/3.png") no-repeat;
+}
+.valign {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+}
+.logo-name {
+        color: #1AB394;
+        text-shadow: 2px 2px 5px gray;
+}
+.bg-login {
+        background: url("../img/bg-login.jpeg");
+}
+.valign2 {
+        position: relative;
+        top: 15%;
+        transform: translateY(-50%);
+}
+.btn-logo {
+        background-color: #477383;
+        border-color: #477383;
+        color: #FFFFFF;
+}

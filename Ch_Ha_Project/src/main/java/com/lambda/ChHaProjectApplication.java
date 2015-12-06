@@ -3,6 +3,7 @@ package com.lambda;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
@@ -17,12 +18,17 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.SocketUtils;
+
+import com.lambda.security.SaltedSHA256PasswordEncoder;
 
 
 @ComponentScan
@@ -48,4 +54,16 @@ class ServletInitializer extends SpringBootServletInitializer {
 
 
 
+}
+@EnableSpringDataWebSupport
+@EnableTransactionManagement
+@Configuration
+class CommonConfiguration {
+
+	@Bean
+	public SaltedSHA256PasswordEncoder saltedSHA256PasswordEncoder(
+			Environment environment) throws NoSuchAlgorithmException {
+		return new SaltedSHA256PasswordEncoder(
+				environment.getProperty("secret"));
+	}
 }

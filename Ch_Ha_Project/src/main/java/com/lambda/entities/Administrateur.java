@@ -10,17 +10,19 @@ public class Administrateur extends Manager{
 	
 	
 	
-	public Administrateur(){}
+	public Administrateur(){
+		this.setRole(ROLE_ADMIN);
+	}
 
 	public Administrateur(String username, String password, String firstName, String lastName, String email,
 			String adresse, String telephone) {
 		super(username, password, firstName, lastName, email, adresse, telephone);
-		// TODO Auto-generated constructor stub
+		this.setRole(ROLE_ADMIN);
 	}
 
 	public Administrateur(String username, String password, String email) {
 		super(username, password, email);
-		// TODO Auto-generated constructor stub
+		this.setRole(ROLE_ADMIN);
 	}
 	
 	
