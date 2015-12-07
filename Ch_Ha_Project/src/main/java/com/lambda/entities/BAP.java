@@ -3,12 +3,16 @@ package com.lambda.entities;
 import java.util.Collection;
 import java.util.Date;
 
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
 @DiscriminatorValue("BAP")
@@ -28,6 +32,7 @@ public class BAP extends Bilan{
 	  @JoinColumn(name="BAP_ID_S")
 	private Collection<Objectif> objectifsSortantes;
 	private String status;
+	@Cascade(value = { CascadeType.SAVE_UPDATE, CascadeType.DELETE })
 	@ManyToOne(fetch=FetchType.EAGER)
 	  @JoinColumn(name="MAG_ID")
 	private Manager manager;

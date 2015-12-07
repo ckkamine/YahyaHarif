@@ -30,6 +30,12 @@ app.config(['$stateProvider','$locationProvider', '$httpProvider',
 		templateUrl: 'partials/admin/parametre.html'
 		
 	});
+	$stateProvider.state('admin.parametre.id',{
+		url: '/:id',
+		controller: parametreIdCtrl,
+		templateUrl: 'partials/admin/id.html'
+		
+	});
 	$stateProvider.state('manager',{
 		templateUrl: 'partials/manager/index.html',
 		resolve:{
@@ -89,8 +95,13 @@ app.config(['$stateProvider','$locationProvider', '$httpProvider',
 		$rootScope.$on('$viewContentLoaded', function() {
 			delete $rootScope.error;
 		});
-		
-		
+		$rootScope.hasRole= function(role){
+			if(role= $rootScope.user.role){
+				return true;
+			}else{
+				return false;
+			}
+		};
 		$rootScope.logout = function() {
 			delete $rootScope.user;
 			$cookieStore.remove('user');
@@ -116,12 +127,15 @@ app.config(['$stateProvider','$locationProvider', '$httpProvider',
 			};
 			
 		};
+		
 		var today= new Date();
 		$rootScope.date= today.getDate() + ' / '+ (today.getMonth()+1);
 		
 		 /* Try getting valid user from cookie or go to login page */
 		var originalPath = $location.path();
-		
+		$rootScope.reload= function () {
+			$state.go($state.current, {}, {reload: true});
+		}
 		var user = $cookieStore.get('user');
 		if (user !== undefined) {
 			isConnected= true;
@@ -140,8 +154,59 @@ function adminCtrl($scope){
 function managerCtrl($scope){
 	
 }
-function parametreCtrl($scope){
-	
+function parametreCtrl($scope, $http, $location){
+	$scope.getUsers = function(page) {
+		$http({
+			  method: 'GET',
+			  url: 'rest/admin/users',
+			  headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+			  params:{page: page}
+			}).then(function (response) {
+				var users= response.data.content;
+				$scope.users= users;
+				$scope.last= response.data.last;
+				$scope.first= response.data.first;
+				$scope.pages= new Array(response.data.totalPages);
+				$scope.pageCurrent=page;
+			  }, function () {
+				 
+			  });
+	};
+	$scope.deleteUser = function(id) {
+		$http({
+			  method: 'DELETE',
+			  url: 'rest/admin/user',
+			  headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+			  params:{id: id}
+			}).then(function (response) {
+				$scope.getUsers($scope.pageCurrent);
+			  }, function () {
+				 
+			  });
+	};
+	$scope.getUsers(0);
+	$scope.goToUser= function(id){
+		$location.url('/admin/parametre/'+id);
+	};
+}
+function parametreIdCtrl($scope, $stateParams, $http){
+	var id= $stateParams.id;
+	$scope.getUser= function(matricule) {
+		$http({
+			  method: 'GET',
+			  url: 'rest/admin/user',
+			  headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+			  params:{id: matricule}
+			}).then(function (response) {
+				var user= response.data;
+				$scope.user= user;
+				var date= new Date($scope.user.dateRecrutement);
+				$scope.dateRecrutement= date.getDate()+' / '+(date.getMonth()+1)+' / '+date.getFullYear();
+			  }, function () {
+				 
+			  });
+	};
+	$scope.getUser(id);
 }
 
 function loginCtrl($scope, $rootScope, $location, $cookieStore, $http, $state){

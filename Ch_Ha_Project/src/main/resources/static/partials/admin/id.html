@@ -1,0 +1,53 @@
+<div class="row">
+	<div class="col-md-6 col-md-offset-3">
+		<div class="">
+			
+				<div class="col-sm-4">
+					<div class="text-center">
+					<span ng-if="user.role=='ADMIN'">
+						<img width="150%" alt="image" class="img-circle  img-responsive"
+							src="img/user-admin-1.png"></span>
+					<span ng-if="user.role=='COLLABORATEUR'">
+						<img alt="image" class="img-circle m-t-xs img-responsive"
+							width="150%" src="img/user-collaborateur-1.png"></span>
+					<span ng-if="user.role=='ENCADRANT'">
+						<img alt="image" class="img-circle m-t-xs img-responsive"
+							width="150%" src="img/user-encadrant-1.png"></span>
+					<span ng-if="user.role=='MANAGER'">
+						<img alt="image" class="img-circle m-t-xs img-responsive"
+							width="150%" src="img/user-manager-1.png"></span>
+						<div class="m-t-xs font-bold">{{user.posteActuel}}</div>
+					</div>
+				</div>
+				<div class="col-sm-8">
+					<h3>
+						<strong>{{user.firstName}} {{user.lastName}}</strong>
+					</h3>
+					<p>
+						<i class="fa fa-hashtag">&nbsp;</i> {{user.matricule}}
+					</p>
+					<p>
+						<i class="fa fa-user">&nbsp;</i> {{user.username}}
+					</p>
+					<p>
+						<i class="fa fa-user-md">&nbsp;</i> {{user.role}}
+					</p>
+					<p>
+						<i class="fa fa-calendar">&nbsp;</i> {{dateRecrutement}}
+					</p>
+					<p>
+						<i class="fa fa-envelope-o">&nbsp;</i> {{user.email}}
+					</p>
+					<p>
+						<i class="fa fa-phone">&nbsp;</i> {{user.tel}}
+					</p>
+					<p>
+						<i class="fa fa-map-marker">&nbsp;</i> {{user.adresse}}
+					</p>
+					
+				</div>
+<!-- 				<div class="clearfix"></div> -->
+			
+		</div>
+	</div>
+</div>

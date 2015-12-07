@@ -69,6 +69,10 @@ public class DataBaseInit {
 		List<Feedback> list= new ArrayList<Feedback>();
 		Administrateur a= new Administrateur("admin", passwordEncoder.encode("admin"), "admin@lambda.com");
 		aR.save(a);
+		for(int i=0; i<20; i++){
+			Administrateur a2= new Administrateur("admin"+i, passwordEncoder.encode("admin"+i), "admin"+i+"@lambda.com");
+			aR.save(a2);
+		}
 		Collaborateur c= new Collaborateur("collaborateur", passwordEncoder.encode("collaborateur"), "email");
 		Encadrant e= new Encadrant("encadrant", passwordEncoder.encode("encadrant"), "email");
 		cR.save(c);
