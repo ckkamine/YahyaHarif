@@ -43,7 +43,7 @@ public class User implements Serializable, UserDetails{
 	public static final String ROLE_ADMIN = "ADMIN";
     public static final String ROLE_MANAGER = "MANAGER";
     public static final String ROLE_COLLABORATEUR = "COLLABORATEUR";
-    public static final String ROLE_EVALUATEUR = "EVALUATEUR";
+    public static final String ROLE_EVALUATEUR = "ENCADRANT";
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -175,6 +175,7 @@ public class User implements Serializable, UserDetails{
 		this.posteActuel = posteActuel;
 	}
 
+	@JsonIgnore
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		String role = this.getRole();
@@ -186,24 +187,28 @@ public class User implements Serializable, UserDetails{
 		return authorities;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonLocked() {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isCredentialsNonExpired() {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub

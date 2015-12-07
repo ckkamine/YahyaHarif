@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.lambda.entities.Administrateur;
 import com.lambda.entities.BAP;
 import com.lambda.entities.Collaborateur;
 import com.lambda.entities.Encadrant;
@@ -15,6 +16,7 @@ import com.lambda.entities.Feedback;
 import com.lambda.entities.Manager;
 import com.lambda.entities.Objectif;
 import com.lambda.metier.ManagerMetier;
+import com.lambda.repository.AdminRepository;
 import com.lambda.repository.BapRepository;
 import com.lambda.repository.CollaborateurRepository;
 import com.lambda.repository.EncadrantRepository;
@@ -27,6 +29,8 @@ import com.lambda.repository.ObjectifRepository;
 
 @Component
 public class DataBaseInit {
+	@Autowired
+	AdminRepository aR;
 	
 	@Autowired
 	CollaborateurRepository cR;
@@ -46,7 +50,7 @@ public class DataBaseInit {
    
 		@Autowired
 		public DataBaseInit(CollaborateurRepository userDao, EncadrantRepository eR, FeedbackRepository fR, ObjectifRepository or
-				, BapRepository br, ManagerRepository mR, PasswordEncoder passwordEncoder) {
+				, BapRepository br, ManagerRepository mR, PasswordEncoder passwordEncoder, AdminRepository aR) {
 			this.cR= userDao;
 			this.eR= eR;
 			this.fR= fR;
@@ -54,6 +58,7 @@ public class DataBaseInit {
 			this.br= br;
 			this.mR= mR;
 			this.passwordEncoder= passwordEncoder;
+			this.aR= aR;
 		}
 //		this.userRepository = userDao;
 //		this.cl= cr;
@@ -62,6 +67,8 @@ public class DataBaseInit {
     
 	public void init () {
 		List<Feedback> list= new ArrayList<Feedback>();
+		Administrateur a= new Administrateur("admin", passwordEncoder.encode("admin"), "admin@lambda.com");
+		aR.save(a);
 		Collaborateur c= new Collaborateur("collaborateur", passwordEncoder.encode("collaborateur"), "email");
 		Encadrant e= new Encadrant("encadrant", passwordEncoder.encode("encadrant"), "email");
 		cR.save(c);

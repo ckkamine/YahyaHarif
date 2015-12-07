@@ -1,0 +1,57 @@
+<div
+	class="row wrapper border-bottom white-bg page-heading animated fadeInLeft">
+	<div class="col-sm-4">
+		<h2>Tableau de bord</h2>
+		<ol class="breadcrumb">
+			<li><a href=""><i class="fa fa-folder-open-o"></i></a></li>
+			<li class="active"><strong>Tableau de bord</strong></li>
+		</ol>
+	</div>
+	<div class="col-sm-8">
+		<div class="title-action">
+			<a href="" class="btn btn-warning"><i class="fa fa-refresh"></i></a>
+		</div>
+	</div>
+</div>
+<!-- -->
+<div class="wrapper wrapper-content">
+	<div class="row">
+		<div class="col-md-4 col-md-offset-2">
+			<div class="widget style1 white-bg">
+				<div class="row">
+					<div class="col-xs-4">
+						<i class="fa fa-files-o text-success fa-5x"></i>
+					</div>
+					<div class="col-xs-8 text-right">
+						<span>L'état de votre <strong class="text-success">BAP</strong>
+							est
+						</span>
+						<h2 class="font-bold text-success">En cours</h2>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="widget style1 white-bg">
+				<div class="row">
+					<div class="col-xs-4">
+						<i class="fa fa-calendar text-warning fa-5x"></i>
+					</div>
+					<div class="col-xs-8 text-right">
+						<span> Date du Jour </span>
+						<h2 class="font-bold text-warning">{{date}}</h2>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="footer fixed">
+		<div>
+			<strong>Copyright</strong> LAMBDA &copy; 2015
+		</div>
+	</div>
+</div>
+<script>
+	$('.collaborateur').removeClass("active active-collaborateur");
+	$('#dashbord').addClass("active active-collaborateur");
+</script>

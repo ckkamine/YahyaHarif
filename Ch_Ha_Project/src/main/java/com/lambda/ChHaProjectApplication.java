@@ -27,6 +27,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.SocketUtils;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.lambda.security.SaltedSHA256PasswordEncoder;
 
@@ -67,3 +71,4 @@ class CommonConfiguration {
 				environment.getProperty("secret"));
 	}
 }
+
