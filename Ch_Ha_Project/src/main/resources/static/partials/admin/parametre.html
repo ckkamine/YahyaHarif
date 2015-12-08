@@ -1,79 +1,299 @@
-<div 
-	class="row wrapper border-bottom white-bg page-heading animated fadeInLeft">
-	<div class="col-sm-4">
-		<h2>Paramètres</h2>
-		<ol class="breadcrumb">
-			<li><a href=""><i class="fa fa-folder-open-o"></i></a></li>
-			<li class="active"><strong>Paramètres</strong></li>
-		</ol>
+<div id="page-wrapper" class="gray-bg">
+	<div class="row border-bottom">
+		<nav class="navbar navbar-static-top  " role="navigation"
+			style="margin-bottom: 0">
+			<div class="navbar-header">
+				<a class="navbar-minimalize minimalize-styl-2 btn btn-primary"
+					href=""><i class="fa fa-search"></i> </a>
+				<form role="search" class="navbar-form-custom" action="">
+					<div class="form-group">
+						<input type="text" placeholder="Rechercher ..."
+							class="form-control" ng-model="mc" ng-change="getUsers(0)">
+
+					</div>
+
+				</form>
+			</div>
+			<ul class="nav navbar-top-links navbar-right">
+
+				<li><span class="m-r-sm text-muted welcome-message">Bienvenue
+						<strong>{{user.firstName}} {{user.lastName}}</strong> - Vous êtes
+						connecté en tant que <strong class="text-navy">Administrateur</strong>.
+				</span></li>
+				<li><a href="" ng-click="logout()"> <i
+						class="fa fa-sign-out"></i> Déconnexion
+				</a></li>
+			</ul>
+		</nav>
 	</div>
-	<div class="col-sm-8">
-		<div class="title-action">
-			<a href="" class="btn btn-primary" ng-click="reload()"><i class="fa fa-refresh"></i></a>
+
+	<div
+		class="row wrapper border-bottom white-bg page-heading animated fadeInRight">
+		<div class="col-sm-4">
+			<h2>Paramètres</h2>
+			<ol class="breadcrumb">
+				<li><a href=""><i class="fa fa-folder-open-o"></i></a></li>
+				<li class="active "><strong>Paramètres</strong></li>
+
+			</ol>
+		</div>
+		<div class="col-sm-8">
+			<div class="title-action">
+				<a href="" class="btn btn-primary" ng-click="reload()"><i
+					class="fa fa-refresh"></i></a>
+			</div>
 		</div>
 	</div>
-</div>
-<!-- -->
-<div class="wrapper wrapper-content ">
-	<div class="row animated fadeInLeft">
-		<div class="col-md-12">
-			<div class="ibox float-e-margins">
-				<div class="ibox-title">
-					<h5>La liste des utilisateurs</h5>
+	<!-- -->
+	<div class="wrapper wrapper-content " ng-hide="add">
+		<div class="row animated fadeInLeft">
+			<div class="col-md-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>La liste des utilisateurs</h5>
+						<a href="" ng-click="changeAdd()"
+							class="btn btn-primary btn-xs pull-right"><i
+							class="fa fa-plus"></i> Ajouter un utilisateur</a>
+					</div>
+					<div class="ibox-content">
+						<div ui-view></div>
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th># Matricule</th>
+									<th>username</th>
+									<th>Nom Prénom</th>
+									<th>Role</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="user in users"
+									ng-click="goToUser(user.matricule)" class="click">
+									<td>{{user.matricule}}</td>
+									<td>{{user.username}}</td>
+									<td>{{user.firstName}} {{user.lastName}}</td>
+									<td>{{user.role}}</td>
+									<td><a href="" ng-click="goToUser(user.matricule)"> <i
+											class="fa fa-search-plus text-success"></i></a> &nbsp; <a href=""
+										ng-click="deleteUser(user.matricule)"
+										ng-hide="$root.user.matricule==user.matricule"> <i
+											class="fa fa-trash text-danger"></i></a> &nbsp; <a href=""
+										ng-click=""> <i class="fa fa-edit text-navy"></i></a></td>
+								</tr>
+
+							</tbody>
+						</table>
+						<nav>
+							<ul class="pagination">
+								<li ng-hide="first"><a href=""
+									ng-click="getUsers(pageCurrent-1)"> <span
+										aria-hidden="true">&laquo;</span>
+								</a></li>
+								<li ng-class="{'active': pageCurrent==$index}"
+									ng-repeat="p in pages track by $index"><a href=""
+									ng-click="getUsers($index)">{{$index+1}}</a></li>
+
+								<li ng-hide="last"><a href="" aria-label="Next"
+									ng-click="getUsers(pageCurrent+1)"> <span
+										aria-hidden="true">&raquo;</span>
+								</a></li>
+							</ul>
+						</nav>
+					</div>
 				</div>
-				<div class="ibox-content" >
-					<div ui-view></div>
-					<table class="table table-hover">
-						<thead>
-							<tr>
-								<th># Matricule</th>
-								<th>username</th>
-								<th>Nom Prénom</th>
-								<th>Role</th>
-								<th>Action</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr ng-repeat="user in users" ng-click="goToUser(user.matricule)" class="click" >
-								<td>{{user.matricule}}</td>
-								<td>{{user.username}}</td>
-								<td>{{user.firstName}} {{user.lastName}}</td>
-								<td>{{user.role}}</td>
-								<td >
-									<a href="" ng-click="goToUser(user.matricule)"> <i class="fa fa-search-plus text-success"></i></a> &nbsp;
-									<a href="" ng-click="deleteUser(user.matricule)" ng-hide="$root.user.matricule==user.matricule"> <i class="fa fa-trash text-danger"></i></a>
-									&nbsp;
-									<a href="" ng-click=""> <i class="fa fa-edit text-navy"></i></a>
-								</td>
-							</tr>
+			</div>
+		</div>
 
-						</tbody>
-					</table>
-					<nav>
-						<ul class="pagination">
-							<li ng-hide="first"><a href=""
-								ng-click="getUsers(pageCurrent-1)"> <span aria-hidden="true">&laquo;</span>
-							</a></li>
-							<li ng-class="{'active': pageCurrent==$index}"
-								ng-repeat="p in pages track by $index"><a href=""
-								ng-click="getUsers($index)">{{$index+1}}</a></li>
+	</div>
+	<div class="wrapper wrapper-content " ng-show="add">
+		<div class="row animated fadeInLeft">
+			<div class="col-md-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>La liste des utilisateurs</h5>
+						<a href="" ng-click="changeAdd()"
+							class="btn btn-primary btn-xs pull-right"><i
+							class="fa fa-arrow-left"></i> Retour</a>
+					</div>
+					<div class="ibox-content">
+						<form class="form-horizontal" name="formUser" method="get" action="">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<div class="row">
+										
+											<label class="col-lg-2 control-label">Username</label>
+											<div class="col-lg-9">
+												<input type="text" placeholder="Username ..."
+													class="form-control" ng-change="checkUsername()"
+													ng-model="u.username" ng-minlength="7" required ng-maxlength="15" name="username" ng-click="checkUsername()"
+													 class="has-error"> 
+												<span class="help-block m-b-none"> 
+												<span ng-show="formUser.username.$valid">
+													<i class="fa fa-check text-navy" ng-show="errorUsername==true"> Ce username est
+														disponible.</i> 
+													<i class="fa fa-close text-danger" ng-show="errorUsername==false"> Ce
+														username est déja pris.</i>
+												</span>
+													<span ng-messages="formUser.username.$error" >
+														<i class="fa fa-close text-danger" ng-message="required"> Le champ est vide</i>
+														<i class="fa fa-close text-danger" ng-message="minlength"> Trop court!</i>
+														<i class="fa fa-close text-danger" ng-message="maxlength"> Trop long!</i>
+													</span>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<label class="col-lg-2 control-label">Nom</label>
+											<div class="col-lg-9">
+												<input type="text" placeholder="Nom" class="form-control"
+													ng-model="u.lastName">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<label class="col-lg-2 control-label">Prénom</label>
+											<div class="col-lg-9">
+												<input type="text" placeholder="Prénom" class="form-control"
+													ng-model="u.firstName">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<label class="col-lg-2 control-label">Email</label>
+											<div class="col-lg-9">
+												<input type="email" placeholder="exemple@compagnie.com"
+													class="form-control" ng-model="u.email">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<label class="col-lg-2 control-label">Adresse</label>
+											<div class="col-lg-9">
+												<input type="text"
+													placeholder="Rue XXX Appartement YY Rabat"
+													class="form-control" ng-model="u.adresse">
+											</div>
+										</div>
+									</div>
 
-							<li ng-hide="last"><a href="" aria-label="Next"
-								ng-click="getUsers(pageCurrent+1)"> <span aria-hidden="true">&raquo;</span>
-							</a></li>
-						</ul>
-					</nav>
+
+									<div class="form-group">
+										<div class="row">
+											<label class="col-lg-2 control-label">Téléphone</label>
+											<div class="col-lg-9">
+												<input type="text" placeholder="06 XX XX XX XX "
+													class="form-control" ng-model="u.tel">
+											</div>
+										</div>
+									</div>
+									<div class="form-group" >
+										<div class="row">
+											<label class="col-lg-2 control-label">Date de
+												recrutement</label>
+											<div class="col-lg-9">
+											<div class="row">
+											<div class="col-md-1 control-label">
+												<strong>Jour</strong>
+											</div>
+											<div class="col-md-2">
+												<select class="form-control input-sm" ng-model="jour">
+													<option>1</option>
+												</select>
+											</div>
+											<div class="col-md-1 control-label">
+												<strong>Mois</strong>
+											</div>
+												
+											<div class="col-md-2">
+												<select class="form-control input-sm" ng-model="mois">
+													<option>2</option>
+												</select>
+											</div>
+											<div class="col-md-1 control-label">
+												<strong>Année</strong>
+											</div>
+												<div class="col-md-2">
+												<select class="form-control input-sm" ng-model="annee">
+													<option>2015</option>
+												</select>
+											</div>
+											<div class="col-md-2 control-label">
+												<strong>{{jour}} / {{mois}} / {{annee}}</strong>
+											</div>
+											</div>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<label class="col-lg-2 control-label">Poste Actuel</label>
+											<div class="col-lg-9">
+												<input type="text" placeholder="Technicien, etc."
+													class="form-control" ng-model="u.posteActuel">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<label class="col-lg-2 control-label">Rôle</label>
+											<div class="col-lg-9">
+												<select class="form-control" ng-model="u.role">
+													<option value="ADM">Administrateur</option>
+													<option value="MAG">Manager</option>
+													<option value="ENC">Encadrant</option>
+													<option value="COL">Collaborateur</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						
+						<div class="hr-line-dashed"></div>
+						<div class="row">
+							<div class="col-md-1 col-md-offset-9">
+
+								<a href="" class="btn btn-sm btn-default pull-right"
+									ng-click="changeAdd()"><i class="fa fa-close"></i> Annuler</a>
+							</div>
+							<div class="col-md-1">
+								<button class="btn btn-sm btn-primary "><i
+									class="fa fa-check"></i> Valider</button>
+							</div>
+						</div>
+					</div>
+					</form>
 				</div>
 			</div>
 		</div>
 	</div>
-<!-- 	<div class="footer fixed"> -->
-<!-- 		<div> -->
-<!-- 			<strong>Copyright</strong> LAMBDA &copy; 2015 -->
-<!-- 		</div> -->
-<!-- 	</div> -->
 </div>
+
 <script>
 	$('.admin').removeClass("active");
 	$('#parametre').addClass("active");
+	
+	$('#daterecrutement').dateDropper();
+	
+		
+// 	$('#daterecrutement .input-group.date').datepicker({
+// 		todayBtn : "linked",
+// 		keyboardNavigation : true,
+// 		forceParse : true,
+// 		calendarWeeks : true,
+// 		language : "fr",
+// 		format: "dd / mm / yyyy",
+//         autoclose: true
+// 	});
 </script>
+
+
+
+

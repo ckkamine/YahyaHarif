@@ -34,7 +34,7 @@ public class Objectif implements Serializable{
 	
 	public Objectif() {
 		super();
-		// TODO Auto-generated constructor stub
+		this.archive=false;
 	}
 	
 	

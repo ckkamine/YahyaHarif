@@ -95,12 +95,14 @@ public class AdminMetierImpl implements AdminMetier{
 
 	@Override
 	public void deleteObjectif(Long id) {
-		objectifRepository.delete(id);
-		
+		Objectif o= objectifRepository.findOne(id);
+		o.setArchive(true);
 	}
 
 	@Override
 	public Projet addProjet(Projet projet) {
+		Encadrant e= encadrantRepository.findOne(projet.getChefProjet().getMatricule());
+		projet.setChefProjet(e);
 		return projetRepository.save(projet);
 	}
 
@@ -187,7 +189,6 @@ public class AdminMetierImpl implements AdminMetier{
 	@Override
 	public void deleteArchiveBap(Long id) {
 		archiveBapRepository.delete(id);
-		
 	}
 
 	@Override
@@ -210,7 +211,16 @@ public class AdminMetierImpl implements AdminMetier{
 
 	@Override
 	public Page<Projet> findByMcProjet(String mc, int page) {
-		return projetRepository.findByMcProjet("%"+mc+"%", new PageRequest(page, 10));
+		try {
+			String mc2=mc;
+			Long id= Long.parseLong(mc2, 10);
+			System.out.println("test2");
+			return projetRepository.findByIdProjet(id, new PageRequest(page, 10));
+		} catch (NumberFormatException e) {
+			System.out.println(mc);
+			return projetRepository.findByMcProjet("%"+mc+"%", new PageRequest(page, 10));
+		}
+		
 	}
 
 	@Override

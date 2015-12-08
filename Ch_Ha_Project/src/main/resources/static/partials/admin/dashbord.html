@@ -1,3 +1,32 @@
+<div id="page-wrapper" class="gray-bg">
+		<div class="row border-bottom">
+			<nav class="navbar navbar-static-top  " role="navigation"
+				style="margin-bottom: 0">
+				<div class="navbar-header">
+					<a class="navbar-minimalize minimalize-styl-2 btn btn-primary"
+						href=""><i class="fa fa-search"></i> </a>
+					<form role="search" class="navbar-form-custom"
+						action="">
+						<div class="form-group">
+							<input type="text" placeholder="Rechercher ..."
+								class="form-control" ng-model="mc" ng-change="getUsersByMc()">
+
+						</div>
+
+					</form>
+				</div>
+				<ul class="nav navbar-top-links navbar-right">
+
+					<li><span class="m-r-sm text-muted welcome-message">Bienvenue
+							<strong>{{user.firstName}} {{user.lastName}}</strong> - Vous êtes
+							connecté en tant que <strong class="text-navy">Administrateur</strong>.
+					</span></li>
+					<li><a href="" ng-click="logout()"> <i
+							class="fa fa-sign-out"></i> Déconnexion
+					</a></li>
+				</ul>
+			</nav>
+		</div>
 <div class="row wrapper border-bottom white-bg page-heading animated fadeInLeft">
 	<div class="col-sm-4">
 		<h2>Tableau de bord</h2>
@@ -89,3 +118,5 @@
 	$('.admin').removeClass("active");
 	$('#dashbord').addClass("active");
 </script>
+</div>
+

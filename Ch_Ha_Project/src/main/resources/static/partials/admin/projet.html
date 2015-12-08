@@ -1,0 +1,157 @@
+<div id="page-wrapper" class="gray-bg">
+	<div class="row border-bottom">
+		<nav class="navbar navbar-static-top  " role="navigation"
+			style="margin-bottom: 0">
+			<div class="navbar-header">
+				<a class="navbar-minimalize minimalize-styl-2 btn btn-primary"
+					href=""><i class="fa fa-search"></i> </a>
+				<form role="search" class="navbar-form-custom" action="">
+					<div class="form-group">
+						<input type="text" placeholder="Rechercher ..."
+							class="form-control" ng-model="mc" ng-change="getProjects(0)">
+
+					</div>
+
+				</form>
+			</div>
+			<ul class="nav navbar-top-links navbar-right">
+
+				<li><span class="m-r-sm text-muted welcome-message">Bienvenue
+						<strong>{{user.firstName}} {{user.lastName}}</strong> - Vous êtes
+						connecté en tant que <strong class="text-navy">Administrateur</strong>.
+				</span></li>
+				<li><a href="" ng-click="logout()"> <i
+						class="fa fa-sign-out"></i> Déconnexion
+				</a></li>
+			</ul>
+		</nav>
+	</div>
+
+	<div
+		class="row wrapper border-bottom white-bg page-heading animated fadeInRight">
+		<div class="col-sm-4">
+			<h2>Projets</h2>
+			<ol class="breadcrumb">
+				<li><a href=""><i class="fa fa-folder-open-o"></i></a></li>
+				<li><strong> Projets </strong></li>
+				
+			</ol>
+		</div>
+		<div class="col-sm-8">
+			<div class="title-action">
+				<a href="" class="btn btn-primary" ng-click="reload()"><i
+					class="fa fa-refresh"></i></a>
+			</div>
+		</div>
+	</div>
+	<!-- -->
+	<div class="wrapper wrapper-content ">
+		<div class="row animated fadeInLeft">
+			<div class="col-md-12">
+				<div class="ibox float-e-margins" ng-hide="ajout">
+					<div class="ibox-title">
+						<h5>La liste des Projets</h5>
+						<a href="" ng-click="ajouter()"
+							class="btn btn-primary btn-xs pull-right"><i
+							class="fa fa-plus"></i> Ajouter un projet</a>
+					</div>
+					<div class="ibox-content">
+
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th># id</th>
+									<th>Nom</th>
+									<th>Chef de projet</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="p in projets">
+									<td>{{p.idProjet}}</td>
+									<td>{{p.nom}}</td>
+									<td><span ng-show="p.chefProjet">{{p.chefProjet.matricule}}
+											: {{p.chefProjet.firstName}} {{p.chefProjet.lastName}}</span></td>
+
+									<td><a href=""
+										ng-click="deleteProject(p.idProjet)"> <i
+											class="fa fa-trash text-danger"></i></a> &nbsp; <a href=""
+										ng-click="updateProject(p)"> <i class="fa fa-edit text-navy"></i></a></td>
+								</tr>
+
+							</tbody>
+						</table>
+						<nav>
+							<ul class="pagination">
+								<li ng-hide="first"><a href="" ng-click="getProjects(pageCurrent-1)"> <span
+										aria-hidden="true">&laquo;</span>
+								</a></li>
+								<li ng-class="{'active': pageCurrent==$index}"
+									ng-repeat="p in pages track by $index"><a href=""
+									ng-click="getProjects($index)">{{$index+1}}</a></li>
+
+								<li ng-hide="last"><a href="" aria-label="Next" ng-click="getProjects(pageCurrent+1)">
+										<span aria-hidden="true">&raquo;</span>
+								</a></li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+				<div class="ibox float-e-margins" ng-show="ajout">
+					<div class="ibox-title">
+						<h5>Ajouter un projet</h5>
+						<a href="" ng-click="ajouter()"
+							class="btn btn-primary btn-xs pull-right"><i
+							class="fa fa-arrow-left"></i> Retour</a>
+					</div>
+					<div class="ibox-content">
+
+						<form class="form-horizontal">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Nom du Projet: </label>
+
+								<div class="col-sm-7">
+									<input type="text" class="form-control" ng-model="projet.nom" required="required">
+								</div>
+							</div>
+							<div class="hr-line-dashed"></div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Matricule du chef
+									du projet :</label>
+
+								<div class="col-sm-7">
+									<select class="form-control m-b" ng-model="projet.chefProjet.matricule">
+										<option ng-repeat="c in encadrants">{{c.matricule}}</option>
+									</select>
+									
+								</div>
+								
+
+							</div>
+						
+						<div class="row">
+							<div class="col-md-2 col-md-offset-8">
+								<a href="" class="btn btn-white btn-sm pull-right " ng-click="ajouter()"><i class="fa fa-close"></i> Annuler</a>
+							</div>
+							
+							<div class="col-md-2">
+								<button type="submit" class="btn btn-primary btn-sm " ng-click="addProject()"><i class="fa fa-check"></i> Valider</button>
+								
+							</div>
+						</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<script>
+		$('.admin').removeClass("active");
+		$('#projet').addClass("active");
+		
+	</script>
+</div>
+
+
+

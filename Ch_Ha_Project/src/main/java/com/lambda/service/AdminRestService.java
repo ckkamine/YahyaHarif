@@ -83,7 +83,7 @@ public class AdminRestService {
 	}
 
 	@RequestMapping(value="/projet", method= RequestMethod.DELETE)
-	public void deleteProjet(Long id) {
+	public void deleteProjet(@RequestParam Long id) {
 		adminMetier.deleteProjet(id);
 	}
 	

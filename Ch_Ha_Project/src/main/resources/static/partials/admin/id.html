@@ -4,50 +4,51 @@
 			
 				<div class="col-sm-4">
 					<div class="text-center">
-					<span ng-if="user.role=='ADMIN'">
+					<span ng-if="u.role=='ADMIN'">
 						<img width="150%" alt="image" class="img-circle  img-responsive"
 							src="img/user-admin-1.png"></span>
-					<span ng-if="user.role=='COLLABORATEUR'">
+					<span ng-if="u.role=='COLLABORATEUR'">
 						<img alt="image" class="img-circle m-t-xs img-responsive"
 							width="150%" src="img/user-collaborateur-1.png"></span>
-					<span ng-if="user.role=='ENCADRANT'">
+					<span ng-if="u.role=='ENCADRANT'">
 						<img alt="image" class="img-circle m-t-xs img-responsive"
 							width="150%" src="img/user-encadrant-1.png"></span>
-					<span ng-if="user.role=='MANAGER'">
+					<span ng-if="u.role=='MANAGER'">
 						<img alt="image" class="img-circle m-t-xs img-responsive"
 							width="150%" src="img/user-manager-1.png"></span>
-						<div class="m-t-xs font-bold">{{user.posteActuel}}</div>
+						<div class="m-t-xs font-bold">{{u.posteActuel}}</div>
 					</div>
 				</div>
 				<div class="col-sm-8">
 					<h3>
-						<strong>{{user.firstName}} {{user.lastName}}</strong>
+						<strong>{{u.firstName}} {{user.lastName}}</strong>
 					</h3>
 					<p>
-						<i class="fa fa-hashtag">&nbsp;</i> {{user.matricule}}
+						<i class="fa fa-hashtag">&nbsp;</i> {{u.matricule}}
 					</p>
 					<p>
-						<i class="fa fa-user">&nbsp;</i> {{user.username}}
+						<i class="fa fa-user">&nbsp;</i> {{u.username}}
 					</p>
 					<p>
-						<i class="fa fa-user-md">&nbsp;</i> {{user.role}}
+						<i class="fa fa-user-md">&nbsp;</i> {{u.role}}
 					</p>
 					<p>
 						<i class="fa fa-calendar">&nbsp;</i> {{dateRecrutement}}
 					</p>
 					<p>
-						<i class="fa fa-envelope-o">&nbsp;</i> {{user.email}}
+						<i class="fa fa-envelope-o">&nbsp;</i> {{u.email}}
 					</p>
 					<p>
-						<i class="fa fa-phone">&nbsp;</i> {{user.tel}}
+						<i class="fa fa-phone">&nbsp;</i> {{u.tel}}
 					</p>
 					<p>
-						<i class="fa fa-map-marker">&nbsp;</i> {{user.adresse}}
+						<i class="fa fa-map-marker">&nbsp;</i> {{u.adresse}}
 					</p>
 					
 				</div>
-<!-- 				<div class="clearfix"></div> -->
+		
 			
 		</div>
+	
 	</div>
 </div>

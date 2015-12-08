@@ -42,11 +42,12 @@ public class Feedback implements Serializable{
 	@OneToMany(cascade=CascadeType.REMOVE)
 	  @JoinColumn(name="FEED_ID")
 	private Collection<Qualification> qualifications;
+	private boolean archive;
 	
 	
 	public Feedback() {
 		super();
-		// TODO Auto-generated constructor stub
+		this.archive=false;
 	}
 	public Feedback(Date debutInter, Date finInter, String role, String commentaire, Integer nombreJourValorise) {
 		super();
@@ -55,6 +56,7 @@ public class Feedback implements Serializable{
 		this.role = role;
 		this.commentaire = commentaire;
 		this.nombreJourValorise = nombreJourValorise;
+		this.archive= false;
 	}
 	public Long getIdFeedback() {
 		return idFeedback;
@@ -134,6 +136,12 @@ public class Feedback implements Serializable{
 	}
 	public void setQualifications(Collection<Qualification> qualifications) {
 		this.qualifications = qualifications;
+	}
+	public boolean isArchive() {
+		return archive;
+	}
+	public void setArchive(boolean archive) {
+		this.archive = archive;
 	}
 	
 	
