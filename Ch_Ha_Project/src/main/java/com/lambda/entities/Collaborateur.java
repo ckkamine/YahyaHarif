@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 import javax.persistence.JoinColumn;
 
@@ -24,7 +25,7 @@ public class Collaborateur extends User{
 	@JoinColumn(name="BAP_ID")
 	private BAP bap;
 	
-	private Date dateProchainBap;
+	
 	@ManyToMany
 	@JoinTable(name="PROJET_COL",
 			joinColumns={@JoinColumn(name="COL_ID")},
@@ -39,14 +40,14 @@ public class Collaborateur extends User{
 
 	public Collaborateur(String username, String password, String email) {
 		super(username, password, email);
-		this.dateProchainBap= addYear(this.getDateRecrutement());
+		
 		this.setRole(ROLE_COLLABORATEUR);
 	}
 
 	public Collaborateur(String username, String password, String firstName, String lastName, String email,
 			String adresse, String telephone) {
 		super(username, password, firstName, lastName, email, adresse, telephone);
-		this.dateProchainBap= addYear(this.getDateRecrutement());
+		
 		this.setRole(ROLE_COLLABORATEUR);
 	}
 
@@ -57,14 +58,7 @@ public class Collaborateur extends User{
 	}
 
 	
-	public Date getDateProchainBap() {
-		return dateProchainBap;
-	}
-
-	public void setDateProchainBap(Date dateProchainBap) {
-		this.dateProchainBap = dateProchainBap;
-	}
-
+	
 	@JsonIgnore
 	public Collection<Projet> getProjets() {
 		return projets;
@@ -82,6 +76,7 @@ public class Collaborateur extends User{
 		return bap;
 	}
 
+	@JsonSetter
 	public void setBap(BAP bap) {
 		this.bap = bap;
 	}

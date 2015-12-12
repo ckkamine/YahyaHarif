@@ -28,4 +28,9 @@ public class UserMetierImpl implements UserMetier{
 		return user;
 	}
 
+	@Override
+	public User getUser(Long matricule) {
+		return userRepository.findOne(matricule);
+	}
+
 }

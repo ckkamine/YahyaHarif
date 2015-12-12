@@ -14,6 +14,7 @@ import com.lambda.entities.BAP;
 import com.lambda.entities.Bilan;
 import com.lambda.entities.Collaborateur;
 import com.lambda.entities.Encadrant;
+import com.lambda.entities.Manager;
 import com.lambda.entities.Objectif;
 import com.lambda.entities.Projet;
 import com.lambda.entities.User;
@@ -22,6 +23,7 @@ import com.lambda.repository.BapRepository;
 import com.lambda.repository.BilanRepository;
 import com.lambda.repository.CollaborateurRepository;
 import com.lambda.repository.EncadrantRepository;
+import com.lambda.repository.ManagerRepository;
 import com.lambda.repository.ObjectifRepository;
 import com.lambda.repository.ProjetRepository;
 import com.lambda.repository.UserRepository;
@@ -34,6 +36,9 @@ public class AdminMetierImpl implements AdminMetier{
 	
 	@Autowired
 	ArchiveBapRepository archiveBapRepository;
+	
+	@Autowired
+	ManagerRepository managerRepository;
 	
 	@Autowired
 	UserRepository userRepository;
@@ -153,20 +158,25 @@ public class AdminMetierImpl implements AdminMetier{
 
 	@Override
 	public User getUser(Long id) {
-		// TODO Auto-generated method stub
 		return userRepository.findOne(id);
 	}
 
 	@Override
 	public User updateUser(User user) {
-		// TODO Auto-generated method stub
-		return userRepository.save(user);
+		User u= userRepository.findOne(user.getMatricule());
+		u.setFirstName(user.getFirstName());
+		u.setLastName(user.getLastName());
+		u.setEmail(user.getEmail());
+		u.setAdresse(user.getAdresse());
+		u.setPosteActuel(user.getPosteActuel());
+		u.setTelephone(user.getTelephone());
+		return u;
 	}
 
 	@Override
 	public void deleteUser(Long id) {
-		userRepository.delete(id);
 		
+	
 	}
 
 	@Override
@@ -193,8 +203,13 @@ public class AdminMetierImpl implements AdminMetier{
 
 	@Override
 	public Page<User> findByMcUser(String mc, int page) {
-		// TODO Auto-generated method stub
-		return userRepository.findByMcUsers("%"+mc+"%", new PageRequest(page, 10));
+		try {
+			Long id= Long.parseLong(mc, 10);
+			return userRepository.findByMcUsersId(id, new PageRequest(page, 10));
+		} catch (NumberFormatException e) {
+			return userRepository.findByMcUsers("%"+mc+"%", new PageRequest(page, 10));
+		}
+		
 	}
 
 	@Override
@@ -212,9 +227,7 @@ public class AdminMetierImpl implements AdminMetier{
 	@Override
 	public Page<Projet> findByMcProjet(String mc, int page) {
 		try {
-			String mc2=mc;
-			Long id= Long.parseLong(mc2, 10);
-			System.out.println("test2");
+			Long id= Long.parseLong(mc, 10);
 			return projetRepository.findByIdProjet(id, new PageRequest(page, 10));
 		} catch (NumberFormatException e) {
 			System.out.println(mc);
@@ -239,6 +252,12 @@ public class AdminMetierImpl implements AdminMetier{
 	public List<Collaborateur> getAllCollaborateur() {
 		// TODO Auto-generated method stub
 		return collaborateurRepository.findAll();
+	}
+
+	@Override
+	public List<Manager> getAllManagers() {
+		// TODO Auto-generated method stub
+		return managerRepository.findAll();
 	}
 
 	

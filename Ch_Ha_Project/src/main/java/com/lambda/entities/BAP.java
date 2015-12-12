@@ -32,20 +32,22 @@ public class BAP extends Bilan{
 	  @JoinColumn(name="BAP_ID_S")
 	private Collection<Objectif> objectifsSortantes;
 	private String status;
-	@Cascade(value = { CascadeType.SAVE_UPDATE, CascadeType.DELETE })
+	@Cascade(value = { CascadeType.DELETE })
 	@ManyToOne(fetch=FetchType.EAGER)
 	  @JoinColumn(name="MAG_ID")
 	private Manager manager;
 	private int compteur;
 	
-	public BAP(){}
+	public BAP(){
+		this.status= EN_ATTENTE;
+	}
 	
 	
 
 	public BAP(Date dateBilan, Collaborateur collaborateur,   boolean locked, String status, Manager manager, int compteur) {
 		super(dateBilan, collaborateur);
 		this.locked = true;
-		this.status = status;
+		this.status = EN_ATTENTE;
 		this.manager = manager;
 		this.compteur = 0;
 	}

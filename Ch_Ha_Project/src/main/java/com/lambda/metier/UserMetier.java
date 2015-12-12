@@ -6,4 +6,5 @@ public interface UserMetier {
 
 	public User updatePassword(Long matricule, String password);
 	User findByUsername(String name);
+	public User getUser(Long matricule);
 }

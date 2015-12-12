@@ -10,6 +10,7 @@ import com.lambda.entities.BAP;
 import com.lambda.entities.Bilan;
 import com.lambda.entities.Collaborateur;
 import com.lambda.entities.Encadrant;
+import com.lambda.entities.Manager;
 import com.lambda.entities.Objectif;
 import com.lambda.entities.Projet;
 import com.lambda.entities.User;
@@ -49,6 +50,7 @@ public interface AdminMetier {
 	Page<Objectif> findByMcObjectif(String mc,int page);
 	List<Encadrant> getAllEncadrant();
 	List<Collaborateur> getAllCollaborateur();
+	List<Manager> getAllManagers();
 	
 	
 	

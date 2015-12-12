@@ -19,6 +19,9 @@ public interface UserRepository extends JpaRepository<User, Long>{
 			+ "u.lastName like :x or u.email like :x or u.telephone like :x or u.adresse like :x or u.posteActuel like :x or u.username like :x")
 	Page<User> findByMcUsers(@Param("x") String mc, Pageable page);
 	
+	@Query("select u from User u where u.matricule like :x ")
+	Page<User> findByMcUsersId(@Param("x") Long mc, Pageable page);
+	
 	@Query("select u.username from User u")
 	List<String> getAllUsername();
 	

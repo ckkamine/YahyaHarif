@@ -79,7 +79,7 @@
 										ng-click="deleteUser(user.matricule)"
 										ng-hide="$root.user.matricule==user.matricule"> <i
 											class="fa fa-trash text-danger"></i></a> &nbsp; <a href=""
-										ng-click=""> <i class="fa fa-edit text-navy"></i></a></td>
+										ng-click="updateUser(user)"> <i class="fa fa-edit text-navy"></i></a></td>
 								</tr>
 
 							</tbody>
@@ -111,20 +111,19 @@
 			<div class="col-md-12">
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
-						<h5>La liste des utilisateurs</h5>
+						<h5>Ajouter un utilisateur</h5>
 						<a href="" ng-click="changeAdd()"
 							class="btn btn-primary btn-xs pull-right"><i
 							class="fa fa-arrow-left"></i> Retour</a>
 					</div>
 					<div class="ibox-content">
-						<form class="form-horizontal" name="formUser" method="get" action="">
+						<form class="form-horizontal" name="formUser">
 							<div class="row">
 								<div class="col-md-12">
 									<div class="form-group">
-										<div class="row">
-										
+										<div class="row" ng-hide="update">		
 											<label class="col-lg-2 control-label">Username</label>
-											<div class="col-lg-9">
+											<div class="col-lg-9" ng-class="{'has-error': error}">
 												<input type="text" placeholder="Username ..."
 													class="form-control" ng-change="checkUsername()"
 													ng-model="u.username" ng-minlength="7" required ng-maxlength="15" name="username" ng-click="checkUsername()"
@@ -193,7 +192,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="form-group" >
+									<div class="form-group" ng-hide="update">
 										<div class="row">
 											<label class="col-lg-2 control-label">Date de
 												recrutement</label>
@@ -204,7 +203,7 @@
 											</div>
 											<div class="col-md-2">
 												<select class="form-control input-sm" ng-model="jour">
-													<option>1</option>
+													<option ng-repeat="j in jours track by $index">{{$index+1}}</option>
 												</select>
 											</div>
 											<div class="col-md-1 control-label">
@@ -212,8 +211,8 @@
 											</div>
 												
 											<div class="col-md-2">
-												<select class="form-control input-sm" ng-model="mois">
-													<option>2</option>
+												<select class="form-control input-sm" ng-model="$scope.mois">
+													<option ng-repeat="m in $root.mois track by $index">{{$index+1}}</option>
 												</select>
 											</div>
 											<div class="col-md-1 control-label">
@@ -221,11 +220,11 @@
 											</div>
 												<div class="col-md-2">
 												<select class="form-control input-sm" ng-model="annee">
-													<option>2015</option>
+													<option ng-repeat="y in annees">{{y}}</option>
 												</select>
 											</div>
 											<div class="col-md-2 control-label">
-												<strong>{{jour}} / {{mois}} / {{annee}}</strong>
+												<strong>{{jour}} / {{$scope.mois}} / {{annee}}</strong>
 											</div>
 											</div>
 											</div>
@@ -240,15 +239,25 @@
 											</div>
 										</div>
 									</div>
-									<div class="form-group">
+									<div class="form-group" ng-hide="update">
 										<div class="row">
 											<label class="col-lg-2 control-label">Rôle</label>
-											<div class="col-lg-9">
-												<select class="form-control" ng-model="u.role">
+											<div class="col-lg-9" ng-class="{'has-error': errorRole}">
+												<select class="form-control" ng-model="u.type">
 													<option value="ADM">Administrateur</option>
 													<option value="MAG">Manager</option>
 													<option value="ENC">Encadrant</option>
 													<option value="COL">Collaborateur</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="form-group" ng-show="u.type='COL'">
+										<div class="row">
+											<label class="col-lg-2 control-label">Rôle</label>
+											<div class="col-lg-9" ng-class="{'has-error': errorRole}">
+												<select class="form-control" ng-model="u.bap.manager.matricule">
+													<option>test</option>
 												</select>
 											</div>
 										</div>
@@ -264,7 +273,7 @@
 									ng-click="changeAdd()"><i class="fa fa-close"></i> Annuler</a>
 							</div>
 							<div class="col-md-1">
-								<button class="btn btn-sm btn-primary "><i
+								<button class="btn btn-sm btn-primary " ng-click="addUser()"><i
 									class="fa fa-check"></i> Valider</button>
 							</div>
 						</div>

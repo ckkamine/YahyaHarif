@@ -12,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,6 +43,11 @@ public class UserRessource {
 	public User updatePassword(@PathVariable(value = "mdp") String mdp, @PathVariable(value = "id") Long id) {
 		return userMetier.updatePassword(id, mdp);
 	}
+	
+	@RequestMapping(method= RequestMethod.GET)
+	public User getUser(@RequestParam Long matricule){
+		return userMetier.getUser(matricule);
+	}
 
 	@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/authenticate", method = RequestMethod.POST)
 	public User authenticate(	@RequestParam("username") String username,
@@ -51,19 +57,12 @@ public class UserRessource {
 				password);
 		Authentication authentication = this.authManager.authenticate(authenticationToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		//Map<String, Boolean> roles = new HashMap<String, Boolean>();
 
 		User userDetails = (User) this.userService.loadUserByUsername(username);
 		
 		userDetails.setToken(tokenUtils.createToken(userDetails));
 
-//		for (GrantedAuthority authority : userDetails.getAuthorities()) {
-//			roles.put(authority.toString(), Boolean.TRUE);
-//		}
-//
-//		return new UTransfer(userDetails.getUsername(), roles.keySet().toArray()[0].toString(),
-//				tokenUtils.createToken(userDetails), userDetails.getEmail(), userDetails.getFirstName(),
-//				userDetails.getLastName());
+
 		return userDetails;
 	}
 
