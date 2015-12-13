@@ -1,4 +1,5 @@
-var app = angular.module('myApp', [ 'ui.router', 'ngCookies' , 'ngMessages', 'ui.bootstrap']);
+var app = angular.module('myApp', [ 'ui.router', 'ngCookies', 'ngMessages',
+		'ui.bootstrap' ]);
 var isConnected = false;
 app
 		.config(
@@ -103,7 +104,8 @@ app
 											});
 
 							$httpProvider.interceptors
-									.push(function($q, $rootScope, $location, $cookieStore) {
+									.push(function($q, $rootScope, $location,
+											$cookieStore) {
 										return {
 											'request' : function(config) {
 												var isRestCall = config.url
@@ -111,7 +113,8 @@ app
 												if (isRestCall
 														&& angular
 																.isDefined($rootScope.user.token)) {
-													var authToken = $cookieStore.get('token');
+													var authToken = $cookieStore
+															.get('token');
 													config.headers['X-Auth-Token'] = signatureHMAC(
 															authToken,
 															config.url);
@@ -122,37 +125,80 @@ app
 										};
 									});
 
-						} ]).run(
-				function($rootScope, $location, $cookieStore, $http, $state) {
-					var today = new Date();
-					$rootScope.annees= {};
-					$rootScope.jours= new Array(31);
-					$rootScope.mois= new Array(12);
-					for(i=0; i<10 ; i++){
-						$rootScope.annees[i]=(today.getFullYear() - i);
-					}
+						} ])
+		.run(function($rootScope, $location, $cookieStore, $http, $state) {
 
-					/* Reset error when a new view is loaded */
-					$rootScope.$on('$viewContentLoaded', function() {
-						delete $rootScope.error;
-					});
-					$rootScope.hasRole = function(role) {
-						if (role = $rootScope.user.role) {
-							return true;
-						} else {
-							return false;
+			/* Reset error when a new view is loaded */
+			$rootScope.$on('$viewContentLoaded', function() {
+				delete $rootScope.error;
+			});
+			$rootScope.hasRole = function(role) {
+				if (role = $rootScope.user.role) {
+					return true;
+				} else {
+					return false;
+				}
+			};
+			$rootScope.logout = function() {
+				delete $rootScope.user;
+				$cookieStore.remove('userId');
+				$cookieStore.remove('token');
+				isConnected = false;
+				$location.url("/login");
+				$rootScope.username = '';
+				$rootScope.password = '';
+			};
+
+			var today = new Date();
+
+			$rootScope.date = today.getDate() + ' / ' + (today.getMonth() + 1);
+
+			/* Try getting valid user from cookie or go to login page */
+			var originalPath = $location.path();
+			$rootScope.reload = function() {
+				$state.go($state.current, {}, {
+					reload : true
+				});
+			}
+			var userId = $cookieStore.get('userId');
+			if (userId !== undefined) {
+				$http({
+					method : 'GET',
+					url : 'user',
+					headers : {
+						'Content-Type' : 'application/x-www-form-urlencoded'
+					},
+					params : {
+						matricule : userId
+					}
+				}).then(function(response) {
+					$rootScope.user = response.data;
+					isConnected = true;
+					
+					$location.path(originalPath);
+				}, function() {
+
+				});
+
+			} else {
+				$location.url('/login');
+			}
+
+			$rootScope.redirectRole = function() {
+				var userId = $cookieStore.get('userId');
+				
+					$http({
+						method : 'GET',
+						url : 'user',
+						headers : {
+							'Content-Type' : 'application/x-www-form-urlencoded'
+						},
+						params : {
+							matricule : userId
 						}
-					};
-					$rootScope.logout = function() {
-						delete $rootScope.user;
-						$cookieStore.remove('userId');
-						$cookieStore.remove('token');
-						isConnected = false;
-						$location.url("/login");
-						$rootScope.username = '';
-						$rootScope.password = '';
-					};
-					$rootScope.redirectRole = function() {
+					}).then(function(response) {
+						$rootScope.user = response.data;
+						isConnected = true;
 						switch ($rootScope.user.role) {
 						case 'ADMIN':
 							$location.url('/admin');
@@ -166,48 +212,15 @@ app
 						case 'ENCADRANT':
 							$location.url('/encadrant');
 							break;
-						}
-						;
+						};
+					}, function() {
 
-					};
+					});
+				
 
-					
-					$rootScope.date = today.getDate() + ' / '
-							+ (today.getMonth() + 1);
-
-					/* Try getting valid user from cookie or go to login page */
-					var originalPath = $location.path();
-					$rootScope.reload = function() {
-						$state.go($state.current, {}, {
-							reload : true
-						});
-					}
-					var userId = $cookieStore.get('userId');
-					if (userId !== undefined) {
-						$http({
-							method : 'GET',
-							url : 'user',
-							headers : {
-								'Content-Type' : 'application/x-www-form-urlencoded'
-							},
-							params: {
-								matricule: userId
-							}
-						}).then(function(response) {
-							$rootScope.user= response.data;
-							isConnected = true;
-							$location.path(originalPath);
-						}, function() {
-
-						});
-						
-
-					} else {
-						$location.url('/login');
-					}
-
-					$rootScope.initialized = true;
-				});
+			};
+			$rootScope.initialized = true;
+		});
 function adminCtrl($scope) {
 
 }
@@ -215,7 +228,28 @@ function managerCtrl($scope) {
 
 }
 function parametreCtrl($scope, $http, $location) {
-	$scope.update=false;
+	$scope.today = function() {
+		$scope.dt = new Date();
+	};
+	$scope.today();
+
+	$scope.clear = function() {
+		$scope.dt = null;
+	};
+	$scope.minDate = new Date(2008, 0, 1);
+
+	$scope.maxDate = new Date();
+
+	$scope.open = function($event) {
+		$scope.status.opened = true;
+	};
+	$scope.setDate = function(year, month, day) {
+		$scope.dt = new Date(year, month, day);
+	};
+	$scope.status = {
+		opened : false
+	};
+	$scope.update = false;
 	$http({
 		method : 'GET',
 		url : 'rest/admin/usernames',
@@ -225,17 +259,18 @@ function parametreCtrl($scope, $http, $location) {
 	}, function() {
 
 	});
-	$scope.checkUsername= function () {
-		
-		$scope.errorUsername= true;
-		
-		for(i=0; i < $scope.usernames.length; i++){
-			if($scope.u.username==$scope.usernames[i]){
-				$scope.errorUsername= false;
+	$scope.checkUsername = function() {
+
+		$scope.errorUsername = true;
+
+		for (i = 0; i < $scope.usernames.length; i++) {
+			if ($scope.u.username == $scope.usernames[i]) {
+				$scope.errorUsername = false;
 				break;
-				
+
 			}
-		};
+		}
+		;
 	};
 
 	$scope.add = false;
@@ -248,66 +283,67 @@ function parametreCtrl($scope, $http, $location) {
 			$scope.add = true;
 			break;
 		}
-		$scope.update= false;
+		$scope.update = false;
 	};
-	$scope.addUser= function(){
-		if($scope.update){
-			switch($scope.u.role){
+	$scope.addUser = function() {
+		if ($scope.update) {
+			switch ($scope.u.role) {
 			case "ADMIN":
-				$scope.u.type= 'ADM';
+				$scope.u.type = 'ADM';
 				break;
 			case "MANAGER":
-				$scope.u.type= 'MAG';
+				$scope.u.type = 'MAG';
 				break;
 			case "COLLABORATEUR":
-				$scope.u.type= 'COL';
+				$scope.u.type = 'COL';
 				break;
 			case "ENCADRANT":
-				$scope.u.type= 'ENC';
+				$scope.u.type = 'ENC';
 				break;
 			}
 			$http({
 				method : 'PUT',
 				url : 'rest/admin/user',
-				data: $scope.u
+				data : $scope.u
 			}).then(function(response) {
-				$scope.getUsers();
-				$scope.add= false;
-				$scope.update= false;
+				$scope.getUsers($scope.pageCurrent);
+				$scope.add = false;
+				$scope.update = false;
 			}, function() {
 
 			});
-		}else{
-			if($scope.errorUsername){
-				$scope.error= false;
-				if(!($scope.u.type==null)){
-					$scope.u.password='';
-					var date = new Date(1999, 1, 1);
-					date.setFullYear($scope.annee, $scope.mois - 1, $scope.jour);
-					alert($scope.u.dateRecrutement+' - '+date);
+		} else {
+			if ($scope.errorUsername) {
+				$scope.error = false;
+				$scope.errorEmail=false;
+				if (!($scope.u.type == null)) {
+					$scope.u.password = '';
+					$scope.u.dateRecrutement = $scope.dt;
 					$http({
 						method : 'POST',
 						url : 'rest/admin/user',
-						data: $scope.u
+						data : $scope.u
 					}).then(function(response) {
-						$scope.getUsers();
-						$scope.add= false;
-						$scope.errorRole=false;
+						$scope.getUsers($scope.pageCurrent);
+						$scope.add = false;
+						$scope.errorRole = false;
+						$scope.u=null;
 					}, function() {
-			
+						$scope.errorEmail= true;
 					});
-				}else{
-					$scope.errorRole=true;
-				};
-			}else{
-				$scope.error= true;
+				} else {
+					$scope.errorRole = true;
+				}
+				;
+			} else {
+				$scope.error = true;
 			}
 		}
 	}
-	$scope.updateUser= function(user){
-		$scope.u= user;
-		$scope.update= true;
-		$scope.add= true;
+	$scope.updateUser = function(user) {
+		$scope.u = user;
+		$scope.update = true;
+		$scope.add = true;
 	}
 	$scope.getUsers = function(page) {
 		if ($scope.mc) {
@@ -548,11 +584,10 @@ function checkIsConnected($q, $timeout, $location, $state) {
 	}
 	return deffered.promise;
 }
-function checkIsNonConnected($q, $timeout, $location, $state, $rootScope) {
+function checkIsNonConnected($q, $timeout, $location, $state, $rootScope, $cookieStore) {
 	var deffered = $q.defer();
-	if (isConnected) {
+	if ($cookieStore.get('userId')) {
 		$timeout(deffered.reject, 0);
-
 		$rootScope.redirectRole();
 	} else {
 		$timeout(deffered.resolve, 0);
