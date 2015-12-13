@@ -1,4 +1,4 @@
-var app = angular.module('myApp', [ 'ui.router', 'ngCookies' , 'ngMessages']);
+var app = angular.module('myApp', [ 'ui.router', 'ngCookies' , 'ngMessages', 'ui.bootstrap']);
 var isConnected = false;
 app
 		.config(
@@ -419,7 +419,7 @@ function projetCtrl($scope, $http) {
 
 	});
 	$scope.addProject = function() {
-		$scope.projet.chefProjet.role = 'ENC';
+		$scope.projet.chefProjet.type = 'ENC';
 		$http({
 			method : 'POST',
 			url : 'rest/admin/projet',
