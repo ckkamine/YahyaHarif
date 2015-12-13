@@ -230,7 +230,7 @@ function parametreCtrl($scope, $http, $location) {
 		$scope.errorUsername= true;
 		
 		for(i=0; i < $scope.usernames.length; i++){
-			if(($scope.u.username.length <= 6) || ($scope.u.username==$scope.usernames[i])){
+			if($scope.u.username==$scope.usernames[i]){
 				$scope.errorUsername= false;
 				break;
 				
@@ -281,20 +281,21 @@ function parametreCtrl($scope, $http, $location) {
 			if($scope.errorUsername){
 				$scope.error= false;
 				if(!($scope.u.type==null)){
-				$scope.u.password='';
-				var date = new Date();
-				date.setFullYear($scope.annee, $scope.mois - 1, $scope.jour);
-				$scope.u.dateRecrutement= date;
-				$http({
-					method : 'POST',
-					url : 'rest/admin/user',
-					data: $scope.u
-				}).then(function(response) {
-					$scope.getUsers();
-					$scope.add= false;
-				}, function() {
-		
-				});
+					$scope.u.password='';
+					var date = new Date(1999, 1, 1);
+					date.setFullYear($scope.annee, $scope.mois - 1, $scope.jour);
+					alert($scope.u.dateRecrutement+' - '+date);
+					$http({
+						method : 'POST',
+						url : 'rest/admin/user',
+						data: $scope.u
+					}).then(function(response) {
+						$scope.getUsers();
+						$scope.add= false;
+						$scope.errorRole=false;
+					}, function() {
+			
+					});
 				}else{
 					$scope.errorRole=true;
 				};
