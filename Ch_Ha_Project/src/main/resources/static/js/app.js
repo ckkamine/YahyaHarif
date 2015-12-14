@@ -111,10 +111,8 @@ app
 												var isRestCall = config.url
 														.indexOf('rest') == 0;
 												if (isRestCall
-														&& angular
-																.isDefined($rootScope.user.token)) {
-													var authToken = $cookieStore
-															.get('token');
+														&& angular.isDefined($cookieStore.get('token'))) {
+													var authToken = $cookieStore.get('token');
 													config.headers['X-Auth-Token'] = signatureHMAC(
 															authToken,
 															config.url);
@@ -127,7 +125,20 @@ app
 
 						} ])
 		.run(function($rootScope, $location, $cookieStore, $http, $state) {
+			/* Try getting valid user from cookie or go to login page */
+			var originalPath = $location.path();
+			var user = $cookieStore.get('user');
+			if (user !== undefined) {
+				
+					
+					$rootScope.user = user;
+					isConnected = true;
+					$location.path(originalPath);
 
+			} else {
+				
+				$location.url('/login');
+			}
 			/* Reset error when a new view is loaded */
 			$rootScope.$on('$viewContentLoaded', function() {
 				delete $rootScope.error;
@@ -141,7 +152,7 @@ app
 			};
 			$rootScope.logout = function() {
 				delete $rootScope.user;
-				$cookieStore.remove('userId');
+				$cookieStore.remove('user');
 				$cookieStore.remove('token');
 				isConnected = false;
 				$location.url("/login");
@@ -153,70 +164,30 @@ app
 
 			$rootScope.date = today.getDate() + ' / ' + (today.getMonth() + 1);
 
-			/* Try getting valid user from cookie or go to login page */
-			var originalPath = $location.path();
+			
 			$rootScope.reload = function() {
 				$state.go($state.current, {}, {
 					reload : true
 				});
-			}
-			var userId = $cookieStore.get('userId');
-			if (userId !== undefined) {
-				$http({
-					method : 'GET',
-					url : 'user',
-					headers : {
-						'Content-Type' : 'application/x-www-form-urlencoded'
-					},
-					params : {
-						matricule : userId
-					}
-				}).then(function(response) {
-					$rootScope.user = response.data;
-					isConnected = true;
-					
-					$location.path(originalPath);
-				}, function() {
-
-				});
-
-			} else {
-				$location.url('/login');
-			}
+			};
+			
 
 			$rootScope.redirectRole = function() {
-				var userId = $cookieStore.get('userId');
-				
-					$http({
-						method : 'GET',
-						url : 'user',
-						headers : {
-							'Content-Type' : 'application/x-www-form-urlencoded'
-						},
-						params : {
-							matricule : userId
-						}
-					}).then(function(response) {
-						$rootScope.user = response.data;
-						isConnected = true;
-						switch ($rootScope.user.role) {
-						case 'ADMIN':
-							$location.url('/admin');
-							break;
-						case 'MANAGER':
-							$location.url('/manager');
-							break;
-						case 'COLLABORATEUR':
-							$location.url('/collaborateur');
-							break;
-						case 'ENCADRANT':
-							$location.url('/encadrant');
-							break;
-						};
-					}, function() {
+				switch ($rootScope.user.role) {
+				case 'ADMIN':
+					$location.url('/admin');
+					break;
+				case 'MANAGER':
+					$location.url('/manager');
+					break;
+				case 'COLLABORATEUR':
+					$location.url('/collaborateur');
+					break;
+				case 'ENCADRANT':
+					$location.url('/encadrant');
+					break;
+				};
 
-					});
-				
 
 			};
 			$rootScope.initialized = true;
@@ -227,7 +198,7 @@ function adminCtrl($scope) {
 function managerCtrl($scope) {
 
 }
-function parametreCtrl($scope, $http, $location) {
+function parametreCtrl($scope, $http, $location, $rootScope, $cookieStore) {
 	$scope.today = function() {
 		$scope.dt = new Date();
 	};
@@ -281,6 +252,7 @@ function parametreCtrl($scope, $http, $location) {
 			break;
 		case false:
 			$scope.add = true;
+			$scope.u= null;
 			break;
 		}
 		$scope.update = false;
@@ -306,12 +278,19 @@ function parametreCtrl($scope, $http, $location) {
 				url : 'rest/admin/user',
 				data : $scope.u
 			}).then(function(response) {
+			
+				if(response.data.matricule== $rootScope.user.matricule){
+					$cookieStore.put('user', response.data);
+					$rootScope.user= response.data;
+				}
 				$scope.getUsers($scope.pageCurrent);
 				$scope.add = false;
 				$scope.update = false;
+				
 			}, function() {
 
 			});
+			
 		} else {
 			if ($scope.errorUsername) {
 				$scope.error = false;
@@ -560,13 +539,13 @@ function loginCtrl($scope, $rootScope, $location, $cookieStore, $http, $state) {
 		}).then(function(response) {
 			var user = response.data;
 			if ($rootScope.rememberMe) {
-				$cookieStore.put('userId', user.matricule);
+				$cookieStore.put('user', user);
 				$cookieStore.put('token', user.token);
 			}
 			;
 			$rootScope.user = user;
 			isConnected = true;
-			$rootScope.redirectRole(user.role);
+			$rootScope.redirectRole();
 		}, function() {
 			$rootScope.error = 'Login ou mot de passe incorrect !';
 		});
@@ -586,10 +565,11 @@ function checkIsConnected($q, $timeout, $location, $state) {
 }
 function checkIsNonConnected($q, $timeout, $location, $state, $rootScope, $cookieStore) {
 	var deffered = $q.defer();
-	if ($cookieStore.get('userId')) {
+	if (isConnected) {
 		$timeout(deffered.reject, 0);
 		$rootScope.redirectRole();
 	} else {
+		
 		$timeout(deffered.resolve, 0);
 	}
 	return deffered.promise;
