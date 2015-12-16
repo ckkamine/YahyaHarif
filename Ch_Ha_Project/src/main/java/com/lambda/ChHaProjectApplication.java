@@ -60,4 +60,3 @@ class CommonConfiguration {
 				environment.getProperty("secret"));
 	}
 }
-
