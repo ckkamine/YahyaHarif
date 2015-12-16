@@ -15,6 +15,7 @@ import com.lambda.entities.BAP;
 import com.lambda.entities.Bilan;
 import com.lambda.entities.Collaborateur;
 import com.lambda.entities.Encadrant;
+import com.lambda.entities.Manager;
 import com.lambda.entities.Objectif;
 import com.lambda.entities.Projet;
 import com.lambda.entities.User;
@@ -108,8 +109,8 @@ public class AdminRestService {
 	}
 
 	@RequestMapping(value="/user", method= RequestMethod.POST)
-	public User addUser(@RequestBody User user) {
-		return adminMetier.addUser(user);
+	public User addUser(@RequestBody User user, @RequestParam Long matricule) {
+		return adminMetier.addUser(user, matricule);
 	}
 
 	@RequestMapping(value="/user", method= RequestMethod.GET)
@@ -185,6 +186,11 @@ public class AdminRestService {
 	@RequestMapping(value="/collaborateurs", method=RequestMethod.GET)
 	public List<Collaborateur> getAllCollaborateur() {
 		return adminMetier.getAllCollaborateur();
+	}
+
+	@RequestMapping(value="/managers", method=RequestMethod.GET)
+	public List<Manager> getAllManagers() {
+		return adminMetier.getAllManagers();
 	}
 	
 	

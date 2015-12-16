@@ -1,0 +1,88 @@
+<div id="page-wrapper" class="gray-bg">
+		<div class="row border-bottom">
+			<nav class="navbar navbar-static-top  " role="navigation"
+				style="margin-bottom: 0">
+				<div class="navbar-header">
+					<a class="navbar-minimalize minimalize-styl-2 btn "
+					ng-class="{'btn-primary': user.role=='ADMIN'}" 
+						href=""><i class="fa fa-search"></i> </a>
+					<form role="search" class="navbar-form-custom"
+						action="">
+						<div class="form-group">
+							<input type="text" placeholder="Rechercher ..."
+								class="form-control" ng-model="mc" ng-change="getUsersByMc()">
+
+						</div>
+
+					</form>
+				</div>
+				<ul class="nav navbar-top-links navbar-right">
+
+					<li><span class="m-r-sm text-muted welcome-message">Bienvenue
+							<strong>{{user.firstName}} {{user.lastName}}</strong> - Vous êtes
+							connecté en tant que <strong class="text-navy">Administrateur</strong>.
+					</span></li>
+					<li><a href="" ng-click="logout()"> <i
+							class="fa fa-sign-out"></i> Déconnexion
+					</a></li>
+				</ul>
+			</nav>
+		</div>
+<div class="row wrapper border-bottom white-bg page-heading animated fadeInRight">
+	<div class="col-sm-4">
+		<h2>Bilans Performance</h2>
+		<ol class="breadcrumb">
+			<li><a href=""><i class="fa fa-folder-open-o"></i></a></li>
+			<li class="active"><strong>Bilans Performance</strong></li>
+		</ol>
+	</div>
+	<div class="col-sm-8">
+		<div class="title-action">
+			<a href="" class="btn" ng-class="{'btn-primary': user.role=='ADMIN'}" ng-click="reload()"><i class="fa fa-refresh"></i></a>
+		</div>
+	</div>
+</div>
+<!-- -->
+<div class="wrapper wrapper-content">
+	<div class="row animated fadeInLeft">
+		<!-- Profile -->
+		<div class="row">
+		<div class="widget style1 btn-success col-lg-3 col-lg-offset-2 click">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <i class="fa fa-line-chart fa-5x"></i>
+                        </div>
+                        <div class="col-xs-8 text-right">
+                            <span>Bilans Intermediaires de performance</span>
+                            <h2 class="font-bold">BIP</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget style1 btn-primary col-lg-3 col-lg-offset-2 click" ui-sref="admin.bap">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <i class=" fa fa-line-chart  fa-5x"></i>
+                        </div>
+                        <div class="col-xs-8 text-right">
+                            <span>Bilans Annuels de performance</span>
+                            <h2 class="font-bold">BAP</h2>
+                     </div>
+                </div>
+         </div>
+         </div>
+	</div>
+	
+	<div class="footer fixed">
+		<div>
+			<strong>Copyright</strong> LAMBDA &copy; 2015
+		</div>
+	</div>
+</div>
+<div ng-if="user.role=='ADMIN'">
+<script>
+	$('.admin').removeClass("active");
+	$('#bilan').addClass("active");
+</script>
+</div>
+</div>
+

@@ -35,7 +35,7 @@ public interface AdminMetier {
 	Bilan updateBilan(Bilan bilan);
 	void deleteBilan(Long id);
 	List<String> getAllUsername();
-	User addUser(User user);
+	User addUser(User user, Long matricule);
 	User getUser(Long id);
 	User updateUser(User user);
 	void deleteUser(Long id);

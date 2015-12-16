@@ -1,5 +1,7 @@
 package com.lambda.service;
 
+import java.util.Date;
+
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +17,25 @@ public class testmail {
 	@Autowired
 	MailComponent mailComponent;
 	
+	Date date = new Date();
+	
 	@RequestMapping("/preparer")
 	public void preparer() throws MessagingException{
-		mailComponent.sendPreparer("choukoukouamine@gmail.com", "amine", "ckk", "test", 1L);
+		mailComponent.sendPreparer("choukoukouamine@gmail.com", "amine", "ckk", "test", 1L, date);
+	}
+	
+	@RequestMapping("/nvfeedback")
+	public void nouveaufeedback() throws MessagingException{
+		mailComponent.sendNvFeedback("choukoukouamine@gmail.com", "amine", "ckk", "test", 1L, date);
 	}
 	
 	@RequestMapping("/feedback")
 	public void feedback() throws MessagingException{
-		mailComponent.sendFeedback("choukoukouamine@gmail.com", "amine", "ckk", "test", 1L);
+		mailComponent.sendFeedback("choukoukouamine@gmail.com", "amine", "ckk", "test", 1L, date);
 	}
 	@RequestMapping("/realiser")
 	public void realiser() throws MessagingException{
-		mailComponent.sendRealiser("choukoukouamine@gmail.com", "amine", "ckk", "test", 1L);
+		mailComponent.sendRealiser("choukoukouamine@gmail.com", "amine", "ckk", "test", 1L, date);
 	}
 	@RequestMapping("/mdp")
 	public void mdp() throws MessagingException{

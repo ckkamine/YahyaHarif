@@ -33,7 +33,7 @@
 						<i class="fa fa-user-md">&nbsp;</i> {{u.role}}
 					</p>
 					<p>
-						<i class="fa fa-calendar">&nbsp;</i> {{dateRecrutement}}
+						<i class="fa fa-calendar">&nbsp;</i> {{u.dateRecrutement | date: 'dd/MMM/yyyy'}}
 					</p>
 					<p>
 						<i class="fa fa-envelope-o">&nbsp;</i> {{u.email}}

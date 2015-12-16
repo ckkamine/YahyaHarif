@@ -85,7 +85,7 @@ public class DataBaseInit {
 			list.add(f);
 			fR.save(f);
 		}
-		BAP b= new BAP(new Date(), c, true, "En attente", m, 0);
+		BAP b= new BAP(new Date(), c, true,  m);
 		br.save(b);
 		Objectif o=  new Objectif("nom", "type");
 		o.setEmploye(c);

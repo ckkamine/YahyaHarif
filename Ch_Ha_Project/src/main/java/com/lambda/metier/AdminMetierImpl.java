@@ -1,12 +1,16 @@
 package com.lambda.metier;
 
+import java.util.Date;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.lambda.entities.ArchiveBap;
@@ -18,6 +22,7 @@ import com.lambda.entities.Manager;
 import com.lambda.entities.Objectif;
 import com.lambda.entities.Projet;
 import com.lambda.entities.User;
+import com.lambda.mail.MailComponent;
 import com.lambda.repository.ArchiveBapRepository;
 import com.lambda.repository.BapRepository;
 import com.lambda.repository.BilanRepository;
@@ -31,6 +36,12 @@ import com.lambda.repository.UserRepository;
 @Service
 @Transactional
 public class AdminMetierImpl implements AdminMetier{
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	MailComponent mailService;
+	
 	@Autowired
 	BapRepository bapRepository;
 	
@@ -152,7 +163,23 @@ public class AdminMetierImpl implements AdminMetier{
 	}
 
 	@Override
-	public User addUser(User user) {
+	public User addUser(User user, Long matricule) {
+		String generatedPassword = RandomStringUtils.randomAlphabetic(8);
+		user.setPassword(passwordEncoder.encode(generatedPassword));
+		try {
+			mailService.sendUserpass(user.getEmail(), user.getFirstName(), user.getLastName(), user.getUsername(), generatedPassword);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		System.out.println(generatedPassword);
+		if(user instanceof Collaborateur){
+			Manager m= managerRepository.findOne(matricule);
+			BAP bap = new BAP(new Date(user.getDateRecrutement().getYear()+1, user.getDateRecrutement().getMonth(), 1),
+					(Collaborateur) user, true, m);
+			userRepository.save(user);
+			bapRepository.save(bap);
+			return user;
+		}
 		return userRepository.save(user);
 	}
 

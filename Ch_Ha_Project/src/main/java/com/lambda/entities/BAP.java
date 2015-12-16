@@ -44,7 +44,7 @@ public class BAP extends Bilan{
 	
 	
 
-	public BAP(Date dateBilan, Collaborateur collaborateur,   boolean locked, String status, Manager manager, int compteur) {
+	public BAP(Date dateBilan, Collaborateur collaborateur,   boolean locked, Manager manager) {
 		super(dateBilan, collaborateur);
 		this.locked = true;
 		this.status = EN_ATTENTE;

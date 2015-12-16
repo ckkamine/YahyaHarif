@@ -94,7 +94,7 @@ public class ManagerMetierImpl implements ManagerMetier {
 		}
 		ArchiveBap a= new ArchiveBap(b.getId(), b.getDateBilan(), b.getCollaborateur(), b.getObjectifsEntrantes(), b.getDecision(), b.getFeedbacks(), b.isLocked(), b.getObjectifsSortantes(), b.getManager());
 		archiveBapRepository.save(a);
-		BAP newB= new BAP( b.addYear(b.getDateBilan()), b.getCollaborateur(), true, b.EN_ATTENTE, b.getManager(), 0);
+		BAP newB= new BAP( b.addYear(b.getDateBilan()), b.getCollaborateur(), true, b.getManager());
 		bapRepository.save(newB);
 		bapRepository.delete(b);
 		

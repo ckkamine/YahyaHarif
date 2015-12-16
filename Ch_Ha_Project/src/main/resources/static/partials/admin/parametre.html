@@ -74,12 +74,18 @@
 									<td>{{user.username}}</td>
 									<td>{{user.firstName}} {{user.lastName}}</td>
 									<td>{{user.role}}</td>
-									<td><a href="" ng-click="goToUser(user.matricule)"> <i
-											class="fa fa-search-plus text-success"></i></a> &nbsp; <a href=""
+									<td><a href="" ng-click="goToUser(user.matricule)" class="btn btn-outline btn-success btn-xs"> <i
+											class="fa fa-search-plus"></i>
+										</a> &nbsp; 
+										<a href=""
 										ng-click="deleteUser(user.matricule)"
-										ng-hide="$root.user.matricule==user.matricule"> <i
-											class="fa fa-trash text-danger"></i></a> &nbsp; <a href=""
-										ng-click="updateUser(user)"> <i class="fa fa-edit text-navy"></i></a></td>
+										ng-hide="$root.user.matricule==user.matricule" class="btn btn-outline btn-danger btn-xs"> <i
+											class="fa fa-trash text-danger"></i>
+										</a> &nbsp; 
+										<a href="" class="btn btn-outline btn-primary btn-xs"
+										ng-click="updateUser(user)"> <i class="fa fa-edit text-navy"></i>
+										</a>
+									</td>
 								</tr>
 
 							</tbody>
@@ -222,13 +228,13 @@
 											</div>
 										</div>
 									</div>
-									{{u.bap.manager.matricule}}
+									
 									<div class="form-group" ng-show="u.type=='COL'">
 										<div class="row">
-											<label class="col-lg-2 control-label">Rôle</label>
-											<div class="col-lg-9" ng-class="{'has-error': errorRole}">
-												<select class="form-control" ng-model="u.bap.manager.matricule">
-													<option>test</option>
+											<label class="col-lg-2 control-label">Manager</label>
+											<div class="col-lg-9" ng-class="{'has-error': errorManager}">
+												<select class="form-control" ng-model="managerMatricule">
+													<option ng-repeat="m in managers">{{m.matricule}}</option>
 												</select>
 											</div>
 										</div>
