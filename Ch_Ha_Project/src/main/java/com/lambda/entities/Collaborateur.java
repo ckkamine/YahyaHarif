@@ -26,7 +26,7 @@ public class Collaborateur extends User{
 	private BAP bap;
 	
 	
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name="PROJET_COL",
 			joinColumns={@JoinColumn(name="COL_ID")},
 		      inverseJoinColumns={@JoinColumn(name="PROJ_ID")})
@@ -51,15 +51,10 @@ public class Collaborateur extends User{
 		this.setRole(ROLE_COLLABORATEUR);
 	}
 
-	public Date addYear(Date d){
-		Date r= d;
-		r.setTime(r.getTime()+ 1000L * 60 * 60 * 24 * 365);
-		 return r; 
-	}
 
 	
 	
-	@JsonIgnore
+	
 	public Collection<Projet> getProjets() {
 		return projets;
 	}

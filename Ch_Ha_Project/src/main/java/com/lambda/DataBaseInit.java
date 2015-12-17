@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.neo4j.cypher.internal.compiler.v2_1.planner.logical.findShortestPaths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import com.lambda.entities.Encadrant;
 import com.lambda.entities.Feedback;
 import com.lambda.entities.Manager;
 import com.lambda.entities.Objectif;
+import com.lambda.entities.Projet;
 import com.lambda.metier.ManagerMetier;
 import com.lambda.repository.AdminRepository;
 import com.lambda.repository.BapRepository;
@@ -23,6 +25,7 @@ import com.lambda.repository.EncadrantRepository;
 import com.lambda.repository.FeedbackRepository;
 import com.lambda.repository.ManagerRepository;
 import com.lambda.repository.ObjectifRepository;
+import com.lambda.repository.ProjetRepository;
 
 
 
@@ -46,11 +49,14 @@ public class DataBaseInit {
 	BapRepository br;
 	
 	@Autowired
+	ProjetRepository projetRepository;
+	
+	@Autowired
 	PasswordEncoder passwordEncoder;
    
 		@Autowired
 		public DataBaseInit(CollaborateurRepository userDao, EncadrantRepository eR, FeedbackRepository fR, ObjectifRepository or
-				, BapRepository br, ManagerRepository mR, PasswordEncoder passwordEncoder, AdminRepository aR) {
+				, BapRepository br, ManagerRepository mR, PasswordEncoder passwordEncoder, AdminRepository aR, ProjetRepository projetRepository) {
 			this.cR= userDao;
 			this.eR= eR;
 			this.fR= fR;
@@ -59,44 +65,72 @@ public class DataBaseInit {
 			this.mR= mR;
 			this.passwordEncoder= passwordEncoder;
 			this.aR= aR;
+			this.projetRepository= projetRepository;
 		}
-//		this.userRepository = userDao;
-//		this.cl= cr;
-//		this.a= a;
-//	} 
+
     
 	public void init () {
-		List<Feedback> list= new ArrayList<Feedback>();
-		Administrateur a= new Administrateur("admin", passwordEncoder.encode("admin"), "admin@lambda.com");
+		Administrateur a= new Administrateur("admin", passwordEncoder.encode("admin"), "choukoukouamine@gmail.com");
 		aR.save(a);
-		for(int i=0; i<20; i++){
-			Administrateur a2= new Administrateur("admin"+i, passwordEncoder.encode("admin"+i), "admin"+i+"@lambda.com");
-			aR.save(a2);
-		}
 		Collaborateur c= new Collaborateur("collaborateur", passwordEncoder.encode("collaborateur"), "email");
-		Encadrant e= new Encadrant("encadrant", passwordEncoder.encode("encadrant"), "email");
 		cR.save(c);
+		Encadrant e= new Encadrant("encadrant", passwordEncoder.encode("encadrant"), "choukoukouamine@outlook.com");
 		eR.save(e);
-		Manager m= new Manager("manager", passwordEncoder.encode("manager"), "manager@lambda.com");
-		mR.save(m);
-		for(int i=0; i<4 ; i++){
-			Feedback f= new Feedback(new Date(), new Date(), "role", "commentaire", i);
-			if(i>0) f.setEncadrant(e);
-			list.add(f);
-			fR.save(f);
-		}
-		BAP b= new BAP(new Date(), c, true,  m);
+		BAP b= new BAP(new Date(116, 0, 1), c, true, a);
 		br.save(b);
-		Objectif o=  new Objectif("nom", "type");
-		o.setEmploye(c);
-		o.setArchive(true);
-		or.save(o);
-		Objectif o1=  new Objectif("nom", "type");
-		o1.setEmploye(c);
-		o1.setArchive(false);
-		or.save(o1);
+		Administrateur a1= new Administrateur("admin", passwordEncoder.encode("admin"), "choukoukouamine@gmail.com");
+		aR.save(a1);
+		Collaborateur c1= new Collaborateur("collaborateur", passwordEncoder.encode("collaborateur"), "email");
+		cR.save(c1);
+		Encadrant e1= new Encadrant("encadrant", passwordEncoder.encode("encadrant"), "choukoukouamine@outlook.com");
+		eR.save(e1);
+		BAP b1= new BAP(new Date(115, 11, 1), c1, true, a1);
+		br.save(b1);
+		Administrateur ad= new Administrateur("admin1", passwordEncoder.encode("admin1"), "choukoukouamine@outlook.com");
+		aR.save(ad);
+		Collaborateur co= new Collaborateur("collaborateur1", passwordEncoder.encode("collaborateur1"), "email");
+		cR.save(co);
+		Encadrant en= new Encadrant("encadrant1", passwordEncoder.encode("encadrant1"), "choukoukouamine@gmail.com");
+		eR.save(en);
+		BAP ba= new BAP(new Date(115, 11, 1), co, true, ad);
+		br.save(ba);
+		int i=0;
+		co.setProjets(new ArrayList<>());
+		c.setProjets(new ArrayList<>());
+		c1.setProjets(new ArrayList<>());
+		while (i<3) {
+			Projet p= new Projet("projet "+i);
+			if(i<1){
+				p.setChefProjet(e);
+			}else{
+				p.setChefProjet(en);
+			}
+			p.setCollaborateurs(new ArrayList<Collaborateur>());
+			p.getCollaborateurs().add(c);
+			projetRepository.save(p);
+			c.getProjets().add(p);
+			cR.save(c);
+			p.getCollaborateurs().add(co);
+			projetRepository.save(p);
+			co.getProjets().add(p);
+			cR.save(co);
+			p.getCollaborateurs().add(c1);
+			projetRepository.save(p);
+			c1.getProjets().add(p);
+			cR.save(c1);
+			i++;
+		}
+		i=0;
+		while (i<3) {
+			Objectif p= new Objectif("objectif"+i, "categorie");
+			p.setEmploye(c);
+			or.save(p);
+			i++;
+		}
+		System.out.println("----------------------- Fin------------------");
 		
 	}
+	
 	
 }
 

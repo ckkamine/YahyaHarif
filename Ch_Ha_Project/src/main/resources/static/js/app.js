@@ -43,7 +43,7 @@ app
 							$stateProvider.state('admin.bap', {
 								url : '/admin/bilan/bap',
 								templateUrl : 'partials/admin/bap.html',
-								controller: bapCtrl
+								controller : bapCtrl
 							});
 							$stateProvider.state('admin.projet', {
 								url : '/admin/projets',
@@ -95,7 +95,6 @@ app
 											'collaborateur.dashbord',
 											{
 												url : '/collaborateur',
-												controller : adminCtrl,
 												templateUrl : 'partials/collaborateur/dashbord.html'
 
 											});
@@ -111,10 +110,16 @@ app
 											'encadrant.dashbord',
 											{
 												url : '/encadrant',
-												controller : managerCtrl,
 												templateUrl : 'partials/encadrant/dashbord.html'
 											});
-
+							$stateProvider
+									.state(
+											'encadrant.feedbacks',
+											{
+												url : '/encadrant/feedbacks',
+												controller : feedbackCtrl,
+												templateUrl : 'partials/encadrant/feedbacks.html'
+											});
 							$httpProvider.interceptors
 									.push(function($q, $rootScope, $location,
 											$cookieStore) {
@@ -123,8 +128,11 @@ app
 												var isRestCall = config.url
 														.indexOf('rest') == 0;
 												if (isRestCall
-														&& angular.isDefined($cookieStore.get('token'))) {
-													var authToken = $cookieStore.get('token');
+														&& angular
+																.isDefined($cookieStore
+																		.get('token'))) {
+													var authToken = $cookieStore
+															.get('token');
 													config.headers['X-Auth-Token'] = signatureHMAC(
 															authToken,
 															config.url);
@@ -135,102 +143,97 @@ app
 										};
 									});
 
-						} ])
-		.run(function($rootScope, $location, $cookieStore, $http, $state) {
-			var today = new Date();
-			var token= $cookieStore.get('token');
-			if(token !== undefined){
-				var part = token.split(':');
-				if(today.getMilliseconds() > part[1]){
-					delete $rootScope.user;
-					$cookieStore.remove('user');
-					$cookieStore.remove('token');
-					isConnected = false;
-					$location.url("/login");
-					$rootScope.username = '';
-					$rootScope.password = '';
-				}else{
-					var originalPath = $location.path();
-					var user = $cookieStore.get('user');
-					if (user !== undefined) {
-						$rootScope.user = user;
-						isConnected = true;
-						$location.path(originalPath);
+						} ]).run(
+				function($rootScope, $location, $cookieStore, $http, $state) {
+					var today = new Date();
+					var token = $cookieStore.get('token');
+					if (token !== undefined) {
+						var part = token.split(':');
+						if (today.getMilliseconds() > part[1]) {
+							delete $rootScope.user;
+							$cookieStore.remove('user');
+							$cookieStore.remove('token');
+							isConnected = false;
+							$location.url("/login");
+							$rootScope.username = '';
+							$rootScope.password = '';
+						} else {
+							var originalPath = $location.path();
+							var user = $cookieStore.get('user');
+							if (user !== undefined) {
+								$rootScope.user = user;
+								isConnected = true;
+								$location.path(originalPath);
+							}
+						}
+					} else {
+						$location.url('/login');
 					}
-				}
-			}else{
-				$location.url('/login');
-			}
-			
-			
-			
-			/* Reset error when a new view is loaded */
-			$rootScope.$on('$viewContentLoaded', function() {
-				delete $rootScope.error;
-			});
-			$rootScope.hasRole = function(role) {
-				if (role = $rootScope.user.role) {
-					return true;
-				} else {
-					return false;
-				}
-			};
-			$rootScope.logout = function() {
-				delete $rootScope.user;
-				$cookieStore.remove('user');
-				$cookieStore.remove('token');
-				isConnected = false;
-				$location.url("/login");
-				$rootScope.username = '';
-				$rootScope.password = '';
-			};
 
-			
+					/* Reset error when a new view is loaded */
+					$rootScope.$on('$viewContentLoaded', function() {
+						delete $rootScope.error;
+					});
+					$rootScope.hasRole = function(role) {
+						if (role = $rootScope.user.role) {
+							return true;
+						} else {
+							return false;
+						}
+					};
+					$rootScope.logout = function() {
+						delete $rootScope.user;
+						$cookieStore.remove('user');
+						$cookieStore.remove('token');
+						isConnected = false;
+						$location.url("/login");
+						$rootScope.username = '';
+						$rootScope.password = '';
+					};
 
-			$rootScope.date = today.getDate() + ' / ' + (today.getMonth() + 1);
+					$rootScope.date = today.getDate() + ' / '
+							+ (today.getMonth() + 1);
 
-			
-			$rootScope.reload = function() {
-				$state.go($state.current, {}, {
-					reload : true
+					$rootScope.reload = function() {
+						$state.go($state.current, {}, {
+							reload : true
+						});
+					};
+
+					$rootScope.redirectRole = function() {
+						switch ($rootScope.user.role) {
+						case 'ADMIN':
+							$location.url('/admin');
+							break;
+						case 'MANAGER':
+							$location.url('/manager');
+							break;
+						case 'COLLABORATEUR':
+							$location.url('/collaborateur');
+							break;
+						case 'ENCADRANT':
+							$location.url('/encadrant');
+							break;
+						}
+						;
+
+					};
+					$rootScope.initialized = true;
 				});
-			};
-			
-
-			$rootScope.redirectRole = function() {
-				switch ($rootScope.user.role) {
-				case 'ADMIN':
-					$location.url('/admin');
-					break;
-				case 'MANAGER':
-					$location.url('/manager');
-					break;
-				case 'COLLABORATEUR':
-					$location.url('/collaborateur');
-					break;
-				case 'ENCADRANT':
-					$location.url('/encadrant');
-					break;
-				};
-
-
-			};
-			$rootScope.initialized = true;
-		});
 function adminCtrl($scope) {
 
 }
 function managerCtrl($scope) {
 
 }
-function bapCtrl($scope, $http, $rootScope){
-	$scope.detail= false;
-	var role= $rootScope.user.role.toLowerCase();
-	
-	$scope.getBaps= function(page){
+function bapCtrl($scope, $http, $rootScope) {
+	$scope.detail = false;
+	var role = $rootScope.user.role.toLowerCase();
+
+	$scope.getBaps = function(page) {
 		$http({
 			method : 'GET',
-			url : 'rest/'+role+'/baps',
+			url : 'rest/' + role + '/baps',
 			headers : {
 				'Content-Type' : 'application/x-www-form-urlencoded'
 			},
@@ -248,15 +251,15 @@ function bapCtrl($scope, $http, $rootScope){
 		});
 	}
 	$scope.getBaps(0);
-	$scope.seeMore= function(bap){
-		$scope.bapCurrent= bap;
-		$scope.detail= true;
+	$scope.seeMore = function(bap) {
+		$scope.bapCurrent = bap;
+		$scope.detail = true;
 	}
-	$scope.retour= function(){
-		$scope.detail= false;
+	$scope.retour = function() {
+		$scope.detail = false;
 		$scope.getBaps($scope.pageCurrent);
 	}
-	
+
 }
 
 function parametreCtrl($scope, $http, $location, $rootScope, $cookieStore) {
@@ -322,13 +325,13 @@ function parametreCtrl($scope, $http, $location, $rootScope, $cookieStore) {
 			break;
 		case false:
 			$scope.add = true;
-			$scope.u= null;
+			$scope.u = null;
 			break;
 		}
 		$scope.update = false;
 	};
 	$scope.addUser = function() {
-		
+
 		if ($scope.update) {
 			switch ($scope.u.role) {
 			case "ADMIN":
@@ -349,44 +352,47 @@ function parametreCtrl($scope, $http, $location, $rootScope, $cookieStore) {
 				url : 'rest/admin/user',
 				data : $scope.u
 			}).then(function(response) {
-			
-				if(response.data.matricule== $rootScope.user.matricule){
+
+				if (response.data.matricule == $rootScope.user.matricule) {
 					$cookieStore.put('user', response.data);
-					$rootScope.user= response.data;
+					$rootScope.user = response.data;
 				}
 				$scope.getUsers($scope.pageCurrent);
 				$scope.add = false;
 				$scope.update = false;
-				
+
 			}, function() {
 
 			});
-			
+
 		} else {
 			if ($scope.errorUsername) {
 				$scope.error = false;
-				$scope.errorEmail=false;
-				$scope.errorManager= false;
+				$scope.errorEmail = false;
+				$scope.errorManager = false;
 				if (!($scope.u.type == null)) {
-					if($scope.u.type == 'COL' && $scope.managerMatricule==null){
-						$scope.errorManager= true;
-					}else{
+					if ($scope.u.type == 'COL'
+							&& $scope.managerMatricule == null) {
+						$scope.errorManager = true;
+					} else {
 						$scope.u.password = '';
 						$scope.u.dateRecrutement = $scope.dt;
-						$http({
-							method : 'POST',
-							url : 'rest/admin/user',
-							data : $scope.u,
-							params: {
-								matricule: $scope.managerMatricule== null ? 0: $scope.managerMatricule
-							}
-						}).then(function(response) {
+						$http(
+								{
+									method : 'POST',
+									url : 'rest/admin/user',
+									data : $scope.u,
+									params : {
+										matricule : $scope.managerMatricule == null ? 0
+												: $scope.managerMatricule
+									}
+								}).then(function(response) {
 							$scope.getUsers($scope.pageCurrent);
 							$scope.add = false;
 							$scope.errorRole = false;
-							$scope.u=null;
+							$scope.u = null;
 						}, function() {
-							$scope.errorEmail= true;
+							$scope.errorEmail = true;
 						});
 					}
 				} else {
@@ -482,12 +488,11 @@ function parametreIdCtrl($scope, $stateParams, $http) {
 			params : {
 				id : matricule
 			}
-		}).then(
-				function(response) {
-					$scope.u = response.data;
-				}, function() {
+		}).then(function(response) {
+			$scope.u = response.data;
+		}, function() {
 
-				});
+		});
 	};
 	$scope.getUser(id);
 }
@@ -625,7 +630,215 @@ function loginCtrl($scope, $rootScope, $location, $cookieStore, $http, $state) {
 
 	};
 }
+function feedbackCtrl($scope, $rootScope, $http) {
+	$scope.libelles = [ "Productivite", "Qualité / Fiabilité", "Conception",
+			"Avant-vente", "Gestion de projet", "Gestion de relation client",
+			"Polyvalence" ];
+	$scope.deleteFeedback = function(id) {
+		$http({
+			method : 'DELETE',
+			url : 'rest/encadrant/feedback',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			params : {
+				idFeedback: id,
+				matricule: $rootScope.user.matricule
+			}
+		}).then(function(response) {
+			$scope.getFeedbacks($scope.pageCurrent);
+		}, function() {
 
+		});
+	};
+	$scope.detail= false;
+	$scope.seeMore=function(feedback){
+		$scope.feedback= feedback;
+		$scope.detail=true;
+	}
+	$scope.changeDetail= function () {
+		$scope.detail=false;
+	}
+	$scope.update=false;
+	$scope.today = function() {
+		$scope.finInter = new Date();
+	};
+	$scope.today();
+
+	$scope.clear = function() {
+		$scope.debutInter = null;
+		$scope.finInter = null;
+	};
+	$scope.minDate = new Date(2008, 0, 1);
+
+	$scope.maxDate = new Date();
+
+	$scope.open1 = function($event) {
+		$scope.status.opened1 = true;
+	};
+	$scope.open2 = function($event) {
+		$scope.status.opened2 = true;
+	};
+	$scope.setDate = function(year, month, day) {
+		$scope.debutInter = new Date(year, month, day);
+	};
+	$scope.setDate = function(year, month, day) {
+		$scope.finInter = new Date(year, month, day);
+	};
+	$scope.status = {
+		opened1 : false,
+		opened2 : false
+	};
+	$scope.calculNombreJour = function() {
+		$scope.nombreJ = Math.round(($scope.finInter - $scope.debutInter)
+				/ (1000 * 60 * 60 * 24));
+	}
+
+	$scope.calculNoteGlobale = function() {
+		$scope.f.nombreThemeCalifie = 0;
+		$scope.f.totalPoids = 0;
+		$scope.f.noteGlobal = 0;
+		for (i = 0; 7 > i; i++) {
+			try {
+				if (!isNaN($scope.qualifications[i].qualification)) {
+					$scope.f.nombreThemeCalifie++;
+					$scope.f.totalPoids = parseInt($scope.qualifications[i].qualification)
+							+ $scope.f.totalPoids;
+					$scope.f.noteGlobal = $scope.f.totalPoids
+							/ $scope.f.nombreThemeCalifie;
+				}
+			} catch (e) {
+
+			}
+		}
+
+	}
+	$scope.chargerProjets = function() {
+		$scope.projets = [];
+		for (i = 0; $scope.collaborateurs.length > i; i++) {
+			if ($scope.collaborateurs[i].matricule == $scope.f.collaborateur.matricule) {
+				for (j = 0; $scope.collaborateurs[i].projets.length > j; j++) {
+					if ($scope.collaborateurs[i].projets[j].chefProjet.matricule == $rootScope.user.matricule) {
+						$scope.projets
+								.push($scope.collaborateurs[i].projets[j]);
+						try {
+							$scope.f.projet.idProjet = '';
+						} catch (e) {
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	$scope.add = false;
+	$scope.changeAdd = function() {
+		switch ($scope.add) {
+		case true:
+			$scope.add = false;
+			$scope.f=null;
+			$scope.qualifications=null;
+			$scope.update=false;
+			break;
+		case false:
+			$scope.add = true;
+			$scope.f= null;
+			break;
+		}
+	}
+	$http({
+		method : 'GET',
+		url : 'rest/encadrant/collaborateurs',
+		headers : {
+			'Content-Type' : 'application/x-www-form-urlencoded'
+		},
+		params : {
+			matricule : $rootScope.user.matricule
+		}
+	}).then(function(response) {
+		$scope.collaborateurs = response.data;
+	}, function() {
+
+	});
+	$scope.isCollaborateurCurrent= function(id) {
+		for(i=0; $scope.collaborateurs.length>=i; i++){
+			if($scope.collaborateurs[i].matricule== id){
+				return true;
+			}
+			
+		}
+		return false;
+	}
+	$scope.getFeedbacks = function(page) {
+		$http({
+			method : 'GET',
+			url : 'rest/encadrant/feedbacks',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			params : {
+				page : page,
+				matricule : $rootScope.user.matricule
+			}
+		}).then(function(response) {
+			$scope.feedbacks = response.data.content;
+			$scope.last = response.data.last;
+			$scope.first = response.data.first;
+			$scope.pages = new Array(response.data.totalPages);
+			$scope.pageCurrent = page;
+		}, function() {
+
+		});
+	}
+	$scope.updateFeedback= function(feedback) {
+		$scope.f= feedback;
+		$scope.debutInter= feedback.debutInter;
+		$scope.finInter= feedback.finInter;
+		$scope.nombreJ= feedback.nombreJourValorise
+		$scope.update= true;
+		$scope.add=true;
+	}
+	$scope.getFeedbacks(0);
+	$scope.addFeedback = function() {
+			$rootScope.initialized=false;
+			$scope.f.nombreThemeCalifie = $scope.f.nombreThemeCalifie == undefined ? 0
+					: $scope.f.nombreThemeCalifie;
+			$scope.f.totalPoids = $scope.f.totalPoids == undefined ? 0
+					: $scope.f.totalPoids;
+			$scope.f.noteGlobal = $scope.f.noteGlobal == undefined ? 0
+					: $scope.f.noteGlobal;
+			$scope.f.encadrant = $rootScope.user;
+			$scope.f.encadrant.matricule = $rootScope.user.matricule;
+			$scope.f.encadrant.type = "ENC";
+			$scope.f.finInter = $scope.finInter;
+			$scope.f.debutInter = $scope.debutInter;
+			$scope.f.nombreJourValorise = $scope.nombreJ;
+			$scope.f.collaborateur.type = "COL";
+			$scope.f.qualifications = new Array();
+			for (i = 0; $scope.libelles.length > i; i++) {
+				try {
+					$scope.qualifications[i].theme = $scope.libelles[i];
+					$scope.f.qualifications.push($scope.qualifications[i]);
+				} catch (e) {
+				}
+			}
+			$http({
+				method : 'POST',
+				url : 'rest/encadrant/feedback',
+				data : $scope.f
+			}).then(function(response) {
+				$scope.getFeedbacks(0);
+				$scope.add = false;
+				$scope.update=false;
+				$scope.f=null;
+				$scope.qualifications=null;
+				$rootScope.initialized=true;
+			}, function() {
+
+			});
+
+	}
+}
 function checkIsConnected($q, $timeout, $location, $state) {
 	var deffered = $q.defer();
 	if (isConnected) {
@@ -636,13 +849,14 @@ function checkIsConnected($q, $timeout, $location, $state) {
 	}
 	return deffered.promise;
 }
-function checkIsNonConnected($q, $timeout, $location, $state, $rootScope, $cookieStore) {
+function checkIsNonConnected($q, $timeout, $location, $state, $rootScope,
+		$cookieStore) {
 	var deffered = $q.defer();
 	if (isConnected) {
 		$timeout(deffered.reject, 0);
 		$rootScope.redirectRole();
 	} else {
-		
+
 		$timeout(deffered.resolve, 0);
 	}
 	return deffered.promise;
@@ -709,3 +923,4 @@ function signatureHMAC(token, url) {
 	var hash = CryptoJS.HmacSHA1(url, part[2]);
 	return part[0] + ':' + part[1] + ':' + hash;
 }
+

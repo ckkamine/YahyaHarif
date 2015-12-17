@@ -12,12 +12,14 @@ import com.lambda.mail.MailComponent;
 
 @Controller
 @RequestMapping("/user")
-public class testmail {
+public class testmail1 {
 
 	@Autowired
 	MailComponent mailComponent;
 	
 	Date date = new Date();
+	
+	
 	
 	@RequestMapping("/preparer")
 	public void preparer() throws MessagingException{

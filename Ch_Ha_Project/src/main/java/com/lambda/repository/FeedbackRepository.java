@@ -12,9 +12,11 @@ import com.lambda.entities.Feedback;
 
 public interface FeedbackRepository extends JpaRepository<Feedback, Long>{
 	
-	@Query("select f from Feedback f where f.encadrant.matricule=:matricule")
+	@Query("select f from Feedback f where f.encadrant.matricule=:matricule and archive= false")
 	Page<Feedback> getFeedbacks(@Param("matricule") Long matricule, Pageable page);
 	
-	@Query("select f from Feedback f where f.commentaire=:x")
-	List<Feedback> getFeedbacks2(@Param("x") String matricule);
+	@Query("select f from Feedback f where f.encadrant.matricule=:matricule and archive= false")
+	List<Feedback> getFeedbacksList(@Param("matricule") Long matricule);
+	
+	
 }

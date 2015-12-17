@@ -11,43 +11,48 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 @Entity
 public class Feedback implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long idFeedback;
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
 		@JoinColumn(name="COL_ID")
 	private Collaborateur collaborateur;
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	  @JoinColumn(name="ENCA_ID")
 	private Encadrant encadrant;
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	  @JoinColumn(name="PROJET_ID")
 	private Projet projet;
 	private Date debutInter;
 	private Date finInter;
 	private String role;
+	@Lob
 	private String commentaire;
 	private Integer nombreThemeCalifie;
 	private Integer totalPoids;
 	private double noteGlobal;
 	private Integer nombreJourValorise;
-	@OneToMany(cascade=CascadeType.REMOVE)
+	@OneToMany(cascade=CascadeType.REMOVE, fetch=FetchType.EAGER)
 	  @JoinColumn(name="FEED_ID")
 	private Collection<Qualification> qualifications;
+	private Date dateFeedback;
 	private boolean archive;
 	
 	
 	public Feedback() {
 		super();
 		this.archive=false;
+		this.dateFeedback= new Date();
 	}
 	public Feedback(Date debutInter, Date finInter, String role, String commentaire, Integer nombreJourValorise) {
 		super();
@@ -57,6 +62,7 @@ public class Feedback implements Serializable{
 		this.commentaire = commentaire;
 		this.nombreJourValorise = nombreJourValorise;
 		this.archive= false;
+		this.dateFeedback= new Date();
 	}
 	public Long getIdFeedback() {
 		return idFeedback;
@@ -70,12 +76,22 @@ public class Feedback implements Serializable{
 	public void setCollaborateur(Collaborateur collaborateur) {
 		this.collaborateur = collaborateur;
 	}
+	
 	@JsonIgnore
 	public Encadrant getEncadrant() {
 		return encadrant;
 	}
+	
+	@JsonSetter
 	public void setEncadrant(Encadrant encadrant) {
 		this.encadrant = encadrant;
+	}
+	
+	public Date getDateFeedback() {
+		return dateFeedback;
+	}
+	public void setDateFeedback(Date dateFeedback) {
+		this.dateFeedback = dateFeedback;
 	}
 	public Projet getProjet() {
 		return projet;

@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Projet implements Serializable{
 	@Id
@@ -21,7 +23,7 @@ public class Projet implements Serializable{
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="CHEF_ID")
 	private Encadrant chefProjet;
-	@ManyToMany(mappedBy="projets")
+	@ManyToMany(mappedBy="projets", fetch=FetchType.EAGER)
 	private Collection<Collaborateur> collaborateurs;
 	
 	public Projet(String nom) {
@@ -58,6 +60,7 @@ public class Projet implements Serializable{
 		this.chefProjet = chefProjet;
 	}
 
+	@JsonIgnore
 	public Collection<Collaborateur> getCollaborateurs() {
 		return collaborateurs;
 	}

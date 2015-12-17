@@ -1,10 +1,15 @@
 package com.lambda.entities;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,6 +17,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @DiscriminatorValue("ENC")
 public class Encadrant extends User{
+	
+	@ManyToMany(fetch= FetchType.EAGER)
+	@JoinTable(name="ENC_COL",
+			joinColumns={@JoinColumn(name="ENC")},
+			inverseJoinColumns={@JoinColumn(name="COL")})
+	private List<Collaborateur> collaborateursCurrent;
 	
 
 	@OneToMany(mappedBy="chefProjet")
@@ -43,5 +54,21 @@ public class Encadrant extends User{
 		this.projets = projets;
 	}
 
-	
+	@JsonIgnore
+	public Collection<Collaborateur> getCollaborateursCurrent() {
+		return collaborateursCurrent;
+	}
+
+	public void setCollaborateursCurrent(List<Collaborateur> collaborateursCurrent) {
+		this.collaborateursCurrent = collaborateursCurrent;
+	}
+
+	public void addCollaborateur(Collaborateur c){
+		try {
+			this.collaborateursCurrent.add(c);
+		} catch (Exception e) {
+			this.collaborateursCurrent= new ArrayList<Collaborateur>();
+			this.collaborateursCurrent.add(c);
+		}
+	}
 }

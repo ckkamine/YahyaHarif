@@ -20,4 +20,5 @@ public interface ProjetRepository extends JpaRepository<Projet, Long>{
 
 	@Query("select p from Projet p where p.chefProjet.matricule = :x")
 	List<Projet> getProjetsByChef(@Param("x") Long matricule);
+	
 }

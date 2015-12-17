@@ -1,5 +1,7 @@
 package com.lambda.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -7,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.lambda.entities.BAP;
+import com.lambda.entities.Collaborateur;
 
 public interface BapRepository extends JpaRepository<BAP, Long>{
 
@@ -25,6 +28,9 @@ public interface BapRepository extends JpaRepository<BAP, Long>{
 	
 	@Query("select b from BAP b where b.manager.matricule = :x")
 	Page<BAP> findByManager(@Param("x") Long matricule, Pageable page);
+	
+	@Query("select b.collaborateur from BAP b where b.status = 'En cours'")
+	List<Collaborateur> collaborateurCurrent();
 	
 }
 

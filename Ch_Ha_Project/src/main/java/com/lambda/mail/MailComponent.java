@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-import org.thymeleaf.context.WebContext;
+import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
 @Component
@@ -40,7 +40,7 @@ public class MailComponent {
 			throws MessagingException {
 
 		String dateString = dateFormat.format(date);
-		final WebContext ctx = new WebContext(request, response, servletContext);
+		final Context ctx = new Context();
 		ctx.setVariable("nom", nom);
 		ctx.setVariable("prenom", prenom);
 		ctx.setVariable("posteActuel", posteActuel);
@@ -64,7 +64,7 @@ public class MailComponent {
 			throws MessagingException {
 
 		String dateString = dateFormat.format(date);
-		final WebContext ctx = new WebContext(request, response, servletContext);
+		final Context ctx = new Context();
 		ctx.setVariable("nom", nom);
 		ctx.setVariable("prenom", prenom);
 		ctx.setVariable("posteActuel", posteActuel);
@@ -88,7 +88,7 @@ public class MailComponent {
 			throws MessagingException {
 
 		String dateString = dateFormat.format(date);
-		final WebContext ctx = new WebContext(request, response, servletContext);
+		final Context ctx = new Context();
 		ctx.setVariable("nom", nom);
 		ctx.setVariable("prenom", prenom);
 		ctx.setVariable("posteActuel", posteActuel);
@@ -112,7 +112,7 @@ public class MailComponent {
 			throws MessagingException {
 
 		String dateString = dateFormat.format(date);
-		final WebContext ctx = new WebContext(request, response, servletContext);
+		final Context ctx = new Context();
 		ctx.setVariable("nom", nom);
 		ctx.setVariable("prenom", prenom);
 		ctx.setVariable("posteActuel", posteActuel);
@@ -135,7 +135,7 @@ public class MailComponent {
 	public void sendUserpass(String email, String nom, String prenom, String username, String password)
 			throws MessagingException {
 
-		final WebContext ctx = new WebContext(request, response, servletContext);
+		final Context ctx = new Context();
 		ctx.setVariable("nom", nom);
 		ctx.setVariable("prenom", prenom);
 		ctx.setVariable("username", username);

@@ -1,5 +1,6 @@
 package com.lambda.entities;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -24,7 +25,7 @@ public class BAP extends Bilan{
 	public static final String ANNULE= "Annulé";
 	public static final String REJETE= "Rejeté";
 
-	@OneToMany
+	@OneToMany(fetch=FetchType.EAGER)
 	  @JoinColumn(name="BAP_ID")
 	private Collection<Feedback> feedbacks;
 	private boolean locked;
@@ -44,7 +45,7 @@ public class BAP extends Bilan{
 	
 	
 
-	public BAP(Date dateBilan, Collaborateur collaborateur,   boolean locked, Manager manager) {
+	public BAP(Date dateBilan, Collaborateur collaborateur,   boolean locked, Manager manager ) {
 		super(dateBilan, collaborateur);
 		this.locked = true;
 		this.status = EN_ATTENTE;
@@ -124,5 +125,12 @@ public class BAP extends Bilan{
 		return ANNULE;
 	}
 
-	
+	public void addFeedback(Feedback f){
+		try {
+			this.feedbacks.add(f);
+		} catch (Exception e) {
+			this.feedbacks= new ArrayList<Feedback>();
+			this.feedbacks.add(f);
+		}
+	}
 }
