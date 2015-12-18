@@ -42,8 +42,8 @@ public class MailService {
 	@Autowired
 	ObjectifRepository objectifRepository;
 	
-	
-	@Scheduled(cron = "0 0/1 * * * *") //1 minute
+	@RequestMapping("/user/bilan")
+	//@Scheduled(cron = "0 0/1 * * * *") //1 minute
 	//@Scheduled(cron = "0 0 5 1 1/1 *") 1 mois
 	public void preparer() throws MessagingException {
 		Calendar date= Calendar.getInstance();
@@ -55,7 +55,7 @@ public class MailService {
 			annee++;
 		}
 		for(BAP b: baps){
-			System.out.println("BAP - "+b.getId());
+			System.out.println("BAP - "+b.getId()+" -- PREPARER");
 			Collaborateur collaborateur= b.getCollaborateur();
 			Calendar bapDate = Calendar.getInstance();
 			bapDate.setTime(b.getDateBilan());
@@ -106,14 +106,15 @@ public class MailService {
 
 	//@Scheduled(cron = "0/10 * * * * *") 10 secondes
 	//@Scheduled(cron = "0 0 5 1 1/1 *") 1 mois
-	@Scheduled(cron = "30 0/1 * * * *") //1 minute
+	//@Scheduled(cron = "30 0/1 * * * *") //1 minute
+	@RequestMapping("/user/bian2")
 	public void realiser() throws MessagingException {
 		Calendar date= Calendar.getInstance();
 		List<BAP> baps = br.findAll();
 		Integer mois = date.get(Calendar.MONTH);
 		Integer annee= date.get(Calendar.YEAR);
 		for(BAP b: baps){
-			System.out.println("BAP - "+b.getId());
+			System.out.println("BAP - "+b.getId()+" -- REALISER");
 			Calendar bapDate = Calendar.getInstance();
 			bapDate.setTime(b.getDateBilan());
 			if((bapDate.get(Calendar.MONTH)==mois)&&(bapDate.get(Calendar.YEAR)==annee)){

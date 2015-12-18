@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,6 +34,7 @@ public class AdminRestService {
 		return adminMetier.getAllUsers(page);
 	}
 	
+	
 	@RequestMapping(value="/baps", method= RequestMethod.GET)
 	public Page<BAP> getAllBap(@RequestParam int page) {
 		return adminMetier.getAllBap(page);
@@ -47,6 +49,22 @@ public class AdminRestService {
 	public Page<Projet> getAllProjets(@RequestParam int page) {
 		return adminMetier.getAllProjets(page);
 	}
+
+	@RequestMapping(value="/objectif", method= RequestMethod.POST)
+	public BAP addObjectif(@RequestBody Objectif objectif, @RequestParam Long idBap) {
+		return adminMetier.addObjectif(objectif, idBap);
+	}
+
+	@RequestMapping(value="/bilan", method= RequestMethod.POST)
+	public Bilan addBilan(Bilan bilan) {
+		return adminMetier.addBilan(bilan);
+	}
+
+	@RequestMapping(value="/bap", method= RequestMethod.POST)
+	public BAP addBap(BAP bap) {
+		return adminMetier.addBap(bap);
+	}
+
 
 	@RequestMapping(value="/objectifs", method= RequestMethod.GET)
 	public Page<Objectif> getAllObjectifs(@RequestParam int page) {
@@ -94,7 +112,7 @@ public class AdminRestService {
 	}
 	
 	@RequestMapping(value="/bilan", method= RequestMethod.PUT)
-	public Bilan updateBilan(@RequestBody Bilan bilan) {
+	public BAP updateBilan(@RequestBody BAP bilan) {
 		return adminMetier.updateBilan(bilan);
 	}
 

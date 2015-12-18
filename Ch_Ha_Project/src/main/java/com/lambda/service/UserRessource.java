@@ -1,7 +1,5 @@
 package com.lambda.service;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lambda.entities.BAP;
 import com.lambda.entities.Collaborateur;
 import com.lambda.entities.User;
 import com.lambda.metier.UserMetier;
-import com.lambda.repository.CollaborateurRepository;
 import com.lambda.repository.EncadrantRepository;
 import com.lambda.security.TokenUtils;
 
@@ -71,12 +67,7 @@ public class UserRessource {
 		return userDetails;
 	}
 	
-	@RequestMapping(value="/test",
-			method= RequestMethod.GET)
-	public List<Collaborateur> getCollaborateurTest(){
-		
-		return encadrantRepository.findColloborateurCurrent(23L);
-	}
+
 
 
 }

@@ -107,6 +107,12 @@ public class ManagerMetierImpl implements ManagerMetier {
 		return b;
 	}
 
+	@Override
+	public BAP addBap(BAP bap) {
+		// TODO Auto-generated method stub
+		return bapRepository.save(bap);
+	}
+
 	
 
 }

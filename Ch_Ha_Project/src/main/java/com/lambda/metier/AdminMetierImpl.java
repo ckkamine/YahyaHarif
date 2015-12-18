@@ -17,6 +17,7 @@ import com.lambda.entities.ArchiveBap;
 import com.lambda.entities.BAP;
 import com.lambda.entities.Bilan;
 import com.lambda.entities.Collaborateur;
+import com.lambda.entities.Description;
 import com.lambda.entities.Encadrant;
 import com.lambda.entities.Manager;
 import com.lambda.entities.Objectif;
@@ -27,6 +28,7 @@ import com.lambda.repository.ArchiveBapRepository;
 import com.lambda.repository.BapRepository;
 import com.lambda.repository.BilanRepository;
 import com.lambda.repository.CollaborateurRepository;
+import com.lambda.repository.DescriptionRepository;
 import com.lambda.repository.EncadrantRepository;
 import com.lambda.repository.ManagerRepository;
 import com.lambda.repository.ObjectifRepository;
@@ -68,6 +70,9 @@ public class AdminMetierImpl implements AdminMetier{
 	
 	@Autowired
 	EncadrantRepository encadrantRepository;
+	
+	@Autowired
+	DescriptionRepository descriptionRepository;
 
 	public Page<User> getAllUsers(int page) {	
 		return userRepository.findAll(new PageRequest(page, 10));
@@ -146,9 +151,9 @@ public class AdminMetierImpl implements AdminMetier{
 	}
 
 	@Override
-	public Bilan updateBilan(Bilan bilan) {
-		// TODO Auto-generated method stub
-		return bilanRepository.save(bilan);
+	public BAP updateBilan(BAP bilan) {
+		return bapRepository.save(bilan);
+		
 	}
 
 	@Override
@@ -285,6 +290,25 @@ public class AdminMetierImpl implements AdminMetier{
 	public List<Manager> getAllManagers() {
 		// TODO Auto-generated method stub
 		return managerRepository.findAll();
+	}
+
+	@Override
+	public BAP addObjectif(Objectif objectif, Long idBap) {
+		objectifRepository.save(objectif);
+		BAP bap= bapRepository.findOne(idBap);
+		bap.addObjectifSortantes(objectif);
+		bap= bapRepository.findOne(idBap);
+		return bap;
+	}
+
+	@Override
+	public Bilan addBilan(Bilan bilan) {
+		return bilanRepository.save(bilan);
+	}
+
+	@Override
+	public BAP addBap(BAP bap) {
+		return bapRepository.save(bap);
 	}
 
 	

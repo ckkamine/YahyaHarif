@@ -35,7 +35,7 @@ public class ManagerRestService {
 		return managerMetier.getAllArchiveBapManager(matricule, page);
 	}
 
-	@RequestMapping(value="/bap", method= RequestMethod.POST)
+	@RequestMapping(value="/bap", method= RequestMethod.GET)
 	public BAP getBap(@RequestBody Long idBap) {
 		return managerMetier.getBap(idBap);
 	}
@@ -56,7 +56,7 @@ public class ManagerRestService {
 	}
 
 	@RequestMapping(value="/objectif/{idbap}", method= RequestMethod.POST)
-	public Objectif addObjectif(@RequestBody Objectif objectif,@PathVariable("idbap") Long idBap) {
+	public Objectif addObjectif(@RequestBody Objectif objectif, @PathVariable("idbap") Long idBap) {
 		return managerMetier.addObjectif(objectif, idBap);
 	}
 
@@ -70,6 +70,9 @@ public class ManagerRestService {
 		managerMetier.validerBap(idBap);
 	}
 	
-	
+	@RequestMapping(value="/bap", method= RequestMethod.POST)
+	public BAP addBap(BAP bap) {
+		return managerMetier.addBap(bap);
+	}
 
 }

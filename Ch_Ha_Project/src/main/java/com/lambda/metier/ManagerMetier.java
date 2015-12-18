@@ -19,7 +19,7 @@ public interface ManagerMetier {
 	public Objectif addObjectif(Objectif objectif, Long idBap);
 	public BAP preparerBap(Long idBap);
 	public void validerBap(Long idBap);
-	
+	public BAP addBap(BAP bap);
 	
 
 }

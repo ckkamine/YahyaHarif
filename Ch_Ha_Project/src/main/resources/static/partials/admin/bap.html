@@ -129,12 +129,12 @@
 			<div class="ibox-title">
 				<h5>Details du Bilan Annuel de Performance</h5>
 				<a href="" ng-click="retour()"
-							class="btn btn-primary btn-xs pull-right"><i
-							class="fa fa-arrow-left"></i> Retour</a>
+					class="btn btn-primary btn-xs pull-right"><i
+					class="fa fa-arrow-left"></i> Retour</a>
 			</div>
 			<div class="ibox-content">
 				<div class="row">
-					<div class="col-sm-12 col-md-4">
+					<div class="col-sm-12 col-md-5">
 						<div class="contact-box">
 							<a href="">
 								<div class="col-sm-4">
@@ -146,26 +146,32 @@
 								</div>
 								<div class="col-sm-8">
 									<h3>
-										<strong>{{bapCurrent.collaborateur.firstName}} {{bapCurrent.collaborateur.lastName}}</strong>
+										<strong>{{bapCurrent.collaborateur.firstName}}
+											{{bapCurrent.collaborateur.lastName}}</strong>
 									</h3>
 									<p>
-										<i class="fa fa-hashtag">&nbsp;</i> {{bapCurrent.collaborateur.matricule}}
+										<i class="fa fa-hashtag">&nbsp;</i>
+										{{bapCurrent.collaborateur.matricule}}
 									</p>
 									<p>
-										<i class="fa fa-calendar">&nbsp;</i> {{bapCurrent.collaborateur.dateRecrutement | date: 'dd/MM/yyyy'}}
+										<i class="fa fa-calendar">&nbsp;</i>
+										{{bapCurrent.collaborateur.dateRecrutement | date:
+										'dd/MM/yyyy'}}
 									</p>
 									<p>
-										<i class="fa fa-envelope-o">&nbsp;</i> {{bapCurrent.collaborateur.email}}
+										<i class="fa fa-envelope-o">&nbsp;</i>
+										{{bapCurrent.collaborateur.email}}
 									</p>
 									<p>
-										<i class="fa fa-phone">&nbsp;</i> {{bapCurrent.collaborateur.telephone}}
+										<i class="fa fa-phone">&nbsp;</i>
+										{{bapCurrent.collaborateur.telephone}}
 									</p>
 								</div>
 								<div class="clearfix"></div>
 							</a>
 						</div>
 					</div>
-					<div class="col-sm-12 col-md-2 col-md-offset-1">
+					<div class="col-sm-12 col-md-2 ">
 						<div class="content-box equal">
 							<h2 class="text-center">Bilan Annuel de Performance</h2>
 							<p class="text-center">
@@ -173,20 +179,21 @@
 							</p>
 							<br />
 							<p>
-								<strong>Statut</strong> <span
-									class="label pull-right" ng-class="{
+								<strong>Statut</strong> <span class="label pull-right"
+									ng-class="{
                                                        	'label-warning': bapCurrent.status=='En cours',
                                                          'label-danger': bapCurrent.status=='En attente'
                                                                                 			}">{{bapCurrent.status}}</span>
 							</p>
 							<p>
-								<strong>Accès</strong> 
-								<span ng-if="bapCurrent.locked==true"><span  class ="label label-danger pull-right">Privé</span></span>
-								<span ng-if="bapCurrent.locked==false"><span	class="label label-primary pull-right">Public</span></span>
+								<strong>Accès</strong> <span ng-if="bapCurrent.locked==true"><span
+									class="label label-danger pull-right">Privé</span></span> <span
+									ng-if="bapCurrent.locked==false"><span
+									class="label label-primary pull-right">Public</span></span>
 							</p>
 						</div>
 					</div>
-					<div class="col-sm-12 col-md-4 col-md-offset-1">
+					<div class="col-sm-12 col-md-5">
 						<div class="contact-box">
 							<a href="">
 								<div class="col-sm-4">
@@ -197,22 +204,27 @@
 									</div>
 								</div>
 								<div class="col-sm-8">
-								
+
 									<h3>
-										<strong>{{bapCurrent.manager.firstName}} {{bapCurrent.manager.lastName}}</strong>
+										<strong>{{bapCurrent.manager.firstName}}
+											{{bapCurrent.manager.lastName}}</strong>
 									</h3>
-										
+
 									<p>
-										<i class="fa fa-hashtag">&nbsp;</i> {{bapCurrent.manager.matricule}}
+										<i class="fa fa-hashtag">&nbsp;</i>
+										{{bapCurrent.manager.matricule}}
 									</p>
 									<p>
-										<i class="fa fa-calendar">&nbsp;</i> {{bapCurrent.manager.dateRecrutement | date : 'dd/MM/yyyy'}}
+										<i class="fa fa-calendar">&nbsp;</i>
+										{{bapCurrent.manager.dateRecrutement | date : 'dd/MM/yyyy'}}
 									</p>
 									<p>
-										<i class="fa fa-envelope-o">&nbsp;</i> {{bapCurrent.manager.email}}
+										<i class="fa fa-envelope-o">&nbsp;</i>
+										{{bapCurrent.manager.email}}
 									</p>
 									<p>
-										<i class="fa fa-phone">&nbsp;</i> {{bapCurrent.manager.telephone}}
+										<i class="fa fa-phone">&nbsp;</i>
+										{{bapCurrent.manager.telephone}}
 									</p>
 								</div>
 								<div class="clearfix"></div>
@@ -221,268 +233,333 @@
 					</div>
 				</div>
 				<br />
-				<div class="table-responsive" ng-show="bapCurrent.status=='En cours'">
-					<table class="table table-striped">
-						<thead>
-							<tr>
-								<th>Catégorie</th>
-								<th>Objectif</th>
-								<th>Description</th>
-								<th>Mesure</th>
-								<th>Responsable Mesure</th>
-								<th>Poids</th>
-								<th>Résultat</th>
-								<th>Note finale</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>Jul 14, 2013</</td>
-								<td>Project <small>This is example of project</small>
-								</td>
-								<td><span class="pie">0.52/1.561</span></td>
-								<td>20%</td>
-								<td>Jul 14, 2013</td>
-								<td>Jul 14, 2013</td>
-								<td>Jul 14, 2013</td>
-								<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-							</tr>
-							<tr>
-								<td>Jul 14, 2013</</td>
-								<td>Project <small>This is example of project</small>
-								</td>
-								<td><span class="pie">0.52/1.561</span></td>
-								<td>20%</td>
-								<td>Jul 14, 2013</td>
-								<td>Jul 14, 2013</td>
-								<td>Jul 14, 2013</td>
-								<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-							</tr>
-							<tr>
-								<td>Jul 14, 2013</</td>
-								<td>Project <small>This is example of project</small>
-								</td>
-								<td><span class="pie">0.52/1.561</span></td>
-								<td>20%</td>
-								<td>Jul 14, 2013</td>
-								<td>Jul 14, 2013</td>
-								<td>Jul 14, 2013</td>
-								<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-							</tr>
-							<tr>
-								<td>Jul 14, 2013</</td>
-								<td>Project <small>This is example of project</small>
-								</td>
-								<td><span class="pie">0.52/1.561</span></td>
-								<td>20%</td>
-								<td>Jul 14, 2013</td>
-								<td>Jul 14, 2013</td>
-								<td>Jul 14, 2013</td>
-								<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-							</tr>
-						</tbody>
-					</table>
+				<div class="ibox-content" ng-show="bapCurrent.status=='En cours'">
+
+					<ul class="list-group">
+						<li class="list-group-item">
+							<div class="row">
+								<div class="col-md-1">
+									<strong>Catégorie</strong>
+								</div>
+								<div class="col-md-3">
+									<strong>Objectif</strong>
+								</div>
+								<div class="col-md-3">
+									<strong>Description</strong>
+								</div>
+								<div class="col-md-1">
+									<strong>Mesure </strong>
+								</div>
+								<div class="col-md-1">
+									<strong>Responsable Mesure</strong>
+								</div>
+								<div class="col-md-1">
+									<strong>Poids</strong>
+								</div>
+								<div class="col-md-2">
+									<strong>Résultat</strong>
+								</div>
+
+
+							</div>
+						</li>
+
+						<div ng-repeat="o in bapCurrent.objectifsEntrantes">
+							<li class="list-group-item" ng-repeat="d in o.descriptions">
+
+								<div class="row">
+									<div class="col-md-1">{{o.categorie}}</div>
+									<div class="col-md-3">{{o.objectif}}</div>
+									<div class="col-md-3">{{d.description}}</div>
+									<div class="col-md-1">{{d.mesure}}</div>
+									<div class="col-md-1">{{d.responsable.posteActuel}}</div>
+									<div class="col-md-1">{{d.poids}}%</div>
+									<div class="col-md-2">
+										<div class="row">
+											<div ng-hide="editResultatF">
+												<div class="col-md-2">{{d.note}}%</div>
+												<div class="col-md-1">
+													<button class="btn btn-xs btn-primary"
+														ng-click="editResultat()">
+														<i class="fa fa-edit"></i>
+													</button>
+												</div>
+											</div>
+											<div ng-show="editResultatF">
+												<input type="number" value="0" class="col-md-6"
+													ng-model="d.note" ng-change="calculNoteGlobale()" />
+
+												<div class="col-md-1">
+													<button class="btn btn-xs btn-primary"
+														ng-click="updateBap()">
+														<i class="fa fa-edit"></i>
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</li>
+						</div>
+						<li class="list-group-item">
+							<div class="row">
+								<div class="col-md-1 col-md-offset-9">100 %</div>
+								<div class="col-md-2">{{bapCurrent.noteGlobale}} %</div>
+							</div>
+						</li>
+					</ul>
+
 				</div>
 				<br />
-				<div class="row" ng-show="bapCurrent.status=='En cours'">
-					<div class="col-md-6">
-						<div class="tabs-container">
-							<ul class="nav nav-tabs">
-								<li class="active"><a data-toggle="tab" href="#tab-3">Objectifs
-										Année Prochaine</a></li>
-								<li class=""><a data-toggle="tab" href="#tab-4">Remarques
-										et Observations</a></li>
-							</ul>
-							<div class="tab-content">
-								<div id="tab-3" class="tab-pane active">
-									<div class="panel-body equal">
-										<div class="row">
-											<div class="col-md-8">Objectif</div>
-											<div class="col-md-2">
-												<i class="fa fa-check text-info"></i>&nbsp; <span
-													class="text-info">Validé</span>
-											</div>
-											<div class="col-md-2"></div>
-										</div>
-										<br />
-										<div class="row">
-											<div class="col-md-8">Objectif</div>
-											<div class="col-md-2">
-												<i class="fa fa-check text-info"></i>&nbsp; <span
-													class="text-info">Validé</span>
-											</div>
-											<div class="col-md-2"></div>
-										</div>
-										<br />
-										<div class="row">
-											<div class="col-md-8">Objectif</div>
-											<div class="col-md-2">
-												<i class="fa fa-close text-danger"></i>&nbsp; <span
-													class="text-danger">Refusé</span>
-											</div>
-											<div class="col-md-2">
-												<a href="#" class="btn btn-xs"><i class="fa fa-edit"></i>
-													Modifier</a>
-											</div>
-										</div>
-										<br />
-										<div class="row">
-											<div class="col-md-8">Objectif</div>
-											<div class="col-md-2">
-												<i class="fa fa-check text-info"></i>&nbsp; <span
-													class="text-info">Validé</span>
-											</div>
-											<div class="col-md-2"></div>
-										</div>
-										<br />
-										<div class="row">
-											<div class="col-md-8">Objectif</div>
-											<div class="col-md-2">
-												<i class="fa fa-close text-danger"></i>&nbsp; <span
-													class="text-danger">Refusé</span>
-											</div>
-											<div class="col-md-2">
-												<a href="#" class="btn btn-xs"><i class="fa fa-edit"></i>
-													Modifier</a>
-											</div>
-										</div>
-									</div>
-									<br />
-									<div class="row">
-										<center>
-											<a href="#" class="btn btn-xs btn-success btn-outline"><i class="fa fa-send"></i>&nbsp;Soumettre Objectifs</a>
-										</center>
-									</div>
-								</div>
-								<div id="tab-4" class="tab-pane">
-									<div class="panel-body equal">
-										<div class="row">
-											<div class="col-md-10">
-												<p>Remarque test remarque test Remarque test remarque
-													test Remarque test remarque test Remarque test remarque
-													test</p>
-											</div>
-											<div class="col-md-2">
-												<a href="#" class="btn btn-xs" data-toggle="modal"
-													data-target="#myModal5"><i class="fa fa-edit"></i>
-													Modifier</a> <br />
-												<a href="#" class="btn btn-xs text-danger"><i
-													class="fa fa-trash"></i> Supprimer</a>
-											</div>
-										</div>
-									</div>
-								</div>
+				<div class="tab-pane" ng-show="bapCurrent.status=='En cours'">
+					<div class="panel-body equal">
+						<div class="row">
+							<h3>Remarques et Observations</h3>
+						</div>
+						<div class="row">
+							<div class="col-md-8 tabs-container panel-body"
+								ng-hide="editRemarqueF">
+								<p>{{bapCurrent.decision}}</p>
+							</div>
+							<div class="col-md-8 form-group" ng-show="editRemarqueF">
+								<textarea class="col-md-12 form-control"
+									ng-model="bapCurrent.decision"></textarea>
+							</div>
+							<div class="col-md-3 col-md-offset-1">
+								<a href="" class="btn btn-xs btn-primary"
+									ng-click="editRemarque()" ng-hide="editRemarqueF"><i
+									class="fa fa-edit"></i> Modifier</a> <a href=""
+									class="btn btn-xs btn-primary" ng-click="updateBap()"
+									ng-show="editRemarqueF"><i class="fa fa-edit"></i> Valider</a>
+								<a href="" class="btn btn-xs btn-outline btn-danger"
+									ng-click="clearDecision()"><i class="fa fa-trash"></i>
+									Supprimer</a>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
+				</div>
+				<div class="row" ng-show="bapCurrent.status=='En cours'">
+					<div class="col-md-11">
 						<div class="tabs-container">
 							<ul class="nav nav-tabs">
-								<li class="active"><a data-toggle="tab" href="#tab-1">Fiches
-										d'Évaluation</a></li>
-								<li class=""><a data-toggle="tab" href="#tab-2">Historique</a></li>
+								<li ng-class="{'active': tab==0}" ng-click="tab=0"><a>Objectifs
+										Année Prochaine</a></li>
+								<li ng-class="{'active': tab==1}" ng-click="tab=1"><a>Ajouter
+										Objectif</a></li>
 							</ul>
 							<div class="tab-content">
-								<div id="tab-1" class="tab-pane active">
+								<div class="tab-pane" ng-class="{'active': tab==0}">
 									<div class="panel-body equal">
-										<div class="row">
-											<div class="col-md-4">
-												<a href="#">Fiche Évaluation 1</a>
+
+										<div
+											ng-repeat=" o in bapCurrent.objectifsSortantes track by $index">
+											<div class="row">
+												<div ng-hide="editObjectifsSF[$index]">
+													<div class="col-md-8">
+														<div class="row">
+															<div class="col-md-3">{{o.categorie}}</div>
+															<div class="col-md-3">{{o.objectif}}</div>
+															<div class="col-md-3">{{o.objectif}}</div>
+														</div>
+													</div>
+													<div class="col-md-1" ng-show="o.valide">
+														<i class="fa fa-check text-info"></i>&nbsp; <span
+															class="text-info">Validé</span>
+													</div>
+													<div ng-hide="o.valide">
+														<div class="col-md-2">
+															<i class="fa fa-close text-danger"></i>&nbsp; <span
+																class="text-danger">Refusé</span>
+														</div>
+														<div class="col-md-1">
+															<a href="" class="btn btn-xs btn-success "
+																ng-click="editObjectifsS($index)"><i
+																class="fa fa-edit"></i> Modifier</a>
+														</div>
+													</div>
+												</div>
+												<div ng-show="editObjectifsSF[$index]">
+													<div class="row">
+														<div class="col-md-2" class="form-group">
+															<input type="text" placeholder="Catégorie"
+																ng-model="o.categorie" class="form-control col-md-2">
+														</div>
+														<div class="col-md-2" class="form-group">
+															<input type="text" placeholder="Objectif"
+																ng-model="o.objectif" class="form-control">
+														</div>
+														<div class="col-md-2" class="form-group">
+															<select class="form-control">
+																<option>1</option>
+																<option>2</option>
+																<option>3</option>
+															</select>
+														</div>
+														<div class="col-md-2" class="form-group">
+															<input type="text" class="form-control"
+																placeholder="description">
+														</div>
+														<div class="col-md-2" class="form-group">
+															<input type="number" class="form-control">
+														</div>
+														<div class="col-md-1 ">
+															<input type="submit" class="btn btn-xs btn-primary"
+																ng-click="updateBap()" value="Envoyer">
+														</div>
+													</div>
+												</div>
 											</div>
-											<div class="col-md-4">NOM Encadrant</div>
-											<div class="col-md-4">NOM Projet</div>
+											<br />
 										</div>
-										<br />
 										<div class="row">
-											<div class="col-md-4">
-												<a href="#">Fiche Évaluation 1</a>
-											</div>
-											<div class="col-md-4">NOM Encadrant</div>
-											<div class="col-md-4">NOM Projet</div>
-										</div>
-										<br />
-										<div class="row">
-											<div class="col-md-4">
-												<a href="#">Fiche Évaluation 1</a>
-											</div>
-											<div class="col-md-4">NOM Encadrant</div>
-											<div class="col-md-4">NOM Projet</div>
-										</div>
-										<br />
-										<div class="row">
-											<div class="col-md-4">
-												<a href="#">Fiche Évaluation 1</a>
-											</div>
-											<div class="col-md-4">NOM Encadrant</div>
-											<div class="col-md-4">NOM Projet</div>
-										</div>
-										<br />
-										<div class="row">
-											<div class="col-md-4">
-												<a href="#">Fiche Évaluation 1</a>
-											</div>
-											<div class="col-md-4">NOM Encadrant</div>
-											<div class="col-md-4">NOM Projet</div>
+											<div class="col-md-3 col-md-offset-2">Somme des Poids =
+												100%</div>
 										</div>
 									</div>
+									<br />
+
+									<div class="row">
+										<center>
+											<a href="" class="btn btn-xs btn-success btn-outline"><i
+												class="fa fa-send"></i>&nbsp;Soumettre Objectifs</a>
+										</center>
+									</div>
 								</div>
-								<div id="tab-2" class="tab-pane">
+								<div class="tab-pane" ng-class="{'active': tab==1}">
 									<div class="panel-body equal">
-										<div class="row">
-											<div class="col-md-12">
-												<span class="text-success"><i class="fa fa-clock"></i>12
-													/ 05 / 2015 à 13h52</span> - <strong>ENCADRANT</strong> à soumis
-												un feedback.
+										<form class="form-horizontal">
+											<div class="form-group">
+												<label for="categorie" class="col-sm-2 control-label">Catégorie</label>
+												<div class="col-sm-10">
+													<input type="text" class="form-control" id="categorie"
+														placeholder="catégorie" ng-model="objectif.categorie">
+												</div>
 											</div>
-										</div>
-										<br />
-										<div class="row">
-											<div class="col-md-12">
-												<span class="text-success"><i class="fa fa-clock"></i>12
-													/ 05 / 2015 à 13h52</span> - <strong>ENCADRANT</strong> à soumis
-												un feedback.
+											<div class="form-group">
+												<label for="objectif" class="col-sm-2 control-label">Objectif</label>
+												<div class="col-sm-10">
+													<input type="text" class="form-control"
+														id="objectif" placeholder="objectif" ng-model="objectif.objectif">
+												</div>
 											</div>
-										</div>
-										<br />
-										<div class="row">
-											<div class="col-md-12">
-												<span class="text-success"><i class="fa fa-clock"></i>12
-													/ 05 / 2015 à 13h52</span> - <strong>ENCADRANT</strong> à soumis
-												un feedback.
+											<div ng-repeat="d in descriptions">
+											<div class="row">
+												<div class="col-sm-2">Description :</div>
+												<div class="col-sm-8">
+													{{d.description}}
+												</div>
+												<div class="col-sm-2">
+													<button class="btn btn-xs btn-danger" ng-click="editerDescription($index)"> Supprimer</button>
+												</div>
 											</div>
-										</div>
-										<br />
-										<div class="row">
-											<div class="col-md-12">
-												<span class="text-success"><i class="fa fa-clock"></i>12
-													/ 05 / 2015 à 13h52</span> - <strong>ENCADRANT</strong> à soumis
-												un feedback.
+											<div class="row">
+												<div class="col-sm-2 ">Mesure :</div>
+												<div class="col-sm-8">
+													{{d.mesure}}
+												</div>
+												<div class="col-sm-2">
+													
+												</div>
 											</div>
-										</div>
-										<br />
-										<div class="row">
-											<div class="col-md-12">
-												<span class="text-success"><i class="fa fa-clock"></i>12
-													/ 05 / 2015 à 13h52</span> - <strong>ENCADRANT</strong> à soumis
-												un feedback.
+											<div class="row">
+												<div class="col-sm-2">Poids :</div>
+												<div class="col-sm-8">
+													{{d.poids}} %
+												</div>
+												<div class="col-sm-2">
+													
+												</div>
 											</div>
-										</div>
-										<br />
-										<div class="row">
-											<div class="col-md-12">
-												<span class="text-success"><i class="fa fa-clock"></i>12
-													/ 05 / 2015 à 13h52</span> - <strong>ENCADRANT</strong> à soumis
-												un feedback.
+											<div class="row">
+												<div class="col-sm-2">Responsable :</div>
+												<div class="col-sm-8">
+													{{d.responsable.matricule}}
+												</div>
+												<div class="col-sm-2">
+													
+												</div>
 											</div>
-										</div>
-										<br />
-										<div class="row">
-											<div class="col-md-12">
-												<span class="text-success"><i class="fa fa-clock"></i>12
-													/ 05 / 2015 à 13h52</span> - <strong>ENCADRANT</strong> à soumis
-												un feedback.
+											<br>
 											</div>
+											
+											</br>
+											<div class="form-group">
+												<label for="description" class="col-sm-2 control-label">Description :</label>
+												<div class="col-sm-10">
+													<input type="text" class="form-control"
+														id="description" placeholder="description" ng-model="description.description">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="mesure" class="col-sm-2 control-label">Mesure :</label>
+												<div class="col-sm-10">
+													<input type="text" class="form-control"
+														id="mesure" placeholder="mesure" ng-model="description.mesure">
+												</div>
+											</div>
+											
+											
+											<div class="form-group">
+												<label for="responsable" class="col-sm-2 control-label">Responsable :</label>
+												<div class="col-sm-10">
+													<select ng-model="description.responsable.matricule" class="form-control">
+														<option ng-repeat="e in encadrants">{{e.matricule}}</option>
+													</select>
+												</div>
+											</div>
+											
+											<div class="form-group">
+												<div class="col-sm-offset-7 col-sm-2">
+													<button type="submit" class="btn btn-outline text-navy" ng-click="ajouterUneAutre()">Ajouter une autre description
+														</button>
+												</div>
+												<div class= "col-sm-1 col-sm-offset-1">
+													<button type="submit" class="btn btn-primary" ng-click="addObjectif()">Valider
+														</button>
+												</div>
+											</div>
+											
+											<div class="row">
+												<div class="col-md-3 col-md-offset-2">Somme des Poids est <strong ng-class="{'text-danger': somme>100}">{{somme}}</strong> </div>
+											</div>
+											</form>
+									</div>
+									
+									<br/>
+
+									<div class="row">
+										<center>
+											<a href="" class="btn btn-xs btn-success btn-outline"><i
+												class="fa fa-send"></i>&nbsp;Soumettre Objectifs</a>
+										</center>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="col-md-11">
+						<div class="tabs-container">
+							<ul class="nav nav-tabs">
+								<li class="active"><a href="">Historique</a></li>
+							</ul>
+							<div class="tab-content">
+								<div id="" class="tab-pane active">
+									<div class="panel-body equal">
+										<div ng-repeat="f in bapCurrent.feedbacks">
+											<div class="row">
+												<div class="col-md-10">
+													<span class="text-success"><i
+														class="fa fa-search click text-navy"></i> <i
+														class="fa fa-clock"></i> {{f.dateFeedback |
+														date:'yyyy/MM/dd HH:mm'}}</span> - <strong>{{f.encadrant.matricule}}
+														{{f.encadrant.lastName}} </strong>a soumis un feedback.
+												</div>
+
+											</div>
+											<br />
 										</div>
+
 									</div>
 								</div>
 							</div>

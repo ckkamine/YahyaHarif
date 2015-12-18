@@ -15,14 +15,14 @@ import com.lambda.entities.Objectif;
 import com.lambda.entities.Projet;
 import com.lambda.entities.User;
 
-public interface AdminMetier {
+public interface AdminMetier{
 
 	Page<User> getAllUsers(int page);
 	Page<BAP> getAllBap(int page);
 	Page<ArchiveBap> getAllArchiveBap(int page);
 	Page<Projet> getAllProjets(int page);
 	Page<Objectif> getAllObjectifs(int page);
-	//Objectif addObjectif(Objectif objectif); #Manager
+	BAP addObjectif(Objectif objectif, Long idBap);
 	Objectif getObjectif(Long id);
 	Objectif updateObjectif(Objectif objectif);
 	void deleteObjectif(Long id);
@@ -30,9 +30,9 @@ public interface AdminMetier {
 	Projet getProjet(Long id);
 	Projet updateProjet(Projet projet);
 	void deleteProjet(Long id);
-	//Bilan addBilan(Bilan bilan); #Manager
+	Bilan addBilan(Bilan bilan);
 	Bilan getBilan(Long id);
-	Bilan updateBilan(Bilan bilan);
+	BAP updateBilan(BAP bilan);
 	void deleteBilan(Long id);
 	List<String> getAllUsername();
 	User addUser(User user, Long matricule);
@@ -51,6 +51,7 @@ public interface AdminMetier {
 	List<Encadrant> getAllEncadrant();
 	List<Collaborateur> getAllCollaborateur();
 	List<Manager> getAllManagers();
+	BAP addBap(BAP bap);
 	
 	
 	

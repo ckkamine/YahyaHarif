@@ -42,7 +42,7 @@ public class Feedback implements Serializable{
 	private Integer totalPoids;
 	private double noteGlobal;
 	private Integer nombreJourValorise;
-	@OneToMany(cascade=CascadeType.REMOVE, fetch=FetchType.EAGER)
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	  @JoinColumn(name="FEED_ID")
 	private Collection<Qualification> qualifications;
 	private Date dateFeedback;
@@ -77,12 +77,12 @@ public class Feedback implements Serializable{
 		this.collaborateur = collaborateur;
 	}
 	
-	@JsonIgnore
+	
 	public Encadrant getEncadrant() {
 		return encadrant;
 	}
 	
-	@JsonSetter
+	
 	public void setEncadrant(Encadrant encadrant) {
 		this.encadrant = encadrant;
 	}

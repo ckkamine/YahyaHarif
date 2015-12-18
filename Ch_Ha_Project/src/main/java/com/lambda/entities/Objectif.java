@@ -1,18 +1,21 @@
 package com.lambda.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;;
+import javax.persistence.OneToMany;
+
+
+
 
 @Entity
 public class Objectif implements Serializable{
@@ -27,7 +30,8 @@ public class Objectif implements Serializable{
 	@ManyToOne
 	@JoinColumn(name="COL_ID")
 	private User employe;
-	@OneToMany(cascade=CascadeType.REMOVE)
+	
+	@OneToMany(cascade = CascadeType.ALL)
 	  @JoinColumn(name="OBJEC_ID")
 	private Collection<Description> descriptions;
 	
@@ -49,21 +53,15 @@ public class Objectif implements Serializable{
 
 
 
-	public boolean isArchive() {
-		return archive;
-	}
-
 	
-
-
-	public User getEmploye() {
-		return employe;
+	public Long getIdObjectif() {
+		return idObjectif;
 	}
 
 
 
-	public void setEmploye(User employe) {
-		this.employe = employe;
+	public void setIdObjectif(Long idObjectif) {
+		this.idObjectif = idObjectif;
 	}
 
 
@@ -76,6 +74,18 @@ public class Objectif implements Serializable{
 
 	public void setObjectif(String objectif) {
 		this.objectif = objectif;
+	}
+
+
+
+	public Date getDateCreation() {
+		return dateCreation;
+	}
+
+
+
+	public void setDateCreation(Date dateCreation) {
+		this.dateCreation = dateCreation;
 	}
 
 
@@ -104,55 +114,49 @@ public class Objectif implements Serializable{
 
 
 
+	public boolean isArchive() {
+		return archive;
+	}
+
+
+
 	public void setArchive(boolean archive) {
 		this.archive = archive;
 	}
 
 
 
-	public Long getIdObjectif() {
-		return idObjectif;
+	public User getEmploye() {
+		return employe;
 	}
-	public void setIdObjectif(Long idObjectif) {
-		this.idObjectif = idObjectif;
+
+
+
+	public void setEmploye(User employe) {
+		this.employe = employe;
 	}
-	public String getNom() {
-		return objectif;
-	}
-	public void setNom(String nom) {
-		this.objectif = nom;
-	}
+
+
+
 	public Collection<Description> getDescriptions() {
 		return descriptions;
 	}
+
+
+
 	public void setDescriptions(Collection<Description> descriptions) {
 		this.descriptions = descriptions;
 	}
 
 
 
-	public String getType() {
-		return categorie;
+	public void addDescription(Description d){
+		try {
+			this.getDescriptions().add(d);
+		} catch (Exception e) {
+			this.descriptions= new ArrayList<Description>();
+			this.descriptions.add(d);
+		}
 	}
-
-
-
-	public void setType(String type) {
-		this.categorie = type;
-	}
-
-
-
-	public Date getDateCreation() {
-		return dateCreation;
-	}
-
-
-
-	public void setDateCreation(Date dateCreation) {
-		this.dateCreation = dateCreation;
-	}
-	
-	
 	
 }

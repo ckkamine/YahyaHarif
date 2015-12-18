@@ -148,8 +148,9 @@ app
 					var today = new Date();
 					var token = $cookieStore.get('token');
 					if (token !== undefined) {
+						
 						var part = token.split(':');
-						if (today.getMilliseconds() > part[1]) {
+						if (today.getTime() > part[1]) {
 							delete $rootScope.user;
 							$cookieStore.remove('user');
 							$cookieStore.remove('token');
@@ -227,13 +228,68 @@ function managerCtrl($scope) {
 
 }
 function bapCtrl($scope, $http, $rootScope) {
-	$scope.detail = false;
 	var role = $rootScope.user.role.toLowerCase();
+	$scope.errorSome=false;
+	$scope.tab=0;
+	$scope.descriptions=new Array();
+	$scope.editerDescription= function(d){
+		$scope.descriptions.splice(d, 1);
+	}
+	$scope.calculeSomme = function() {
+		$scope.somme=0;
+		for(i=0; $scope.bapCurrent.objectifsSortantes.length >i;i++){
+			for(j=0; $scope.bapCurrent.objectifsSortantes[i].descriptions.length >j;j++){
+				$scope.somme +=$scope.bapCurrent.objectifsSortantes[i].descriptions[j].poids;
+			}
+		}
+		for(i=0; $scope.descriptions.length >i; i++){
+			$scope.somme += $scope.descriptions[i].poids;
+		}
+		
+	}
+	
+	$scope.ajouterUneAutre= function() {		
+		$scope.descriptions.push($scope.description);
+		$scope.description={};
+	}
+	
+	
+	$scope.editResultatF= false;
+	$scope.editResultat= function() {
+		$scope.editResultatF= true;
+	}
+	$scope.editRemarqueF= false;
+	$scope.editRemarque= function() {
+		$scope.editRemarqueF= true;
+	}
+	$scope.clearDecision= function(){
+		$scope.bapCurrent.decision='';
+	}
+	$scope.editObjectifsS= function(o , d) {
+		var c=0;
+		for(i=0; $scope.bapCurrent.objectifsEntrantes.length>i;i++){
+			for(j=0; $scope.bapCurrent.objectifsEntrantes[i].descriptions.length>j;j++){
+				if(($scope.bapCurrent.objectifsEntrantes[i].idObjectif==o)&&($scope.bapCurrent.objectifsEntrantes[i].descriptions[j].idDescription==d)){
+					$scope.editObjectifSF[c]=true;
+				}
+				c++;
+			}
+		}
+	}
+	$scope.detail = false;
+	
+	$http({
+		method : 'GET',
+		url : 'rest/'+role+'/encadrants'
+	}).then(function(response) {
+		$scope.encadrants = response.data;
+	}, function() {
 
+	});
 	$scope.getBaps = function(page) {
 		$http({
 			method : 'GET',
-			url : 'rest/' + role + '/baps',
+			url : 'rest/'+ role +'/baps',
 			headers : {
 				'Content-Type' : 'application/x-www-form-urlencoded'
 			},
@@ -250,16 +306,82 @@ function bapCtrl($scope, $http, $rootScope) {
 
 		});
 	}
+	$scope.addObjectif= function(){
+		$scope.ajouterUneAutre();
+		for(i=0; $scope.descriptions.length > i; i++){
+			$scope.descriptions[i].responsable.type='ENC';
+			$scope.descriptions[i].responsable.user='';
+			$scope.descriptions[i].responsable.password='';
+		}
+		$scope.objectif.descriptions= $scope.descriptions;
+		$http({
+			method : 'POST',
+			url : 'rest/' + role + '/objectif',
+			params:{
+				idBap: $scope.bapCurrent.id
+			},
+			data : $scope.objectif
+		}).then(function(response) {
+			$scope.descriptions={};
+			$scope.description={};
+			$scope.objectif={};
+			$scope.getBaps($scope.pageCurrent);
+			for(i=0; $scope.baps.length > i; i++){
+				if($scope.baps[i].id==$scope.bapCurrent.id){
+					$scope.bapCurrent=$scope.baps[i];
+				}
+			}
+			$scope.tab=0;
+		}, function() {
+
+		});
+	}
 	$scope.getBaps(0);
 	$scope.seeMore = function(bap) {
 		$scope.bapCurrent = bap;
 		$scope.detail = true;
+		$scope.editObjectifsSF=[];
+		for(i=0; bap.objectifsSortantes.length>i; i++){
+			$scope.editObjectifsSF[i]= false;
+		}
+		$scope.calculeSomme();
 	}
 	$scope.retour = function() {
 		$scope.detail = false;
 		$scope.getBaps($scope.pageCurrent);
 	}
+	
+	$scope.calculNoteGlobale= function(){
+		$scope.bapCurrent.noteGlobale=0;
+		for(i=0; $scope.bapCurrent.objectifsEntrantes.length>i;i++){
+			for(j=0; $scope.bapCurrent.objectifsEntrantes[i].descriptions.length>j;j++){
+				$scope.bapCurrent.noteGlobale+= $scope.bapCurrent.objectifsEntrantes[i].descriptions[j].note;
+			}
+		}
+	}
+	
+	$scope.updateBap= function(){
+		$scope.bapCurrent.type='BAP';
+		$http({
+			method : 'PUT',
+			url : 'rest/' + role + '/bilan',
+			data : $scope.bapCurrent
+		}).then(function(response) {
+			$scope.bapCurrent=response.data;
+			var c=0;
+			for(i=0; $scope.bapCurrent.objectifsEntrantes.length>i;i++){
+				for(j=0; $scope.bapCurrent.objectifsEntrantes[i].descriptions.length>j;j++){
+					$scope.editObjectifSF[c]=false;
+					c++;
+				}
+			}
+			$scope.editResultatF= false;
+			$scope.editRemarqueF= false;
+			$scope.getBaps($scope.pageCurrent);
+		}, function() {
 
+		});
+	}
 }
 
 function parametreCtrl($scope, $http, $location, $rootScope, $cookieStore) {

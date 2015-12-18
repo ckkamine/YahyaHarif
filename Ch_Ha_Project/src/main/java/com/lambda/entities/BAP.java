@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,8 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+
+import com.lambda.entities.Objectif;
 
 @Entity
 @DiscriminatorValue("BAP")
@@ -26,18 +26,18 @@ public class BAP extends Bilan{
 	public static final String REJETE= "Rejeté";
 
 	@OneToMany(fetch=FetchType.EAGER)
-	  @JoinColumn(name="BAP_ID")
+	@JoinColumn(name="BAP_ID")
 	private Collection<Feedback> feedbacks;
 	private boolean locked;
-	@OneToMany
-	  @JoinColumn(name="BAP_ID_S")
+	@OneToMany(fetch= FetchType.EAGER, cascade=CascadeType.MERGE)
+	@JoinColumn(name="BAP_ID_S")
 	private Collection<Objectif> objectifsSortantes;
 	private String status;
-	@Cascade(value = { CascadeType.DELETE })
 	@ManyToOne(fetch=FetchType.EAGER)
-	  @JoinColumn(name="MAG_ID")
+	@JoinColumn(name="MAG_ID")
 	private Manager manager;
 	private int compteur;
+	private Integer noteGlobale;
 	
 	public BAP(){
 		this.status= EN_ATTENTE;
@@ -133,4 +133,25 @@ public class BAP extends Bilan{
 			this.feedbacks.add(f);
 		}
 	}
+	
+	public void addObjectifSortantes(Objectif o){
+		try {
+			this.objectifsSortantes.add(o);
+		} catch (Exception e) {
+			this.objectifsSortantes= new ArrayList<Objectif>();
+			this.objectifsSortantes.add(o);
+		}
+	}
+	
+
+	public Integer getNoteGlobale() {
+		return noteGlobale;
+	}
+
+
+
+	public void setNoteGlobale(Integer noteGlobale) {
+		this.noteGlobale = noteGlobale;
+	}
+	
 }

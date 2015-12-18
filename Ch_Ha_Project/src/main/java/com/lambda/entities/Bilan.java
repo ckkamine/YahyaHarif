@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
@@ -16,6 +17,7 @@ import javax.persistence.JoinColumn;
 
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -38,13 +40,13 @@ public abstract class Bilan implements Serializable{
 	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="COLL_ID")
 	private Collaborateur collaborateur;
-	@OneToMany
-	  @JoinColumn(name="B_ID_E")
+	@OneToMany(fetch=FetchType.EAGER, cascade= CascadeType.MERGE)
+	@JoinColumn(name="B_ID_E")
 	private Collection<Objectif> objectifsEntrantes;
 	private String decision;
 	public Bilan() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public Long getId() {
@@ -77,12 +79,7 @@ public abstract class Bilan implements Serializable{
 	public void setDateBilan(Date dateBilan) {
 		this.dateBilan = dateBilan;
 	}
-	public Collection<Objectif> getObjectifs() {
-		return objectifsEntrantes;
-	}
-	public void setObjectifs(Collection<Objectif> objectifs) {
-		this.objectifsEntrantes = objectifs;
-	}
+	
 
 	public Collection<Objectif> getObjectifsEntrantes() {
 		return objectifsEntrantes;
