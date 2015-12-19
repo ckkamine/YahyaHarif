@@ -3,8 +3,7 @@
 			<nav class="navbar navbar-static-top  " role="navigation"
 				style="margin-bottom: 0">
 				<div class="navbar-header">
-					<a class="navbar-minimalize minimalize-styl-2 btn "
-					ng-class="{'btn-primary': user.role=='ADMIN'}" 
+					<a class="navbar-minimalize minimalize-styl-2 btn btn-cfb" 
 						href=""><i class="fa fa-search"></i> </a>
 					<form role="search" class="navbar-form-custom"
 						action="">
@@ -20,7 +19,7 @@
 
 					<li><span class="m-r-sm text-muted welcome-message">Bienvenue
 							<strong>{{user.firstName}} {{user.lastName}}</strong> - Vous êtes
-							connecté en tant que <strong class="text-navy">Administrateur</strong>.
+							connecté en tant que <strong class="text-cfb">Manager</strong>.
 					</span></li>
 					<li><a href="" ng-click="logout()"> <i
 							class="fa fa-sign-out"></i> Déconnexion
@@ -38,7 +37,7 @@
 	</div>
 	<div class="col-sm-8">
 		<div class="title-action">
-			<a href="" class="btn" ng-class="{'btn-primary': user.role=='ADMIN'}" ng-click="reload()"><i class="fa fa-refresh"></i></a>
+			<a href="" class="btn btn-cfb" ng-click="reload()"><i class="fa fa-refresh"></i></a>
 		</div>
 	</div>
 </div>
@@ -47,7 +46,7 @@
 	<div class="row animated fadeInLeft">
 		<!-- Profile -->
 		<div class="row">
-		<div class="widget style1 btn-success col-lg-3 col-lg-offset-2 click">
+		<div class="widget style1 btn-default col-lg-3 col-lg-offset-2 click">
                     <div class="row">
                         <div class="col-xs-4">
                             <i class="fa fa-line-chart fa-5x"></i>
@@ -58,7 +57,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="widget style1 btn-primary col-lg-3 col-lg-offset-2 click" ui-sref="admin.bap">
+                <div class="widget style1 btn-cfb col-lg-3 col-lg-offset-2 click" ui-sref="manager.bap">
                     <div class="row">
                         <div class="col-xs-4">
                             <i class=" fa fa-line-chart  fa-5x"></i>
@@ -80,8 +79,8 @@
 </div>
 
 <script>
-	$('.admin').removeClass("active");
-	$('#bilan').addClass("active");
+	$('.manager').removeClass("active active-manager");
+	$('#bilan').addClass("active active-manager");
 </script>
 
 </div>

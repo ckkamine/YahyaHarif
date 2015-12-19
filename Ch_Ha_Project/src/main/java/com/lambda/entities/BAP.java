@@ -1,5 +1,6 @@
 package com.lambda.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -15,9 +16,11 @@ import javax.persistence.OneToMany;
 
 import com.lambda.entities.Objectif;
 
+
+
 @Entity
 @DiscriminatorValue("BAP")
-public class BAP extends Bilan{
+public class BAP extends Bilan implements Serializable{
 	
 	public static final String EN_ATTENTE= "En attente";
 	public static final String EN_COURS= "En cours";
@@ -29,7 +32,7 @@ public class BAP extends Bilan{
 	@JoinColumn(name="BAP_ID")
 	private Collection<Feedback> feedbacks;
 	private boolean locked;
-	@OneToMany(fetch= FetchType.EAGER, cascade=CascadeType.MERGE)
+	@OneToMany(fetch= FetchType.LAZY, cascade=CascadeType.MERGE)
 	@JoinColumn(name="BAP_ID_S")
 	private Collection<Objectif> objectifsSortantes;
 	private String status;
@@ -38,19 +41,38 @@ public class BAP extends Bilan{
 	private Manager manager;
 	private int compteur;
 	private Integer noteGlobale;
+	private boolean envoye;
 	
 	public BAP(){
 		this.status= EN_ATTENTE;
+		this.envoye=false;
+		this.compteur = 0;
+		this.locked = true;
 	}
 	
 	
 
-	public BAP(Date dateBilan, Collaborateur collaborateur,   boolean locked, Manager manager ) {
+	public BAP(Date dateBilan, Collaborateur collaborateur, Manager manager ) {
 		super(dateBilan, collaborateur);
 		this.locked = true;
 		this.status = EN_ATTENTE;
 		this.manager = manager;
 		this.compteur = 0;
+		this.envoye=false;
+	}
+
+	
+
+	
+
+	public boolean isEnvoye() {
+		return envoye;
+	}
+
+
+
+	public void setEnvoye(boolean envoye) {
+		this.envoye = envoye;
 	}
 
 
@@ -59,71 +81,103 @@ public class BAP extends Bilan{
 		return feedbacks;
 	}
 
+
+
 	public void setFeedbacks(Collection<Feedback> feedbacks) {
 		this.feedbacks = feedbacks;
 	}
+
+
 
 	public boolean isLocked() {
 		return locked;
 	}
 
+
+
 	public void setLocked(boolean locked) {
 		this.locked = locked;
 	}
+
+
 
 	public Collection<Objectif> getObjectifsSortantes() {
 		return objectifsSortantes;
 	}
 
+
+
 	public void setObjectifsSortantes(Collection<Objectif> objectifsSortantes) {
 		this.objectifsSortantes = objectifsSortantes;
 	}
-	
-	
 
-	public int getCompteur() {
-		return compteur;
-	}
 
-	public void setCompteur(int compteur) {
-		this.compteur = compteur;
-	}
-
-	public static String getRejete() {
-		return REJETE;
-	}
 
 	public String getStatus() {
 		return status;
 	}
 
+
+
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+
 
 	public Manager getManager() {
 		return manager;
 	}
 
+
+
 	public void setManager(Manager manager) {
 		this.manager = manager;
 	}
+
+
+
+	public int getCompteur() {
+		return compteur;
+	}
+
+
+
+	public void setCompteur(int compteur) {
+		this.compteur = compteur;
+	}
+
+
 
 	public static String getEnAttente() {
 		return EN_ATTENTE;
 	}
 
+
+
 	public static String getEnCours() {
 		return EN_COURS;
 	}
+
+
 
 	public static String getValide() {
 		return VALIDE;
 	}
 
+
+
 	public static String getAnnule() {
 		return ANNULE;
 	}
+
+
+
+	public static String getRejete() {
+		return REJETE;
+	}
+
+
 
 	public void addFeedback(Feedback f){
 		try {

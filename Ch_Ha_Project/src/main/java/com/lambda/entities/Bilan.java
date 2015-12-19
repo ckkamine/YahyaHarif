@@ -21,6 +21,8 @@ import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
 @Entity
@@ -40,7 +42,7 @@ public abstract class Bilan implements Serializable{
 	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="COLL_ID")
 	private Collaborateur collaborateur;
-	@OneToMany(fetch=FetchType.EAGER, cascade= CascadeType.MERGE)
+	@OneToMany(fetch=FetchType.LAZY, cascade= CascadeType.MERGE)
 	@JoinColumn(name="B_ID_E")
 	private Collection<Objectif> objectifsEntrantes;
 	private String decision;
@@ -95,9 +97,6 @@ public abstract class Bilan implements Serializable{
 		this.collaborateur = collaborateur;
 	}
 	
-	public Date addYear(Date d){
-		d.setYear(d.getYear()+1);
-		return d;
-	}
+	
 
 }

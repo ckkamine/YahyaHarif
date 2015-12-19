@@ -21,7 +21,7 @@ import javax.persistence.JoinColumn;
 @DiscriminatorValue("COL")
 public class Collaborateur extends User{
 	
-	@OneToOne(cascade=CascadeType.REMOVE)
+	@OneToOne(fetch=FetchType.EAGER,cascade=CascadeType.REMOVE)
 	@JoinColumn(name="BAP_ID")
 	private BAP bap;
 	

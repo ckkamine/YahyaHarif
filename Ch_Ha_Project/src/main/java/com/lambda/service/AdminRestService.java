@@ -106,8 +106,8 @@ public class AdminRestService {
 		adminMetier.deleteProjet(id);
 	}
 	
-	@RequestMapping(value="/blian", method= RequestMethod.GET)
-	public Bilan getBilan(@RequestParam Long id) {
+	@RequestMapping(value="/bilan", method= RequestMethod.GET)
+	public BAP getBilan(@RequestParam Long id) {
 		return adminMetier.getBilan(id);
 	}
 	
@@ -211,6 +211,15 @@ public class AdminRestService {
 		return adminMetier.getAllManagers();
 	}
 	
-	
+	@RequestMapping(value="/envoyer", method=RequestMethod.PUT)
+	public BAP envoyerObjectifs(@RequestParam Long id) {
+		return adminMetier.envoyerObjectifs(id);
+	}
 
+	@RequestMapping(value="/lock", method= RequestMethod.PUT)
+	public BAP openOrLockBap(@RequestParam Long id) {
+		return adminMetier.openOrLockBap(id);
+	}
+
+	
 }

@@ -89,14 +89,14 @@ public class EncadrantMetierImpl implements EncadrantMetier{
 				feedback= f;
 			}
 		}
-//		Feedback feedback= feedbackRepository.findOne(idFeedback);
+
 		
 		try {
 			BAP bap= bapRepository.findByCollaborateur(feedback.getCollaborateur().getMatricule());
 			bap.getFeedbacks().remove(feedback);
-			System.out.println("trouve");
+			
 		} catch (Exception e) {
-			System.out.println("exception");
+			System.out.println("BAP non trouvé");
 		}
 		feedbackRepository.delete(feedback);
 		

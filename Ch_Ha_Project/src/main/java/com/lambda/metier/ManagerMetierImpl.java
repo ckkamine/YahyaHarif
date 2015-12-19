@@ -11,11 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lambda.entities.ArchiveBap;
 import com.lambda.entities.BAP;
 import com.lambda.entities.Collaborateur;
+import com.lambda.entities.Encadrant;
 import com.lambda.entities.Manager;
 import com.lambda.entities.Objectif;
 import com.lambda.repository.ArchiveBapRepository;
 import com.lambda.repository.BapRepository;
 import com.lambda.repository.CollaborateurRepository;
+import com.lambda.repository.EncadrantRepository;
 import com.lambda.repository.ManagerRepository;
 import com.lambda.repository.ObjectifRepository;
 
@@ -37,6 +39,9 @@ public class ManagerMetierImpl implements ManagerMetier {
 	
 	@Autowired
 	ManagerRepository managerRepository;
+	
+	@Autowired
+	EncadrantRepository encadrantRepository;
 	
 	@Override
 	public Page<BAP> getAllBapManager(Long matricule, int page) {
@@ -77,11 +82,12 @@ public class ManagerMetierImpl implements ManagerMetier {
 	}
 
 	@Override
-	public Objectif addObjectif(Objectif objectif, Long idBap) {
+	public BAP addObjectif(Objectif objectif, Long idBap) {
 		objectifRepository.save(objectif);
-		BAP b= bapRepository.findOne(idBap);
-		b.getObjectifsEntrantes().add(objectif);
-		return objectif;
+		BAP bap= bapRepository.findOne(idBap);
+		bap.addObjectifSortantes(objectif);
+		bapRepository.save(bap);
+		return bapRepository.findOne(idBap);
 	}
 
 	
@@ -94,7 +100,7 @@ public class ManagerMetierImpl implements ManagerMetier {
 		}
 		ArchiveBap a= new ArchiveBap(b.getId(), b.getDateBilan(), b.getCollaborateur(), b.getObjectifsEntrantes(), b.getDecision(), b.getFeedbacks(), b.isLocked(), b.getObjectifsSortantes(), b.getManager());
 		archiveBapRepository.save(a);
-		BAP newB= new BAP( b.addYear(b.getDateBilan()), b.getCollaborateur(), true, b.getManager());
+		BAP newB= new BAP(b.getDateBilan(), b.getCollaborateur(), b.getManager());// à Regler la date
 		bapRepository.save(newB);
 		bapRepository.delete(b);
 		
@@ -109,8 +115,49 @@ public class ManagerMetierImpl implements ManagerMetier {
 
 	@Override
 	public BAP addBap(BAP bap) {
-		// TODO Auto-generated method stub
 		return bapRepository.save(bap);
+	}
+
+	@Override
+	public List<Encadrant> getAllEncadrant() {
+		
+		return encadrantRepository.findAll();
+	}
+
+	@Override
+	public BAP getBilan(Long id) {
+		
+		return bapRepository.findOne(id);
+	}
+
+	@Override
+	public BAP updateBilan(BAP bilan) {
+		return bapRepository.save(bilan);
+	}
+
+	@Override
+	public void deleteObjectif(Long id) {
+		objectifRepository.delete(id);
+		
+	}
+
+	@Override
+	public BAP envoyerObjectifs(Long id) {
+		BAP bap= bapRepository.findOne(id);
+		bap.setEnvoye(true);
+		bap.setCompteur(bap.getCompteur()+1);
+		return bap;
+	}
+
+	@Override
+	public BAP openOrLockBap(Long id) {
+		BAP bap= bapRepository.findOne(id);
+		if(bap.isLocked()){
+			bap.setLocked(false);
+		}else{
+			bap.setLocked(true);
+		}
+		return bap;
 	}
 
 	

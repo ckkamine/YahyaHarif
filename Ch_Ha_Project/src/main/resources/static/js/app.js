@@ -79,6 +79,15 @@ app
 								controller : managerCtrl,
 								templateUrl : 'partials/manager/dashbord.html'
 							});
+							$stateProvider.state('manager.bilan', {
+								url : '/manager/bilan',
+								templateUrl : 'partials/manager/bilan.html'
+							});
+							$stateProvider.state('manager.bap', {
+								url : '/manager/bilan/bap',
+								templateUrl : 'partials/admin/bap.html',
+								controller : bapCtrl
+							});
 
 							$stateProvider
 									.state(
@@ -145,10 +154,11 @@ app
 
 						} ]).run(
 				function($rootScope, $location, $cookieStore, $http, $state) {
+					$rootScope.initialized=false;
 					var today = new Date();
 					var token = $cookieStore.get('token');
 					if (token !== undefined) {
-						
+
 						var part = token.split(':');
 						if (today.getTime() > part[1]) {
 							delete $rootScope.user;
@@ -229,72 +239,115 @@ function managerCtrl($scope) {
 }
 function bapCtrl($scope, $http, $rootScope) {
 	var role = $rootScope.user.role.toLowerCase();
-	$scope.errorSome=false;
-	$scope.tab=0;
-	$scope.descriptions=new Array();
-	$scope.editerDescription= function(d){
-		$scope.descriptions.splice(d, 1);
+	var bilan = angular.element( document.querySelector('#bilan') );
+	if(role=='manager'){
+		var manager = angular.element( document.querySelector('.manager') );
+		manager.removeClass(' active active-manager');
+		bilan.addClass('active active-manager');
 	}
+	if(role=='admin'){
+		var admin = angular.element( document.querySelector('.admin') );
+		admin.removeClass('active ');
+		bilan.addClass('active ');
+	}
+	$scope.errorSomme = false;
+	$scope.tab = 0;
+	$scope.descriptions = [];
+	$scope.feedbackF= false;
 	$scope.calculeSomme = function() {
-		$scope.somme=0;
-		for(i=0; $scope.bapCurrent.objectifsSortantes.length >i;i++){
-			for(j=0; $scope.bapCurrent.objectifsSortantes[i].descriptions.length >j;j++){
-				$scope.somme +=$scope.bapCurrent.objectifsSortantes[i].descriptions[j].poids;
+		$scope.error='';
+		$scope.somme = 0;
+		for (i = 0; $scope.bapCurrent.objectifsSortantes.length > i; i++) {
+			for (j = 0; $scope.bapCurrent.objectifsSortantes[i].descriptions.length > j; j++) {
+				$scope.somme += $scope.bapCurrent.objectifsSortantes[i].descriptions[j].poids;
 			}
 		}
-		for(i=0; $scope.descriptions.length >i; i++){
+		for (i = 0; $scope.descriptions.length > i; i++) {
 			$scope.somme += $scope.descriptions[i].poids;
 		}
-		
+		if ($scope.somme == 100)
+			$scope.errorSomme = false;
+		if ($scope.somme !== 100)
+			$scope.errorSomme = true;
+
 	}
 	
-	$scope.ajouterUneAutre= function() {		
-		$scope.descriptions.push($scope.description);
-		$scope.description={};
+	$scope.ajusterPoids = function() {
+		$scope.error='';
+		$scope.descriptions = [];
+		$scope.calculeSomme();
 	}
-	
-	
-	$scope.editResultatF= false;
-	$scope.editResultat= function() {
-		$scope.editResultatF= true;
-	}
-	$scope.editRemarqueF= false;
-	$scope.editRemarque= function() {
-		$scope.editRemarqueF= true;
-	}
-	$scope.clearDecision= function(){
-		$scope.bapCurrent.decision='';
-	}
-	$scope.editObjectifsS= function(o , d) {
-		var c=0;
-		for(i=0; $scope.bapCurrent.objectifsEntrantes.length>i;i++){
-			for(j=0; $scope.bapCurrent.objectifsEntrantes[i].descriptions.length>j;j++){
-				if(($scope.bapCurrent.objectifsEntrantes[i].idObjectif==o)&&($scope.bapCurrent.objectifsEntrantes[i].descriptions[j].idDescription==d)){
-					$scope.editObjectifSF[c]=true;
+	$scope.ajouterUneAutre = function() {
+		if ($scope.description.description !== null
+				&& $scope.description.mesure !== null
+				&& $scope.description.responsable.matricule !== null) {
+			$scope.descriptions.push($scope.description);
+			for (i = 0; $scope.encadrants.length > i; i++) {
+				if ($scope.encadrants[i].matricule == $scope.description.responsable.matricule) {
+					$scope.encadrants.splice(i, 1);
 				}
-				c++;
 			}
+			$scope.description = {};
 		}
 	}
-	$scope.detail = false;
-	
-	$http({
-		method : 'GET',
-		url : 'rest/'+role+'/encadrants'
-	}).then(function(response) {
-		$scope.encadrants = response.data;
-	}, function() {
 
-	});
-	$scope.getBaps = function(page) {
+	$scope.editResultatF = false;
+	$scope.editResultat = function() {
+		$scope.editResultatF = true;
+	}
+	$scope.editRemarqueF = false;
+	$scope.editRemarque = function() {
+		$scope.editRemarqueF = true;
+	}
+	$scope.clearDecision = function() {
+		$scope.bapCurrent.decision = '';
+	}
+
+	$scope.detail = false;
+	$scope.ajuster = false;
+	$scope.getEncadrants = function() {
 		$http({
 			method : 'GET',
-			url : 'rest/'+ role +'/baps',
+			url : 'rest/' + role + '/encadrants'
+		}).then(function(response) {
+			$scope.encadrants = response.data;
+		}, function() {
+
+		});
+	}
+	$scope.getEncadrants();
+	$scope.editerDescription = function(d) {
+		$scope.encadrants.push($scope.descriptions[d].responsable);
+		$scope.descriptions.splice(d, 1);
+	}
+	$scope.getBap = function(idBap) {
+		$http({
+			method : 'GET',
+			url : 'rest/' + role + '/bilan',
 			headers : {
 				'Content-Type' : 'application/x-www-form-urlencoded'
 			},
 			params : {
-				page : page
+				id : idBap
+			}
+		}).then(function(response) {
+			$scope.bapCurrent = response.data;
+			$scope.tab = 0;
+		}, function() {
+
+		});
+	}
+	$scope.getBaps = function(page) {
+		$http({
+			method : 'GET',
+			url : 'rest/' + role + '/baps',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			params : {
+				page : page,
+				matricule: $rootScope.user.matricule
+				
 			}
 		}).then(function(response) {
 			$scope.baps = response.data.content;
@@ -306,82 +359,182 @@ function bapCtrl($scope, $http, $rootScope) {
 
 		});
 	}
-	$scope.addObjectif= function(){
-		$scope.ajouterUneAutre();
-		for(i=0; $scope.descriptions.length > i; i++){
-			$scope.descriptions[i].responsable.type='ENC';
-			$scope.descriptions[i].responsable.user='';
-			$scope.descriptions[i].responsable.password='';
-		}
-		$scope.objectif.descriptions= $scope.descriptions;
-		$http({
-			method : 'POST',
-			url : 'rest/' + role + '/objectif',
-			params:{
-				idBap: $scope.bapCurrent.id
-			},
-			data : $scope.objectif
-		}).then(function(response) {
-			$scope.descriptions={};
-			$scope.description={};
-			$scope.objectif={};
-			$scope.getBaps($scope.pageCurrent);
-			for(i=0; $scope.baps.length > i; i++){
-				if($scope.baps[i].id==$scope.bapCurrent.id){
-					$scope.bapCurrent=$scope.baps[i];
-				}
-			}
-			$scope.tab=0;
-		}, function() {
+	$scope.addObjectif = function() {
+		$scope.errorDescription = false;
 
-		});
+		try {
+			if ($scope.description.description !== null
+					&& $scope.description.mesure !== null
+					&& $scope.description.responsable.matricule !== null) {
+				$scope.ajouterUneAutre();
+			}
+		} catch (e) {
+
+		}
+		if ($scope.descriptions.length == 0)
+			$scope.errorDescription = true;
+
+		if ($scope.errorDescription == false) {
+			try {
+				for (i = 0; $scope.descriptions.length > i; i++) {
+					$scope.descriptions[i].responsable.type = 'ENC';
+					$scope.descriptions[i].responsable.user = '';
+					$scope.descriptions[i].responsable.password = '';
+				}
+			} catch (e) {
+			}
+			$scope.objectif.descriptions=new Array();
+			$scope.objectif.descriptions = $scope.descriptions;
+			$scope.objectif.employe = $scope.bapCurrent.collaborateur;
+			$scope.objectif.dateCreation = new Date();
+
+			$http({
+				method : 'POST',
+				url : 'rest/' + role + '/objectif',
+				params : {
+					idBap : $scope.bapCurrent.id
+				},
+				data : $scope.objectif
+			}).then(function(response) {
+				$scope.descriptions = [];
+				$scope.description = {};
+				$scope.objectif = {};
+				$scope.getBap($scope.bapCurrent.id);
+				$scope.getEncadrants();
+
+			}, function() {
+
+			});
+		}
 	}
 	$scope.getBaps(0);
 	$scope.seeMore = function(bap) {
 		$scope.bapCurrent = bap;
 		$scope.detail = true;
-		$scope.editObjectifsSF=[];
-		for(i=0; bap.objectifsSortantes.length>i; i++){
-			$scope.editObjectifsSF[i]= false;
-		}
 		$scope.calculeSomme();
 	}
 	$scope.retour = function() {
 		$scope.detail = false;
 		$scope.getBaps($scope.pageCurrent);
 	}
-	
-	$scope.calculNoteGlobale= function(){
-		$scope.bapCurrent.noteGlobale=0;
-		for(i=0; $scope.bapCurrent.objectifsEntrantes.length>i;i++){
-			for(j=0; $scope.bapCurrent.objectifsEntrantes[i].descriptions.length>j;j++){
-				$scope.bapCurrent.noteGlobale+= $scope.bapCurrent.objectifsEntrantes[i].descriptions[j].note;
+
+	$scope.calculNoteGlobale = function() {
+		$scope.bapCurrent.noteGlobale = 0;
+		for (i = 0; $scope.bapCurrent.objectifsEntrantes.length > i; i++) {
+			for (j = 0; $scope.bapCurrent.objectifsEntrantes[i].descriptions.length > j; j++) {
+				$scope.bapCurrent.noteGlobale += $scope.bapCurrent.objectifsEntrantes[i].descriptions[j].note;
 			}
 		}
 	}
-	
-	$scope.updateBap= function(){
-		$scope.bapCurrent.type='BAP';
+
+	$scope.updateBap = function() {
+		$scope.bapCurrent.type = 'BAP';
 		$http({
 			method : 'PUT',
 			url : 'rest/' + role + '/bilan',
 			data : $scope.bapCurrent
 		}).then(function(response) {
-			$scope.bapCurrent=response.data;
-			var c=0;
-			for(i=0; $scope.bapCurrent.objectifsEntrantes.length>i;i++){
-				for(j=0; $scope.bapCurrent.objectifsEntrantes[i].descriptions.length>j;j++){
-					$scope.editObjectifSF[c]=false;
-					c++;
-				}
-			}
-			$scope.editResultatF= false;
-			$scope.editRemarqueF= false;
+			$scope.bapCurrent = response.data;
+			$scope.editResultatF = false;
+			$scope.editRemarqueF = false;
 			$scope.getBaps($scope.pageCurrent);
 		}, function() {
 
 		});
 	}
+	$scope.updatePoids = function() {
+		if ($scope.somme !== 100) {
+			$scope.errorSomme = true;
+		} else {
+			$scope.updateBap();
+			$scope.ajuster = false;
+			$scope.errorSomme = false;
+		}
+	}
+	$scope.updateObjectif = function(o) {
+		$scope.error='';
+		$scope.editObjectif = true;
+		$scope.objectif = o;
+		$scope.tab = 1;
+	}
+	$scope.updateObjectif2 = function() {
+
+		if ($scope.errorSomme == false) {
+			for (i = 0; $scope.bapCurrent.objectifsSortantes.length > i; i++) {
+				if ($scope.bapCurrent.objectifsSortantes[i].idObjectif == $scope.objectif.idObjectif) {
+					$scope.bapCurrent.objectifsSortantes[i] = $scope.objectif;
+					$scope.updateBap();
+					$scope.tab = 0;
+					$scope.objectif = {};
+					$scope.editObjectif = false;
+					break;
+				}
+			}
+		}
+	}
+	$scope.tab1= function() {
+		$scope.tab=1;
+		$scope.editObjectif=false;
+		$scope.objectif={};
+	}
+	$scope.deleteObjectif= function(id) {
+		$http({
+			method : 'DELETE',
+			url : 'rest/' + role + '/objectif',
+			params:{
+				id:id
+			}
+		}).then(function(response) {
+			$scope.getBap($scope.bapCurrent.id);
+			$scope.calculeSomme();
+		}, function() {
+
+		});
+	}
+	$scope.retourFeedback=function(){
+		$scope.feedbackF=false;
+	}
+	$scope.seeMoreFeedback= function(f){
+		$scope.feedback=f;
+		$scope.feedbackF=true;
+	}
+	$scope.sendObjectif= function() {
+		$scope.calculeSomme();
+		if($scope.somme==100){
+		$http({
+			method : 'PUT',
+			url : 'rest/' + role + '/envoyer',
+			params:{
+				id: $scope.bapCurrent.id
+			}
+		}).then(function(response) {
+			$scope.bapCurrent= response.data;
+			
+		}, function() {
+
+		});
+		}else{
+			$scope.error='La somme des poids est differente de 100%';
+		}
+	}
+	$scope.lockOrUnlockBap= function() {
+		if ($rootScope.user.matricule==$scope.bapCurrent.manager.matricule) {
+			$http({
+				method : 'PUT',
+				url : 'rest/' + role + '/lock',
+				params : {
+					id : $scope.bapCurrent.id
+				}
+			}).then(function(response) {
+				$scope.bapCurrent = response.data;
+
+			}, function() {
+
+			});
+		}
+		
+	}
+	
 }
 
 function parametreCtrl($scope, $http, $location, $rootScope, $cookieStore) {
@@ -764,8 +917,8 @@ function feedbackCtrl($scope, $rootScope, $http) {
 				'Content-Type' : 'application/x-www-form-urlencoded'
 			},
 			params : {
-				idFeedback: id,
-				matricule: $rootScope.user.matricule
+				idFeedback : id,
+				matricule : $rootScope.user.matricule
 			}
 		}).then(function(response) {
 			$scope.getFeedbacks($scope.pageCurrent);
@@ -773,15 +926,15 @@ function feedbackCtrl($scope, $rootScope, $http) {
 
 		});
 	};
-	$scope.detail= false;
-	$scope.seeMore=function(feedback){
-		$scope.feedback= feedback;
-		$scope.detail=true;
+	$scope.detail = false;
+	$scope.seeMore = function(feedback) {
+		$scope.feedback = feedback;
+		$scope.detail = true;
 	}
-	$scope.changeDetail= function () {
-		$scope.detail=false;
+	$scope.changeDetail = function() {
+		$scope.detail = false;
 	}
-	$scope.update=false;
+	$scope.update = false;
 	$scope.today = function() {
 		$scope.finInter = new Date();
 	};
@@ -841,8 +994,7 @@ function feedbackCtrl($scope, $rootScope, $http) {
 			if ($scope.collaborateurs[i].matricule == $scope.f.collaborateur.matricule) {
 				for (j = 0; $scope.collaborateurs[i].projets.length > j; j++) {
 					if ($scope.collaborateurs[i].projets[j].chefProjet.matricule == $rootScope.user.matricule) {
-						$scope.projets
-								.push($scope.collaborateurs[i].projets[j]);
+						$scope.projets.push($scope.collaborateurs[i].projets[j]);
 						try {
 							$scope.f.projet.idProjet = '';
 						} catch (e) {
@@ -852,42 +1004,46 @@ function feedbackCtrl($scope, $rootScope, $http) {
 			}
 		}
 	}
-	
+
 	$scope.add = false;
+	
+	$scope.getCollaborateurs=function(){
+		$http({
+			method : 'GET',
+			url : 'rest/encadrant/collaborateurs',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			params : {
+				matricule : $rootScope.user.matricule
+			}
+		}).then(function(response) {
+			$scope.collaborateurs = response.data;
+		}, function() {
+
+		});
+	}
 	$scope.changeAdd = function() {
 		switch ($scope.add) {
 		case true:
 			$scope.add = false;
-			$scope.f=null;
-			$scope.qualifications=null;
-			$scope.update=false;
+			$scope.f = null;
+			$scope.qualifications = null;
+			$scope.update = false;
 			break;
 		case false:
+			$scope.getCollaborateurs();
 			$scope.add = true;
-			$scope.f= null;
+			$scope.f = null;
 			break;
 		}
 	}
-	$http({
-		method : 'GET',
-		url : 'rest/encadrant/collaborateurs',
-		headers : {
-			'Content-Type' : 'application/x-www-form-urlencoded'
-		},
-		params : {
-			matricule : $rootScope.user.matricule
-		}
-	}).then(function(response) {
-		$scope.collaborateurs = response.data;
-	}, function() {
-
-	});
-	$scope.isCollaborateurCurrent= function(id) {
-		for(i=0; $scope.collaborateurs.length>=i; i++){
-			if($scope.collaborateurs[i].matricule== id){
+	$scope.isCollaborateurCurrent = function(id) {
+		for (i = 0; $scope.collaborateurs.length >= i; i++) {
+			if ($scope.collaborateurs[i].matricule == id) {
 				return true;
 			}
-			
+
 		}
 		return false;
 	}
@@ -912,52 +1068,52 @@ function feedbackCtrl($scope, $rootScope, $http) {
 
 		});
 	}
-	$scope.updateFeedback= function(feedback) {
-		$scope.f= feedback;
-		$scope.debutInter= feedback.debutInter;
-		$scope.finInter= feedback.finInter;
-		$scope.nombreJ= feedback.nombreJourValorise
-		$scope.update= true;
-		$scope.add=true;
+	$scope.updateFeedback = function(feedback) {
+		$scope.f = feedback;
+		$scope.debutInter = feedback.debutInter;
+		$scope.finInter = feedback.finInter;
+		$scope.nombreJ = feedback.nombreJourValorise
+		$scope.update = true;
+		$scope.add = true;
 	}
 	$scope.getFeedbacks(0);
 	$scope.addFeedback = function() {
-			$rootScope.initialized=false;
-			$scope.f.nombreThemeCalifie = $scope.f.nombreThemeCalifie == undefined ? 0
-					: $scope.f.nombreThemeCalifie;
-			$scope.f.totalPoids = $scope.f.totalPoids == undefined ? 0
-					: $scope.f.totalPoids;
-			$scope.f.noteGlobal = $scope.f.noteGlobal == undefined ? 0
-					: $scope.f.noteGlobal;
-			$scope.f.encadrant = $rootScope.user;
-			$scope.f.encadrant.matricule = $rootScope.user.matricule;
-			$scope.f.encadrant.type = "ENC";
-			$scope.f.finInter = $scope.finInter;
-			$scope.f.debutInter = $scope.debutInter;
-			$scope.f.nombreJourValorise = $scope.nombreJ;
-			$scope.f.collaborateur.type = "COL";
-			$scope.f.qualifications = new Array();
-			for (i = 0; $scope.libelles.length > i; i++) {
-				try {
-					$scope.qualifications[i].theme = $scope.libelles[i];
-					$scope.f.qualifications.push($scope.qualifications[i]);
-				} catch (e) {
-				}
+		$rootScope.initialized = false;
+		$scope.f.nombreThemeCalifie = $scope.f.nombreThemeCalifie == undefined ? 0
+				: $scope.f.nombreThemeCalifie;
+		$scope.f.totalPoids = $scope.f.totalPoids == undefined ? 0
+				: $scope.f.totalPoids;
+		$scope.f.noteGlobal = $scope.f.noteGlobal == undefined ? 0
+				: $scope.f.noteGlobal;
+		$scope.f.encadrant = $rootScope.user;
+		$scope.f.encadrant.matricule = $rootScope.user.matricule;
+		$scope.f.encadrant.type = "ENC";
+		$scope.f.finInter = $scope.finInter;
+		$scope.f.debutInter = $scope.debutInter;
+		$scope.f.nombreJourValorise = $scope.nombreJ;
+		$scope.f.collaborateur.type = "COL";
+		$scope.f.qualifications = new Array();
+		for (i = 0; $scope.libelles.length > i; i++) {
+			try {
+				$scope.qualifications[i].theme = $scope.libelles[i];
+				$scope.f.qualifications.push($scope.qualifications[i]);
+			} catch (e) {
 			}
-			$http({
-				method : 'POST',
-				url : 'rest/encadrant/feedback',
-				data : $scope.f
-			}).then(function(response) {
-				$scope.getFeedbacks(0);
-				$scope.add = false;
-				$scope.update=false;
-				$scope.f=null;
-				$scope.qualifications=null;
-				$rootScope.initialized=true;
-			}, function() {
+		}
+		$http({
+			method : 'POST',
+			url : 'rest/encadrant/feedback',
+			data : $scope.f
+		}).then(function(response) {
+			$scope.getFeedbacks(0);
+			$scope.add = false;
+			$scope.update = false;
+			$scope.f = null;
+			$scope.qualifications = null;
+			$rootScope.initialized = true;
+		}, function() {
 
-			});
+		});
 
 	}
 }
@@ -1045,4 +1201,3 @@ function signatureHMAC(token, url) {
 	var hash = CryptoJS.HmacSHA1(url, part[2]);
 	return part[0] + ':' + part[1] + ':' + hash;
 }
-

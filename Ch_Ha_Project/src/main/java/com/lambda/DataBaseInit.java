@@ -78,7 +78,7 @@ public class DataBaseInit {
 		cR.save(c);
 		Encadrant e = new Encadrant("encadrant", passwordEncoder.encode("encadrant"), "choukoukouamine@outlook.com");
 		eR.save(e);
-		BAP b = new BAP(new Date(116, 0, 1), c, true, a);
+		BAP b = new BAP(new Date(116, 0, 1), c, a);
 		br.save(b);
 		Administrateur a1 = new Administrateur("admin2", passwordEncoder.encode("admin2"), "choukoukouamine@gmail.com");
 		aR.save(a1);
@@ -86,7 +86,7 @@ public class DataBaseInit {
 		cR.save(c1);
 		Encadrant e1 = new Encadrant("encadrant2", passwordEncoder.encode("encadrant2"), "choukoukouamine@outlook.com");
 		eR.save(e1);
-		BAP b1 = new BAP(new Date(115, 10, 1), c1, true, a1);
+		BAP b1 = new BAP(new Date(115, 10, 1), c1,  a1);
 		br.save(b1);
 		Administrateur ad = new Administrateur("admin1", passwordEncoder.encode("admin1"),
 				"choukoukouamine@outlook.com");
@@ -95,7 +95,7 @@ public class DataBaseInit {
 		cR.save(co);
 		Encadrant en = new Encadrant("encadrant1", passwordEncoder.encode("encadrant1"), "choukoukouamine@gmail.com");
 		eR.save(en);
-		BAP ba = new BAP(new Date(115, 1, 1), co, true, ad);
+		BAP ba = new BAP(new Date(115, 1, 1), co,  ad);
 		br.save(ba);
 		int i = 0;
 		co.setProjets(new ArrayList<>());
@@ -145,6 +145,8 @@ public class DataBaseInit {
 		or.save(o);
 		b.addObjectifSortantes(o);
 		br.save(b);
+		Manager m= new Manager("manager", passwordEncoder.encode("manager"), "choukoukouamine@gmail.com");
+		mR.save(m);
 		System.out.println("---------------------------------------------- Fin ----------------------------------------------");
 
 	}

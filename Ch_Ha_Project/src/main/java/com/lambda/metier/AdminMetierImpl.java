@@ -17,7 +17,6 @@ import com.lambda.entities.ArchiveBap;
 import com.lambda.entities.BAP;
 import com.lambda.entities.Bilan;
 import com.lambda.entities.Collaborateur;
-import com.lambda.entities.Description;
 import com.lambda.entities.Encadrant;
 import com.lambda.entities.Manager;
 import com.lambda.entities.Objectif;
@@ -80,7 +79,6 @@ public class AdminMetierImpl implements AdminMetier{
 
 	@Override
 	public Page<BAP> getAllBap(int page) {
-		// TODO Auto-generated method stub
 		return bapRepository.findAll(new PageRequest(page, 10));
 	}
 
@@ -116,8 +114,8 @@ public class AdminMetierImpl implements AdminMetier{
 
 	@Override
 	public void deleteObjectif(Long id) {
-		Objectif o= objectifRepository.findOne(id);
-		o.setArchive(true);
+		
+		objectifRepository.delete(id);
 	}
 
 	@Override
@@ -146,8 +144,8 @@ public class AdminMetierImpl implements AdminMetier{
 	}
 
 	@Override
-	public Bilan getBilan(Long id) {
-		return bilanRepository.findOne(id);
+	public BAP getBilan(Long id) {
+		return bapRepository.findOne(id);
 	}
 
 	@Override
@@ -180,7 +178,7 @@ public class AdminMetierImpl implements AdminMetier{
 		if(user instanceof Collaborateur){
 			Manager m= managerRepository.findOne(matricule);
 			BAP bap = new BAP(new Date(user.getDateRecrutement().getYear()+1, user.getDateRecrutement().getMonth(), 1),
-					(Collaborateur) user, true, m);
+					(Collaborateur) user, m);
 			userRepository.save(user);
 			bapRepository.save(bap);
 			return user;
@@ -297,8 +295,8 @@ public class AdminMetierImpl implements AdminMetier{
 		objectifRepository.save(objectif);
 		BAP bap= bapRepository.findOne(idBap);
 		bap.addObjectifSortantes(objectif);
-		bap= bapRepository.findOne(idBap);
-		return bap;
+		bapRepository.save(bap);
+		return bapRepository.findOne(idBap);
 	}
 
 	@Override
@@ -309,6 +307,24 @@ public class AdminMetierImpl implements AdminMetier{
 	@Override
 	public BAP addBap(BAP bap) {
 		return bapRepository.save(bap);
+	}
+
+	@Override
+	public BAP envoyerObjectifs(Long id) {
+		BAP bap= bapRepository.findOne(id);
+		bap.setCompteur(bap.getCompteur()+1);
+		return bap;
+	}
+
+	@Override
+	public BAP openOrLockBap(Long id) {
+		BAP bap= bapRepository.findOne(id);
+		if(bap.isLocked()){
+			bap.setLocked(false);
+		}else{
+			bap.setLocked(true);
+		}
+		return bap;
 	}
 
 	

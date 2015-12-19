@@ -257,12 +257,12 @@
 				
 					<div class="contact-box">
 						<div class="progress progress-striped active">
-							<div style="width: {{(feedback.noteGlobal/5)*100}}%" role="progressbar"
+							<div style="width: {{(feedback.noteGlobal/feedback.nombreThemeCalifie)*100}}%" role="progressbar"
 								class="progress-bar"
-								ng-class="{'progress-bar-danger': ((feedback.noteGlobal/5)*100)<=25,
-											'progress-bar-warning': ((feedback.noteGlobal/5)*100)<=50 && ((feedback.noteGlobal/5)*100)>25,
-											'progress-bar-success': ((feedback.noteGlobal/5)*100)<=75 && ((feedback.noteGlobal/5)*100)>50,
-											'progress-bar-primary': ((feedback.noteGlobal/5)*100)<=100}"></div>
+								ng-class="{'progress-bar-danger': ((feedback.noteGlobal/feedback.nombreThemeCalifie)*100)<=25,
+											'progress-bar-warning': ((feedback.noteGlobal/feedback.nombreThemeCalifie)*100)<=50 && ((feedback.noteGlobal/feedback.nombreThemeCalifie)*100)>25,
+											'progress-bar-success': ((feedback.noteGlobal/feedback.nombreThemeCalifie)*100)<=75 && ((feedback.noteGlobal/feedback.nombreThemeCalifie)*100)>50,
+											'progress-bar-primary': ((feedback.noteGlobal/feedback.nombreThemeCalifie)*100)<=100}"></div>
 								
 						</div>
 						<div class="row text-center">
@@ -299,7 +299,7 @@
 							</div>
 							<div class="col-xs-8 text-right">
 								<span> Note Globale </span>
-								<h2 class="font-bold text-success">{{feedback.noteGlobal| number: 2}} / 5</h2>
+								<h2 class="font-bold text-success">{{feedback.noteGlobal| number: 2}} / {{feedback.nombreThemeCalifie}}</h2>
 							</div>
 						</div>
 					</div>

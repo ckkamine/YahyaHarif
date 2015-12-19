@@ -1,5 +1,7 @@
 package com.lambda.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,6 +56,10 @@ public class CollaborateurRestService {
 	@RequestMapping(value="/objectifsa", method= RequestMethod.POST)
 	public Page<Objectif> getObjetifArchive(@RequestBody Long matricule,@RequestParam int page) {
 		return collaborateurMetier.getObjetifArchive(matricule, page);
+	}
+	@RequestMapping(value="/objectifsn", method= RequestMethod.GET)
+	public List<Objectif> getNewObjectif(@RequestParam Long matricule) {
+		return collaborateurMetier.getNewObjectif(matricule);
 	}
 	
 	

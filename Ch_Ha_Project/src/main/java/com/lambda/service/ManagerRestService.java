@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lambda.entities.ArchiveBap;
 import com.lambda.entities.BAP;
 import com.lambda.entities.Collaborateur;
+import com.lambda.entities.Encadrant;
 import com.lambda.entities.Objectif;
 import com.lambda.metier.ManagerMetier;
 
@@ -25,13 +26,33 @@ public class ManagerRestService {
 	@Autowired
 	ManagerMetier managerMetier;
 
-	@RequestMapping(value="/bapc", method= RequestMethod.POST)
-	public Page<BAP> getAllBapManager(@RequestBody Long matricule,@RequestParam int page) {
+	
+	@RequestMapping(value="/encadrants", method= RequestMethod.GET)
+	public List<Encadrant> getAllEncadrant() {
+		return managerMetier.getAllEncadrant();
+	}
+	@RequestMapping(value="/bilan", method= RequestMethod.GET)
+	public BAP getBilan(@RequestParam Long id) {
+		return managerMetier.getBilan(id);
+	}
+	
+	@RequestMapping(value="/bilan", method= RequestMethod.PUT)
+	public BAP updateBilan(@RequestBody BAP bilan) {
+		return managerMetier.updateBilan(bilan);
+	}
+
+	@RequestMapping(value="/objectif", method= RequestMethod.DELETE)
+	public void deleteObjectif(@RequestParam Long id) {
+		managerMetier.deleteObjectif(id);
+	}
+
+	@RequestMapping(value="/baps", method= RequestMethod.GET)
+	public Page<BAP> getAllBapManager(@RequestParam Long matricule,@RequestParam int page) {
 		return managerMetier.getAllBapManager(matricule, page);
 	}
 
 	@RequestMapping(value="/bapa", method= RequestMethod.POST)
-	public Page<ArchiveBap> getAllArchiveBapManager(@RequestBody Long matricule,@RequestParam int page) {
+	public Page<ArchiveBap> getAllArchiveBapManager(@RequestParam Long matricule,@RequestParam int page) {
 		return managerMetier.getAllArchiveBapManager(matricule, page);
 	}
 
@@ -55,8 +76,8 @@ public class ManagerRestService {
 		managerMetier.ouvrirBap(idBap);
 	}
 
-	@RequestMapping(value="/objectif/{idbap}", method= RequestMethod.POST)
-	public Objectif addObjectif(@RequestBody Objectif objectif, @PathVariable("idbap") Long idBap) {
+	@RequestMapping(value="/objectif", method= RequestMethod.POST)
+	public BAP addObjectif(@RequestBody Objectif objectif, @RequestParam Long idBap) {
 		return managerMetier.addObjectif(objectif, idBap);
 	}
 
@@ -74,5 +95,16 @@ public class ManagerRestService {
 	public BAP addBap(BAP bap) {
 		return managerMetier.addBap(bap);
 	}
+	
+	@RequestMapping(value="/envoyer", method=RequestMethod.PUT)
+	public BAP envoyerObjectifs(@RequestParam Long id) {
+		return managerMetier.envoyerObjectifs(id);
+	}
+	
+	@RequestMapping(value="/lock", method=RequestMethod.PUT)
+	public BAP openOrLockBap(@RequestParam Long id) {
+		return managerMetier.openOrLockBap(id);
+	}
 
+	
 }

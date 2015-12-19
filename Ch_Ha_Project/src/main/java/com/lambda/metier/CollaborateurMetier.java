@@ -1,5 +1,7 @@
 package com.lambda.metier;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
 import com.lambda.entities.ArchiveBap;
@@ -15,5 +17,6 @@ public interface CollaborateurMetier {
 	public void refuserObjectif(Long idObjectif);
 	public Page<Objectif> getObjectifCourrant(Long matricule, int page);
 	public Page<Objectif> getObjetifArchive(Long matricule, int page);
-
+	public List<Objectif> getNewObjectif(Long matricule);
+	
 }

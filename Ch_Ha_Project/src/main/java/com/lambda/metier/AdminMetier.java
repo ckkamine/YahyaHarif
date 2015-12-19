@@ -31,7 +31,7 @@ public interface AdminMetier{
 	Projet updateProjet(Projet projet);
 	void deleteProjet(Long id);
 	Bilan addBilan(Bilan bilan);
-	Bilan getBilan(Long id);
+	BAP getBilan(Long id);
 	BAP updateBilan(BAP bilan);
 	void deleteBilan(Long id);
 	List<String> getAllUsername();
@@ -52,8 +52,7 @@ public interface AdminMetier{
 	List<Collaborateur> getAllCollaborateur();
 	List<Manager> getAllManagers();
 	BAP addBap(BAP bap);
-	
-	
-	
+	BAP envoyerObjectifs(Long id);
+	BAP openOrLockBap(Long id);
 	
 }
