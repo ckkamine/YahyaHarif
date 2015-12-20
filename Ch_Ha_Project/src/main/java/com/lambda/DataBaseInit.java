@@ -72,81 +72,76 @@ public class DataBaseInit {
 	}
 
 	public void init() {
-		Administrateur a = new Administrateur("admin", passwordEncoder.encode("admin"), "choukoukouamine@gmail.com");
+		Administrateur a = new Administrateur("admin1", passwordEncoder.encode("admin1"), "AMINE", "CHOUKOUKOU", "choukoukouamine@gmail.com", "adresse", "06 00 00 00 00");
 		aR.save(a);
-		Collaborateur c = new Collaborateur("collaborateur", passwordEncoder.encode("collaborateur"), "choukoukouamine@outlook.com");
+		Collaborateur c = new Collaborateur("collaborateur1", passwordEncoder.encode("collaborateur1"), "TEST1", "COLLABORATEUR2", "choukoukouamine@outlook.com", "adresse", "06 00 00 00 00");
 		cR.save(c);
-		Encadrant e = new Encadrant("encadrant", passwordEncoder.encode("encadrant"), "choukoukouamine@outlook.com");
+		Encadrant e = new Encadrant("encadrant1", passwordEncoder.encode("encadrant1"), "YAHYA", "HARIF", "yahya.harif@gmail.com", "adresse", "06 00 00 00 00");
 		eR.save(e);
-		BAP b = new BAP(new Date(116, 0, 1), c, a);
-		br.save(b);
-		Administrateur a1 = new Administrateur("admin2", passwordEncoder.encode("admin2"), "choukoukouamine@gmail.com");
-		aR.save(a1);
-		Collaborateur c1 = new Collaborateur("collaborateur2", passwordEncoder.encode("collaborateur2"), "choukoukouamine@outlook.com");
-		cR.save(c1);
-		Encadrant e1 = new Encadrant("encadrant2", passwordEncoder.encode("encadrant2"), "choukoukouamine@outlook.com");
-		eR.save(e1);
-		BAP b1 = new BAP(new Date(115, 10, 1), c1,  a1);
+		Manager m= new Manager("manager1", passwordEncoder.encode("manager1"), "TEST1", "MANAGER1", "yahya.harif@gmail.com", "adresse", "06 00 00 00 00");
+		mR.save(m);
+		Administrateur a2 = new Administrateur("admin2", passwordEncoder.encode("admin2"), "AMINE2", "CHOUKOUKOU2", "choukoukouamine@gmail.com", "adresse", "06 00 00 00 00");
+		aR.save(a2);
+		Collaborateur c2 = new Collaborateur("collaborateur2", passwordEncoder.encode("collaborateur2"), "TEST2", "COLLABORATEUR2", "choukoukouamine@outlook.com", "adresse", "06 00 00 00 00");
+		cR.save(c2);
+		Encadrant e2 = new Encadrant("encadrant2", passwordEncoder.encode("encadrant2"), "YAHYA2", "HARIF2", "yahya.harif@gmail.com", "adresse", "06 00 00 00 00");
+		eR.save(e2);
+		Manager m2= new Manager("manager2", passwordEncoder.encode("manager2"), "TEST2", "MANAGER2", "yahya.harif@gmail.com", "adresse", "06 00 00 00 00");
+		mR.save(m2);
+		
+		
+		BAP b1 = new BAP(new Date(116, 0, 1), c2,  m2);
 		br.save(b1);
-		Administrateur ad = new Administrateur("admin1", passwordEncoder.encode("admin1"),
-				"choukoukouamine@outlook.com");
-		aR.save(ad);
-		Collaborateur co = new Collaborateur("collaborateur1", passwordEncoder.encode("collaborateur1"), "choukoukouamine@outlook.com");
-		cR.save(co);
-		Encadrant en = new Encadrant("encadrant1", passwordEncoder.encode("encadrant1"), "choukoukouamine@gmail.com");
-		eR.save(en);
-		BAP ba = new BAP(new Date(115, 1, 1), co,  ad);
-		br.save(ba);
+		
 		int i = 0;
-		co.setProjets(new ArrayList<>());
+		
 		c.setProjets(new ArrayList<>());
-		c1.setProjets(new ArrayList<>());
-		while (i < 3) {
+		c2.setProjets(new ArrayList<>());
+		while (i < 2) {
 			Projet p = new Projet("projet " + i);
 			if (i < 1) {
 				p.setChefProjet(e);
 			} else {
-				p.setChefProjet(en);
+				p.setChefProjet(e2);
 			}
 			p.setCollaborateurs(new ArrayList<Collaborateur>());
 			p.getCollaborateurs().add(c);
 			projetRepository.save(p);
 			c.getProjets().add(p);
 			cR.save(c);
-			p.getCollaborateurs().add(co);
+			p.getCollaborateurs().add(c2);
 			projetRepository.save(p);
-			co.getProjets().add(p);
-			cR.save(co);
-			p.getCollaborateurs().add(c1);
-			projetRepository.save(p);
-			c1.getProjets().add(p);
-			cR.save(c1);
+			c2.getProjets().add(p);
+			cR.save(c2);
 			i++;
 		}
 		i = 0;
-		while (i < 3) {
+		BAP b = new BAP(new Date(115, 11, 1), c, a);
+		b.setStatus(b.EN_COURS);
+		b.setObjectifsEntrantes(new ArrayList<Objectif>());
+		while (i < 2) {
 			Objectif p = new Objectif("objectif" + i, "categorie");
-			for (int j = 0; j < 3; j++) {
-				Description d = new Description("description" + j, "mesure" + j, 30, 23);
+			for (int j = 0; j < 2; j++) {
+				Description d = new Description("description" + j, "mesure" + j, 50, 23);
 				d.setResponsable(e);
 				p.addDescription(d);
 			}
+			b.getObjectifsEntrantes().add(p);
 			p.setEmploye(c);
 			or.save(p);
-			
 			i++;
 		}
+		
 		Objectif o= new Objectif("objectif", "categorie");
-		for (int j = 0; j < 3; j++) {
-			Description d = new Description("description" + j, "mesure" + j, 30, 23);
+		for (int j = 0; j < 2; j++) {
+			Description d = new Description("description" + j, "mesure" + j, 50, 23);
 			d.setResponsable(e);
 			o.addDescription(d);
 		}
 		or.save(o);
 		b.addObjectifSortantes(o);
 		br.save(b);
-		Manager m= new Manager("manager", passwordEncoder.encode("manager"), "choukoukouamine@gmail.com");
-		mR.save(m);
+		
 		System.out.println("---------------------------------------------- Fin ----------------------------------------------");
 
 	}

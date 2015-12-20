@@ -53,7 +53,10 @@
 			<div class="ibox-title">
 				<h5>Mes Bilans Annuels de Performance</h5>
 			</div>
-			<div class="ibox-content">
+			<div class="ibox-content" ng-show="vide==0">
+				<h3>La liste des BAP est vide pour le moment.</h3>
+			</div>
+			<div class="ibox-content" ng-show="vide!==0">
 				<ul class="list-group">
 					<li class="list-group-item">
 						<div class="row">
@@ -112,20 +115,20 @@
 
 				</ul>
 
-				<nav class="text-centre">
-					<ul class="pagination">
-						<li ng-hide="first"><a href=""
-							ng-click="getBaps(pageCurrent-1)"> <span aria-hidden="true">&laquo;</span>
-						</a></li>
-						<li ng-class="{'active': pageCurrent==$index}"
-							ng-repeat="p in pages track by $index"><a href=""
-							ng-click="getBaps($index)">{{$index+1}}</a></li>
-
-						<li ng-hide="last"><a href="" aria-label="Next"
-							ng-click="getBaps(pageCurrent+1)"> <span aria-hidden="true">&raquo;</span>
-						</a></li>
-					</ul>
-				</nav>
+				<center>
+							<div class="btn-group">
+								<button type="button" class="btn btn-white" ng-hide="first" ng-click="getBaps(pageCurrent-1)">
+									<i class="fa fa-chevron-left"></i>
+								</button>
+								<button class="btn btn-white" ng-class="{'active': pageCurrent==$index}"
+								ng-repeat="p in pages track by $index"
+								ng-click="getBaps($index)">{{$index+1}}</button>
+								
+								<button type="button" class="btn btn-white" ng-hide="last" ng-click="getBaps(pageCurrent+1)">
+									<i class="fa fa-chevron-right"></i>
+								</button>
+							</div>
+						</center>
 
 			</div>
 		</div>

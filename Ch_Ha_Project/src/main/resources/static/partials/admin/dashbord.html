@@ -9,7 +9,7 @@
 						action="">
 						<div class="form-group">
 							<input type="text" placeholder="Rechercher ..."
-								class="form-control" ng-model="mc" ng-change="getUsersByMc()">
+								class="form-control">
 
 						</div>
 
@@ -37,7 +37,7 @@
 	</div>
 	<div class="col-sm-8">
 		<div class="title-action">
-			<a href="" class="btn btn-primary"><i class="fa fa-refresh"></i></a>
+			<a href="" class="btn btn-primary" ng-click="reload()"><i class="fa fa-refresh"></i></a>
 		</div>
 	</div>
 </div>
@@ -103,16 +103,8 @@
 				</div>
 			</div>
 		</div>
-	<div class="row">
-		<div class="col-md-12">
-			<!-- Google Calendar API -->
-		</div>
-	</div>
-	<div class="footer fixed">
-		<div>
-			<strong>Copyright</strong> LAMBDA &copy; 2015
-		</div>
-	</div>
+	
+	
 </div>
 <script>
 	$('.admin').removeClass("active");
