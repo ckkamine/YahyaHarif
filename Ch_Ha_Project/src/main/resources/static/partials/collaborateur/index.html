@@ -3,6 +3,7 @@
 		<div class="sidebar-collapse">
 			<ul class="nav metismenu" id="side-menu">
 				<li class="nav-header">
+				<a  href="" ui-sref="collaborateur.user">
 					<div class="dropdown profile-element text-center">
 						<span> <img alt="image" class="img-circle"
 							src="img/user-collaborateur.png" />
@@ -17,15 +18,20 @@
 
 					</div>
 					<div class="logo-element">L</div>
+					</a>
 				</li>
-				<li class="collaborateur" id="dashbord"><a href=""><i
+				<li class="collaborateur" id="dashbord"><a href="" ui-sref="collaborateur.dashbord"><i
 						class="fa fa-dashboard"></i> <span class="nav-label">Tableau
 							de bord</span></a></li>
-				<li class="collaborateur"><a href=""><i
+				<li class="collaborateur" id="newObjectifs"><a href="" ui-sref="collaborateur.newObjectifs"><i
+						class="fa fa-calendar-o"></i> <span class="nav-label">Nouveaux Objectifs</span></a></li>
+				<li class="collaborateur" id="currentObjectifs"><a href="" ui-sref="collaborateur.currentObjectifs"><i
+						class="fa fa-calendar"></i> <span class="nav-label">Objectifs</span></a></li>
+				<li class="collaborateur" id="bap"><a href="" ui-sref="collaborateur.bap"><i
 						class="fa fa-line-chart"></i> Bilans Performance</a></li>
-				<li class="collaborateur"><a href=""><i class="fa fa-files-o"></i> <span
+				<li class="collaborateur" id="feedbacks"><a href="" ui-sref="collaborateur.feedbacks"><i class="fa fa-files-o"></i> <span
 						class="nav-label">Feedbacks</span></a></li>
-				<li class="collaborateur"><a href=""><i class="fa fa-database"></i>
+				<li class="collaborateur" id="archive"><a href="" ui-sref="collaborateur.archive"><i class="fa fa-archive"></i>
 						Archives</a></li>
 				
 			</ul>

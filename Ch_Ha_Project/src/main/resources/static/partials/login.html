@@ -17,14 +17,11 @@
                                 <div class="form-group"  ng-class="{'has-error' : error}" ng-click="inClick()">
                                         <input type="password" class="form-control" placeholder="Mot de Passe" required="" ng-model="$root.password">
                                 </div>
-                                <div >
-                                			<label> <input type="checkbox" ng-model="$root.rememberMe" class="i-checks"> <i></i> Remember Me </label>
-                                			
-                                	</div>
-                                	<div style="color: red;">
+                                
+                                	<span style="color: red;">
                                 			<label>{{$root.error}}</label>
                                 			
-                                	</div>
+                                	</span>
                                 
                                 <button type="submit" class="btn btn-primary block full-width m-b" ng-click="login()">Connexion</button>
 

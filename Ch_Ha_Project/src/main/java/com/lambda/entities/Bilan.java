@@ -1,7 +1,7 @@
 package com.lambda.entities;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -44,7 +44,7 @@ public abstract class Bilan implements Serializable{
 	private Collaborateur collaborateur;
 	@OneToMany(fetch=FetchType.LAZY, cascade= CascadeType.MERGE)
 	@JoinColumn(name="B_ID_E")
-	private Collection<Objectif> objectifsEntrantes;
+	private List<Objectif> objectifsEntrantes;
 	private String decision;
 	public Bilan() {
 		super();
@@ -83,11 +83,11 @@ public abstract class Bilan implements Serializable{
 	}
 	
 
-	public Collection<Objectif> getObjectifsEntrantes() {
+	public List<Objectif> getObjectifsEntrantes() {
 		return objectifsEntrantes;
 	}
 
-	public void setObjectifsEntrantes(Collection<Objectif> objectifsEntrantes) {
+	public void setObjectifsEntrantes(List<Objectif> objectifsEntrantes) {
 		this.objectifsEntrantes = objectifsEntrantes;
 	}
 

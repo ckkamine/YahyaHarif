@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.lambda.entities.BAP;
 import com.lambda.entities.Collaborateur;
+import com.lambda.entities.Feedback;
 
 public interface BapRepository extends JpaRepository<BAP, Long>{
 	
@@ -29,5 +30,21 @@ public interface BapRepository extends JpaRepository<BAP, Long>{
 	@Query("select b.collaborateur from BAP b where b.status = 'En cours'")
 	List<Collaborateur> collaborateurCurrent();
 	
+	
+	
+	@Query("select b.status from BAP b where b.collaborateur.matricule = :x")
+	String findByCollaborateurStatus(@Param("x") Long matricule);
+	
+	@Query("select b.compteur from BAP b where b.collaborateur.matricule = :x")
+	Integer findByCollaborateurCompteur(@Param("x") Long matricule);
+	
+	@Query("select count(b) from BAP b where b.manager.matricule = :x and status='En cours'")
+	Integer nombreEnCours(@Param("x") Long matricule);
+	
+	@Query("select count(b) from BAP b where b.manager.matricule = :x and status='En attente'")
+	Integer nombreEnAttente(@Param("x") Long matricule);
+	
+	@Query("select count(b) from BAP b where b.manager.matricule = :x and status='Rejeté'")
+	Integer nombreRejete(@Param("x") Long matricule);
 }
 

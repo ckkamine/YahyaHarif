@@ -49,6 +49,17 @@ public class EncadrantRestService {
 	public void retirerFeedback(@RequestParam Long idFeedback, @RequestParam Long matricule) {
 		encadrantMetier.retirerFeedback(matricule, idFeedback);
 	}
+
+	@RequestMapping(value="/feedbacksa", method= RequestMethod.GET)
+	public Page<Feedback> getFeedbacksA(@RequestParam(value="matricule") Long matricule, 
+			@RequestParam(value = "page") Integer page) {
+		return encadrantMetier.getFeedbacksA(matricule, page);
+	}
+	
+	@RequestMapping(value="/nombre", method= RequestMethod.GET)
+	public Integer getNombreFeedback(@RequestParam(value="matricule") Long matricule) {
+		return encadrantMetier.getNombreFeedback(matricule);
+	}
 	
 	
 }

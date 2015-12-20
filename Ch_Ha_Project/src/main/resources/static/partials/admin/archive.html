@@ -1,0 +1,644 @@
+<div id="page-wrapper" class="gray-bg">
+	<div class="row border-bottom">
+		<nav class="navbar navbar-static-top  " role="navigation"
+			style="margin-bottom: 0">
+			<div class="navbar-header">
+				<a class="navbar-minimalize minimalize-styl-2 btn "
+					ng-class="{'btn-primary': user.role=='ADMIN', 'btn-cfb': user.role=='MANAGER'}"
+					href=""><i class="fa fa-search"></i> </a>
+				<form role="search" class="navbar-form-custom" action="">
+					<div class="form-group">
+						<input type="text" placeholder="Rechercher ..."
+							class="form-control">
+
+					</div>
+
+				</form>
+			</div>
+			<ul class="nav navbar-top-links navbar-right">
+
+				<li><span class="m-r-sm text-muted welcome-message">Bienvenue
+						<strong>{{user.firstName}} {{user.lastName}}</strong> - Vous êtes
+						connecté en tant que <span ng-if="user.role=='ADMIN'"><strong
+							class="text-navy">Administrateur</strong></span> <span
+						ng-if="user.role=='MANAGER'"><strong class="text-cfb">Manager</strong></span>.
+				</span></li>
+				<li><a href="" ng-click="logout()"> <i
+						class="fa fa-sign-out"></i> Déconnexion
+				</a></li>
+			</ul>
+		</nav>
+	</div>
+<div
+		class="row wrapper border-bottom white-bg page-heading animated fadeInRight">
+		<div class="col-sm-4">
+			<h2>BAP</h2>
+			<ol class="breadcrumb">
+				<li><a href=""><i class="fa fa-folder-open-o"></i></a></li>
+				
+				<li class="active"><strong>Archive BAP</strong></li>
+			</ol>
+		</div>
+		<div class="col-sm-8">
+			<div class="title-action">
+				<a href="" class="btn"
+					ng-class="{'btn-primary': user.role=='ADMIN', 'btn-cfb': user.role=='MANAGER'}"
+					ng-click="reload()"><i class="fa fa-refresh"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="wrapper wrapper-content" ng-hide="detail">
+		<div class="ibox">
+			<div class="ibox-title">
+				<h5>Mes Bilans Annuels de Performance</h5>
+			</div>
+			<div class="ibox-content" ng-show="vide==0">
+				<h3>L'archive des BAP est vide.</h3>
+			</div>
+			<div class="ibox-content" ng-show="vide!==0">
+				<ul class="list-group">
+					<li class="list-group-item">
+						<div class="row">
+							<div class="col-md-2">Id</div>
+							<div class="col-md-2">
+								<strong>Collaborateur</strong>
+							</div>
+							<div class="col-md-2">
+								<strong>Poste actuel</strong>
+							</div>
+							<div class="col-md-2">
+								<strong>Note Globale</strong>
+							</div>
+							<div class="col-md-2">
+								<strong>Date</strong>
+							</div>
+							<div class="col-md-2">
+								<strong>Action</strong>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item" ng-repeat="b in baps">
+						<div class="row">
+							<div class="col-md-2">{{b.idBap}}</div>
+							
+							<div class="col-md-2">{{b.collaborateur.firstName}}
+								{{b.collaborateur.lastName}}</div>
+							<div class="col-md-2">{{b.collaborateur.posteActuel}}</div>
+							<div class="col-md-2">{{b.noteGlobale}}</div>
+							<div class="col-md-2">{{b.dateBilan | date : 'MMMM / yyyy'
+								}}</div>
+							<div class="col-md-2">
+								<span> <a href="" ng-click="seeMore(b)"
+									class="btn btn-outline btn-success btn-xs"><i
+										class="fa fa-search-plus"></i></a>
+								</span>                                                                          
+							</div>
+						</div>
+					</li>
+
+				</ul>
+
+				<center>
+							<div class="btn-group">
+								<button type="button" class="btn btn-white" ng-hide="first" ng-click="getBaps(pageCurrent-1)">
+									<i class="fa fa-chevron-left"></i>
+								</button>
+								<button class="btn btn-white" ng-class="{'active': pageCurrent==$index}"
+								ng-repeat="p in pages track by $index"
+								ng-click="getBaps($index)">{{$index+1}}</button>
+								
+								<button type="button" class="btn btn-white" ng-hide="last" ng-click="getBaps(pageCurrent+1)">
+									<i class="fa fa-chevron-right"></i>
+								</button>
+							</div>
+						</center>
+
+			</div>
+		</div>
+	</div>
+	<div class="wrapper wrapper-content" ng-show="detail">
+		<div class="ibox">
+			<div class="ibox-title">
+				<h5>Details du Bilan Annuel de Performance</h5>
+				<a href="" ng-click="retour()" class="btn  btn-xs pull-right"
+					ng-class="{'btn-primary': user.role=='ADMIN', 'btn-cfb': user.role=='MANAGER'}"><i
+					class="fa fa-arrow-left"></i> Retour</a>
+			</div>
+			<div class="ibox-content">
+				<div class="row">
+					<div class="col-sm-12 col-md-5">
+						<div class="contact-box">
+							<a href="">
+								<div class="col-sm-4">
+									<div class="text-center">
+										<img alt="image" class="img-circle m-t-xs img-responsive"
+											src="img/user-collaborateur-1.png">
+										<div class="m-t-xs font-bold">{{bapCurrent.collaborateur.posteActuel}}</div>
+									</div>
+								</div>
+								<div class="col-sm-8">
+									<h3>
+										<strong>{{bapCurrent.collaborateur.firstName}}
+											{{bapCurrent.collaborateur.lastName}}</strong>
+									</h3>
+									<p>
+										<i class="fa fa-hashtag">&nbsp;</i>
+										{{bapCurrent.collaborateur.matricule}}
+									</p>
+									<p>
+										<i class="fa fa-calendar">&nbsp;</i>
+										{{bapCurrent.collaborateur.dateRecrutement | date:
+										'dd/MM/yyyy'}}
+									</p>
+									<p>
+										<i class="fa fa-envelope-o">&nbsp;</i>
+										{{bapCurrent.collaborateur.email}}
+									</p>
+									<p>
+										<i class="fa fa-phone">&nbsp;</i>
+										{{bapCurrent.collaborateur.telephone}}
+									</p>
+								</div>
+								<div class="clearfix"></div>
+							</a>
+						</div>
+					</div>
+					<div class="col-sm-12 col-md-2 ">
+						<div class="content-box equal">
+							<h2 class="text-center">Bilan Annuel de Performance</h2>
+							<p class="text-center">
+								<strong>{{bapCurrent.dateBilan | date: 'MMMM/yyyy'}}</strong>
+							</p>
+							<br />
+							<p>
+								<strong>Statut</strong> <span class="label pull-right"
+									ng-class="{
+                                                  'label-warning': bapCurrent.status=='En cours',
+                                                 'label-danger': bapCurrent.status=='En attente'
+                                                                                			}">{{bapCurrent.status}}</span>
+							</p>
+							<p>
+
+								<strong>Accès</strong>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<span ng-if="bapCurrent.locked==true"
+									ng-click="lockOrUnlockBap()"> <i
+									class="fa fa-lock text-danger fa-2x click"></i>
+								</span> <span ng-if="bapCurrent.locked==false"
+									ng-click="lockOrUnlockBap()"> <i
+									class="fa fa-unlock-alt text-navy fa-2x click"></i>
+								</span>
+							</p>
+						</div>
+					</div>
+					<div class="col-sm-12 col-md-5">
+						<div class="contact-box">
+							<a href="">
+								<div class="col-sm-4">
+									<div class="text-center">
+										<img alt="image" class="img-circle m-t-xs img-responsive"
+											src="/img/user-manager-1.png">
+										<div class="m-t-xs font-bold">Manager</div>
+									</div>
+								</div>
+								<div class="col-sm-8">
+
+									<h3>
+										<strong>{{bapCurrent.manager.firstName}}
+											{{bapCurrent.manager.lastName}}</strong>
+									</h3>
+
+									<p>
+										<i class="fa fa-hashtag">&nbsp;</i>
+										{{bapCurrent.manager.matricule}}
+									</p>
+									<p>
+										<i class="fa fa-calendar">&nbsp;</i>
+										{{bapCurrent.manager.dateRecrutement | date : 'dd/MM/yyyy'}}
+									</p>
+									<p>
+										<i class="fa fa-envelope-o">&nbsp;</i>
+										{{bapCurrent.manager.email}}
+									</p>
+									<p>
+										<i class="fa fa-phone">&nbsp;</i>
+										{{bapCurrent.manager.telephone}}
+									</p>
+								</div>
+								<div class="clearfix"></div>
+							</a>
+						</div>
+					</div>
+				</div>
+				<br />
+				
+				<div class="row" >
+					<div class="col-md-11">
+						<div class="tabs-container">
+							<ul class="nav nav-tabs">
+								<li ng-class="{'active': tab==0}" ng-click="tab=0"><a>Objectifs
+										Entrantes</a></li>
+								<li ng-class="{'active': tab==1}" ng-click="tab=1"><a>Objectifs
+										Sortantes</a></li>
+								
+								<li ng-class="{'active': tab==2}" ng-click="tab=2"><a>Historique
+										des Feedbacks </a></li>
+								<li ng-class="{'active': tab==3}" ng-click="tab=3"><a>Remarque
+										Générale </a></li>
+							</ul>
+							<div class="tab-content">
+								<div class="tab-pane" ng-class="{'active': tab==1}">
+									<div class="panel-body equal">
+										<ul class="list-group">
+						<li class="list-group-item">
+							<div class="row">
+								<div class="col-md-1">
+									<strong>Catégorie</strong>
+								</div>
+								<div class="col-md-3">
+									<strong>Objectif</strong>
+								</div>
+								<div class="col-md-3">
+									<strong>Description</strong>
+								</div>
+								<div class="col-md-2">
+									<strong>Mesure </strong>
+								</div>
+								<div class="col-md-2">
+									<strong>Responsable Mesure</strong>
+								</div>
+								<div class="col-md-1">
+									<strong>Poids</strong>
+								</div>
+								
+
+
+							</div>
+						</li>
+
+						<div ng-repeat="o in bapCurrent.objectifsSortantes">
+							<li class="list-group-item" ng-repeat="d in o.descriptions">
+
+								<div class="row">
+									<div class="col-md-1">{{o.categorie}}</div>
+									<div class="col-md-3">{{o.objectif}}</div>
+									<div class="col-md-3">{{d.description}}</div>
+									<div class="col-md-2">{{d.mesure}}</div>
+									<div class="col-md-2">{{d.responsable.posteActuel}}</div>
+									<div class="col-md-1">{{d.poids}}%</div>
+									
+								</div>
+							</li>
+						</div>
+						<li class="list-group-item">
+							<div class="row">
+								<div class="col-md-1 col-md-offset-11">100 %</div>
+								
+						</li>
+					</ul>
+								
+								</div>
+								</div>
+								<div class="tab-pane" ng-class="{'active': tab==0}">
+									<div class="panel-body aqual">
+										<ul class="list-group">
+						<li class="list-group-item">
+							<div class="row">
+								<div class="col-md-1">
+									<strong>Catégorie</strong>
+								</div>
+								<div class="col-md-2">
+									<strong>Objectif</strong>
+								</div>
+								<div class="col-md-3">
+									<strong>Description</strong>
+								</div>
+								<div class="col-md-2">
+									<strong>Mesure </strong>
+								</div>
+								<div class="col-md-2">
+									<strong>Responsable Mesure</strong>
+								</div>
+								<div class="col-md-1">
+									<strong>Poids</strong>
+								</div>
+								<div class="col-md-1">
+									<strong>Résultat</strong>
+								</div>
+
+
+							</div>
+						</li>
+
+						<div ng-repeat="o in bapCurrent.objectifsEntrantes">
+							<li class="list-group-item" ng-repeat="d in o.descriptions">
+
+								<div class="row">
+									<div class="col-md-1">{{o.categorie}}</div>
+									<div class="col-md-2">{{o.objectif}}</div>
+									<div class="col-md-3">{{d.description}}</div>
+									<div class="col-md-2">{{d.mesure}}</div>
+									<div class="col-md-2">{{d.responsable.posteActuel}}</div>
+									<div class="col-md-1">{{d.poids}}%</div>
+									<div class="col-md-1">{{d.note}}%</div>
+										
+								</div>
+							</li>
+						</div>
+						<li class="list-group-item">
+							<div class="row">
+								<div class="col-md-1 col-md-offset-9">100 %</div>
+								<div class="col-md-2">{{bapCurrent.noteGlobale}} %</div>
+							</div>
+						</li>
+					</ul>
+									</div>
+									<br />
+
+									
+								</div>
+								
+								<div class="tab-pane" ng-class="{'active': tab==2}">
+									<div class="panel-body equal">
+										<div ng-hide="feedbackF">
+											<div ng-repeat="f in bapCurrent.feedbacks">
+												<div class="row">
+													<div class="col-md-10">
+														<span class="text-success" ng-click="seeMoreFeedback(f)"><i
+															class="fa fa-search click text-navy"></i> <i
+															class="fa fa-clock"></i> {{f.dateFeedback |
+															date:'yyyy/MM/dd HH:mm'}}</span> - <strong>{{f.encadrant.matricule}}
+															: {{f.encadrant.firstName}} {{f.encadrant.lastName}} </strong>a
+														soumis un feedback.
+													</div>
+
+												</div>
+												<br />
+											</div>
+										</div>
+										<div ng-show="feedbackF">
+											<div class="row">
+												<div class="col-md-2">
+													<button class="btn btn-xs"
+														ng-class="{'btn-primary': user.role=='ADMIN', 'btn-cfb': user.role=='MANAGER'}"
+														ng-click="retourFeedback()">
+														<i class="fa fa-arrow-left"></i> Retour
+													</button>
+												</div>
+												<div class="col-md-4 col-md-offset-2">
+													<div class="content-box equal">
+														<h2 class="text-center">Fiche Feedback</h2>
+														<p class="text-center">
+															<strong>{{feedback.dateFeedback | date: 'MMMM
+																/yyyy'}}</strong>
+														</p>
+													</div>
+												</div>
+											</div>
+											<br />
+											<div class="row">
+												<div class="col-sm-12 col-md-4">
+													<div class="contact-box">
+														<a href="">
+
+															<div class="col-sm-12">
+																<h3>Collaborateur</h3>
+																<h3>
+																	<strong>{{feedback.collaborateur.firstName}}
+																		{{feedback.collaborateur.lastName}}</strong>
+																</h3>
+																<p>
+																	<i class="fa fa-calendar">&nbsp;</i>
+																	{{feedback.collaborateur.dateRecrutement | date:
+																	'dd/MM/yyyy'}}
+																</p>
+																<p>
+																	<i class="fa fa-envelope-o">&nbsp;</i>
+																	{{feedback.collaborateur.email}}
+																</p>
+																<p>
+																	<i class="fa fa-phone">&nbsp;</i>
+																	{{feedback.collaborateur.telephone}}
+																</p>
+															</div>
+															<div class="clearfix"></div>
+														</a>
+													</div>
+												</div>
+												<div class="col-sm-12 col-md-4">
+													<div class="contact-box">
+														<a href="">
+															<h3 class="text-center">
+																<strong>{{feedback.projet.nom}}</strong>
+															</h3>
+															<div class="col-sm-6">
+																<p>
+																	<i class="fa fa-hashtag">&nbsp;</i>
+																	{{feedback.projet.idProjet}}
+																</p>
+																<p>
+																	<i class="fa fa-calendar-o">&nbsp;</i>
+																	{{feedback.debutInter | date :' dd/MM/yy'}}
+																</p>
+																<p>
+																	<i class="fa fa-calendar">&nbsp;</i>
+																	{{feedback.finInter | date :' dd/MM/yy'}}
+																</p>
+															</div>
+															<div class="col-sm-6">
+																<p>
+																	<i class="fa fa-user-md">&nbsp;</i> {{feedback.role}}
+																</p>
+																<p>
+																	<i class="fa fa-hourglass-end">&nbsp;</i>
+																	{{feedback.nombreJourValorise}} Jours
+																</p>
+															</div>
+															<div class="clearfix"></div>
+														</a>
+													</div>
+												</div>
+												<div class="col-sm-12 col-md-4">
+													<div class="contact-box">
+														<a href="">
+
+															<div class="col-sm-12">
+																<h3>Encadrant</h3>
+																<h3>
+																	<strong>{{feedback.encadrant.firstName}}
+																		{{feedback.encadrant.lastName}}</strong>
+																</h3>
+																<p>
+																	<i class="fa fa-calendar">&nbsp;</i>
+																	{{feedback.encadrant.dateRecrutement |date:
+																	'dd/MM/yy'}}
+																</p>
+																<p>
+																	<i class="fa fa-envelope-o">&nbsp;</i>
+																	{{feedback.encadrant.email}}
+																</p>
+																<p>
+																	<i class="fa fa-phone">&nbsp;</i>
+																	{{feedback.encadrant.telephone}}
+																</p>
+															</div>
+															<div class="clearfix"></div>
+														</a>
+													</div>
+												</div>
+											</div>
+											<br />
+											<div class="row">
+												<div class="col-md-8">
+													<div class="table-responsive">
+														<table class="table table-bordered">
+															<thead>
+																<tr>
+																	<th>Libellé</th>
+																	<th>Qualification</th>
+																	<th>Remarque</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr ng-repeat="q in feedback.qualifications">
+																	<td>{{q.theme}}</td>
+																	<td><span ng-if="q.qualification==0"
+																		class="font-bold text-danger"> Critique </span> <span
+																		ng-if="q.qualification==1"
+																		class="font-bold text-warning"> À développer </span> <span
+																		ng-if="q.qualification==2"
+																		class="font-bold text-success"> Selon Attentes
+																	</span> <span ng-if="q.qualification==3"
+																		class="font-bold text-navy"> Démontre des
+																			forces </span> <span ng-if="q.qualification=='na'"
+																		class="font-bold"> NA </span></td>
+																	<td>{{q.remarque}}</td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="table-responsive">
+														<table class="table table-bordered">
+															<thead>
+																<tr>
+																	<th>Qualification</th>
+																	<th>Poids</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr>
+																	<td>Critique</td>
+																	<td class="font-bold text-danger">0</td>
+																</tr>
+																<tr>
+																	<td>À développer</td>
+																	<td class="font-bold text-warning">1</td>
+																</tr>
+																<tr>
+																	<td>Selon Attentes</td>
+																	<td class="font-bold text-success">2</td>
+																</tr>
+																<tr>
+																	<td>Démontre des forces</td>
+																	<td class="font-bold text-navy">3</td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<br />
+											<div class="row">
+												<div class="col-md-8">
+
+													<div class="contact-box">
+														<div class="progress progress-striped active">
+															<div
+																style="width: {{(feedback.noteGlobal/3)*100}}%"
+																role="progressbar" class="progress-bar"
+																ng-class="{'progress-bar-danger': ((feedback.noteGlobal/3)*100)<=25,
+											'progress-bar-warning': ((feedback.noteGlobal/3)*100)<=50 && ((feedback.noteGlobal/3)*100)>25,
+											'progress-bar-success': ((feedback.noteGlobal/3)*100)<=75 && ((feedback.noteGlobal/3)*100)>50,
+											'progress-bar-primary': ((feedback.noteGlobal/3)*100)<=100}"></div>
+
+														</div>
+														<div class="row text-center">
+															<div class="col-md-3 font-bold">
+																<i class="fa fa-caret-up text-danger"></i> <br />Critique
+															</div>
+															<div class="col-md-3 font-bold">
+																<i class="fa fa-caret-up text-warning"></i> <br />À
+																développer
+															</div>
+															<div class="col-md-3 font-bold">
+																<i class="fa fa-caret-up text-success"></i> <br />Selon
+																Attentes
+															</div>
+															<div class="col-md-3 font-bold">
+																<i class="fa fa-caret-up text-navy"></i> <br />Démontre
+																des forces
+															</div>
+														</div>
+														<div class="hr-line-dashed"></div>
+														<div class="row">
+															<div class="col-md-3">
+																<span class="font-bold">Remarque Générale</span>
+															</div>
+															<div class="col-md-9">
+																<p class="text-justify">{{feedback.commentaire}}</p>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="widget style1">
+														<div class="row">
+															<div class="col-xs-4 text-center">
+																<i class="fa fa-bar-chart-o fa-5x text-success"></i>
+															</div>
+															<div class="col-xs-8 text-right">
+																<span> Note Globale </span>
+																<h2 class="font-bold text-success">{{feedback.noteGlobal|
+																	number: 2}}</h2>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-12"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane" ng-class="{'active': tab==3}">
+									<div class="panel-body equal">
+
+										<div class="row">
+											<h3>Remarques et Observations</h3>
+										</div>
+
+										<div class="row">
+											<div class="col-md-12">
+												<p>{{bapCurrent.decision}}</p>
+											</div>
+											
+										</div>
+
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+</div>

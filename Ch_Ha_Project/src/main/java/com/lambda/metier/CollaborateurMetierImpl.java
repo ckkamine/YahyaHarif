@@ -11,10 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lambda.entities.ArchiveBap;
 import com.lambda.entities.BAP;
 import com.lambda.entities.Collaborateur;
+import com.lambda.entities.Feedback;
 import com.lambda.entities.Objectif;
 import com.lambda.repository.ArchiveBapRepository;
 import com.lambda.repository.BapRepository;
 import com.lambda.repository.CollaborateurRepository;
+import com.lambda.repository.FeedbackRepository;
 import com.lambda.repository.ObjectifRepository;
 
 
@@ -31,6 +33,9 @@ public class CollaborateurMetierImpl implements CollaborateurMetier{
 	@Autowired
 	ObjectifRepository objectifRepository;
 	
+	@Autowired
+	FeedbackRepository feedbackRepository;
+	
 	@Override
 	public BAP getBapCourrant(Long matricule) {
 		// TODO Auto-generated method stub
@@ -39,47 +44,34 @@ public class CollaborateurMetierImpl implements CollaborateurMetier{
 
 	@Override
 	public Page<ArchiveBap> getAllBapArchive(Long matricule, int page) {
-		// TODO Auto-generated method stub
 		return archiveBapRepository.findByCollaborateur(matricule, new PageRequest(page, 10));
 	}
 
 
-	@Override
-	public void validerObjectif(Long idObjectif) {
-		Objectif o= objectifRepository.findOne(idObjectif);
-		o.setValide(true);
-	}
-
-	@Override
-	public void refuserObjectif(Long idObjectif) {
-		Objectif o= objectifRepository.findOne(idObjectif);
-		o.setValide(false);
-	}
+	
 
 	@Override
 	public void envoyerObjectifs(Long matricule) {
 		BAP b= bapRepository.findByCollaborateur(matricule);
 		if(b.getCompteur() < 3){
-			b.setStatus(b.VALIDE);
-			for(Objectif o: b.getObjectifsSortantes()){
-				if(!o.isValide()){
-					b.setStatus(b.REJETE);
-					break;
-				}
-			}
-			
+			b.setEnvoye(false);
 		}
-		b.setCompteur(b.getCompteur()+1);
+		for(Objectif f: b.getObjectifsEntrantes()){
+			if(!f.isValide()){
+				b.setStatus(b.REJETE);
+			}
+		}
+		//Mail 
 	}
 
 	@Override
 	public Page<Objectif> getObjectifCourrant(Long matricule, int page) {
-		return objectifRepository.getObjectifsC(matricule, new PageRequest(page, 10));
+		return objectifRepository.getObjectifsC(matricule, new PageRequest(page, 5));
 	}
 
 	@Override
 	public Page<Objectif> getObjetifArchive(Long matricule, int page) {
-		return objectifRepository.getObjectifsA(matricule, new PageRequest(page, 10));
+		return objectifRepository.getObjectifsA(matricule, new PageRequest(page, 5));
 	}
 
 	@Override
@@ -90,5 +82,35 @@ public class CollaborateurMetierImpl implements CollaborateurMetier{
 		}
 		return null;
 	}
+
+	@Override
+	public Page<Feedback> getAllFeedbacksArchives(Long matricule, int page) {
+		// TODO Auto-generated method stub
+		return feedbackRepository.getFeedbacksArchiveCollaborateur(matricule, new PageRequest(page, 10));
+	}
+
+	@Override
+	public String getBapStatus(Long matricule) {
+		// TODO Auto-generated method stub
+		return bapRepository.findByCollaborateurStatus(matricule);
+	}
+
+	@Override
+	public void validerOrRefuserObjectif(Long idObjectif) {
+		Objectif o= objectifRepository.findOne(idObjectif);
+		if(o.isValide()){
+			o.setValide(false);
+		}else{
+			o.setValide(true);
+		}
+		
+	}
+
+	@Override
+	public Integer getNombreDeRefus(Long matricule) {
+		// TODO Auto-generated method stub
+		return bapRepository.findByCollaborateurCompteur(matricule);
+	}
+	
 
 }

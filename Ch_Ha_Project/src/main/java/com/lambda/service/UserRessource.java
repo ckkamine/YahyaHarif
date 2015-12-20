@@ -37,18 +37,14 @@ public class UserRessource {
 	@Autowired
 	private AuthenticationManager authManager;
 	
-	@Autowired
-	private EncadrantRepository encadrantRepository;
+	
 
-	@RequestMapping(value = "/updatepassword/{id}/{mdp}", method= RequestMethod.POST)
-	public User updatePassword(@PathVariable(value = "mdp") String mdp, @PathVariable(value = "id") Long id) {
-		return userMetier.updatePassword(id, mdp);
+	@RequestMapping(value = "/updatepassword", method= RequestMethod.POST)
+	public User updatePassword(@RequestParam String password, @RequestParam Long matricule) {
+		return userMetier.updatePassword(matricule, password);
 	}
 	
-	@RequestMapping(method= RequestMethod.GET)
-	public User getUser(@RequestParam Long matricule){
-		return userMetier.getUser(matricule);
-	}
+	
 
 	@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/authenticate", method = RequestMethod.POST)
 	public User authenticate(	@RequestParam("username") String username,

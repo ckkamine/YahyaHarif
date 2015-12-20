@@ -74,7 +74,7 @@ public class DataBaseInit {
 	public void init() {
 		Administrateur a = new Administrateur("admin", passwordEncoder.encode("admin"), "choukoukouamine@gmail.com");
 		aR.save(a);
-		Collaborateur c = new Collaborateur("collaborateur", passwordEncoder.encode("collaborateur"), "email");
+		Collaborateur c = new Collaborateur("collaborateur", passwordEncoder.encode("collaborateur"), "choukoukouamine@outlook.com");
 		cR.save(c);
 		Encadrant e = new Encadrant("encadrant", passwordEncoder.encode("encadrant"), "choukoukouamine@outlook.com");
 		eR.save(e);
@@ -82,7 +82,7 @@ public class DataBaseInit {
 		br.save(b);
 		Administrateur a1 = new Administrateur("admin2", passwordEncoder.encode("admin2"), "choukoukouamine@gmail.com");
 		aR.save(a1);
-		Collaborateur c1 = new Collaborateur("collaborateur2", passwordEncoder.encode("collaborateur2"), "email");
+		Collaborateur c1 = new Collaborateur("collaborateur2", passwordEncoder.encode("collaborateur2"), "choukoukouamine@outlook.com");
 		cR.save(c1);
 		Encadrant e1 = new Encadrant("encadrant2", passwordEncoder.encode("encadrant2"), "choukoukouamine@outlook.com");
 		eR.save(e1);
@@ -91,7 +91,7 @@ public class DataBaseInit {
 		Administrateur ad = new Administrateur("admin1", passwordEncoder.encode("admin1"),
 				"choukoukouamine@outlook.com");
 		aR.save(ad);
-		Collaborateur co = new Collaborateur("collaborateur1", passwordEncoder.encode("collaborateur1"), "email");
+		Collaborateur co = new Collaborateur("collaborateur1", passwordEncoder.encode("collaborateur1"), "choukoukouamine@outlook.com");
 		cR.save(co);
 		Encadrant en = new Encadrant("encadrant1", passwordEncoder.encode("encadrant1"), "choukoukouamine@gmail.com");
 		eR.save(en);

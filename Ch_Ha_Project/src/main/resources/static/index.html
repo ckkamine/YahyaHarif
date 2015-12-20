@@ -1,5 +1,5 @@
 <!DOCTYPE html >
-<html>
+<html ng-app="myApp">
 
 <head>
 
@@ -7,7 +7,7 @@
 <!-- Favicons-->
 <link rel="icon" href="img/lambda-logo-2.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AMBDA</title>
+<title>AMBDA | {{titre}}</title>
 <!-- Bootstrap -->
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/datedropper.css" rel="stylesheet">
@@ -30,7 +30,7 @@
 
 </head>
 
-<body ng-class="{'bg-login': (!user && initialized), 'white': !initialized}" ng-app="myApp"
+<body ng-class="{'bg-login': (!user && initialized), 'white': !initialized}" 
 	class="animated fadeInLeft fixed-sidebar">
 	<div class="spiner-example loading" ng-hide="initialized">
 		<div class="sk-spinner sk-spinner-rotating-plane"></div>

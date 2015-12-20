@@ -1,0 +1,273 @@
+<div
+	class="row wrapper border-bottom white-bg page-heading animated fadeInLeft">
+	<div class="col-sm-4">
+		<h2>BAP</h2>
+
+		<ol class="breadcrumb">
+			<li><a href=""><i class="fa fa-folder-open-o"></i></a></li>
+			<li><strong>BAP courant</strong></li>
+		</ol>
+	</div>
+	<div class="col-sm-8">
+		<div class="title-action">
+			<a href="" class="btn btn-warning" ng-click="reload()"><i
+				class="fa fa-refresh"></i></a>
+		</div>
+	</div>
+</div>
+<div class="wrapper wrapper-content">
+	<div class="ibox">
+		<div class="ibox-title">
+			<h5>Details du votre Bilan Annuel de Performance</h5>
+
+		</div>
+		<div class="ibox-content" ng-hide="bapCurrent">
+			<h3>Votre bilan est&nbsp;&nbsp;&nbsp;<i class="fa fa-lock text-danger fa-2x"></i>&nbsp;&nbsp;&nbsp;privé </h3>
+			
+		</div>
+		<div class="ibox-content" ng-show="bapCurrent">
+
+			<div class="row">
+				<div class="col-sm-12 col-md-5">
+					<div class="contact-box">
+						<a href="">
+							<div class="col-sm-4">
+								<div class="text-center">
+									<img alt="image" class="img-circle m-t-xs img-responsive"
+										src="img/user-collaborateur-1.png">
+									<div class="m-t-xs font-bold">{{bapCurrent.collaborateur.posteActuel}}</div>
+								</div>
+							</div>
+							<div class="col-sm-8">
+								<h3>
+									<strong>{{bapCurrent.collaborateur.firstName}}
+										{{bapCurrent.collaborateur.lastName}}</strong>
+								</h3>
+								<p>
+									<i class="fa fa-hashtag">&nbsp;</i>
+									{{bapCurrent.collaborateur.matricule}}
+								</p>
+								<p>
+									<i class="fa fa-calendar">&nbsp;</i>
+									{{bapCurrent.collaborateur.dateRecrutement | date:
+									'dd/MM/yyyy'}}
+								</p>
+								<p>
+									<i class="fa fa-envelope-o">&nbsp;</i>
+									{{bapCurrent.collaborateur.email}}
+								</p>
+								<p>
+									<i class="fa fa-phone">&nbsp;</i>
+									{{bapCurrent.collaborateur.telephone}}
+								</p>
+							</div>
+							<div class="clearfix"></div>
+						</a>
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-2 ">
+					<div class="content-box equal">
+						<h2 class="text-center">Bilan Annuel de Performance</h2>
+						<p class="text-center">
+							<strong>{{bapCurrent.dateBilan | date: 'MMMM/yyyy'}}</strong>
+						</p>
+						<br />
+						<p>
+							<strong>Statut</strong> <span class="label pull-right"
+								ng-class="{
+                                                  'label-warning': bapCurrent.status=='En cours',
+                                                 'label-danger': bapCurrent.status=='En attente',
+                                                 'label-primary': bapCurrent.status=='Validé',
+                                                 'label-danger': bapCurrent.status=='Rejeté',
+                                                 'label-default': bapCurrent.status=='Annulé'
+                                                                                			}">{{bapCurrent.status}}</span>
+						</p>
+						<p>
+
+							<strong>Accès</strong>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+							<i class="fa fa-unlock-alt text-navy fa-2x click"></i>
+
+						</p>
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-5">
+					<div class="contact-box">
+						<a href="">
+							<div class="col-sm-4">
+								<div class="text-center">
+									<img alt="image" class="img-circle m-t-xs img-responsive"
+										src="/img/user-manager-1.png">
+									<div class="m-t-xs font-bold">Manager</div>
+								</div>
+							</div>
+							<div class="col-sm-8">
+
+								<h3>
+									<strong>{{bapCurrent.manager.firstName}}
+										{{bapCurrent.manager.lastName}}</strong>
+								</h3>
+
+								<p>
+									<i class="fa fa-hashtag">&nbsp;</i>
+									{{bapCurrent.manager.matricule}}
+								</p>
+								<p>
+									<i class="fa fa-calendar">&nbsp;</i>
+									{{bapCurrent.manager.dateRecrutement | date : 'dd/MM/yyyy'}}
+								</p>
+								<p>
+									<i class="fa fa-envelope-o">&nbsp;</i>
+									{{bapCurrent.manager.email}}
+								</p>
+								<p>
+									<i class="fa fa-phone">&nbsp;</i>
+									{{bapCurrent.manager.telephone}}
+								</p>
+							</div>
+							<div class="clearfix"></div>
+						</a>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="" ng-show="bapCurrent.status=='En cours'">
+
+				
+					
+						<div class="row">
+							<h3 class="col-md-12">Les objectifs de l'année courante</h3>
+						</div>
+					
+					<ul class="list-group">
+					<li class="list-group-item">
+						<div class="row">
+							<div class="col-md-1">
+								<strong>Catégorie</strong>
+							</div>
+							<div class="col-md-3">
+								<strong>Objectif</strong>
+							</div>
+							<div class="col-md-3">
+								<strong>Description</strong>
+							</div>
+							<div class="col-md-1">
+								<strong>Mesure </strong>
+							</div>
+							<div class="col-md-2">
+								<strong>Responsable Mesure</strong>
+							</div>
+							<div class="col-md-1">
+								<strong>Poids</strong>
+							</div>
+							<div class="col-md-1">
+								<strong>Résultat</strong>
+							</div>
+
+
+						</div>
+					</li>
+
+					<div ng-repeat="o in bapCurrent.objectifsEntrantes">
+						<li class="list-group-item" ng-repeat="d in o.descriptions">
+
+							<div class="row">
+								<div class="col-md-1">{{o.categorie}}</div>
+								<div class="col-md-3">{{o.objectif}}</div>
+								<div class="col-md-3">{{d.description}}</div>
+								<div class="col-md-1">{{d.mesure}}</div>
+								<div class="col-md-2">{{d.responsable.posteActuel}}</div>
+								<div class="col-md-1">{{d.poids}}%</div>
+								<div class="col-md-1">{{d.note}}%</div>
+							</div>
+					</div>
+					</li>
+					<li class="list-group-item">
+						<div class="row">
+							<div class="col-md-1 col-md-offset-10">100 %</div>
+							<div class="col-md-1">{{bapCurrent.noteGlobale}} %</div>
+						</div>
+					</li>
+					</ul>
+						<div class="row">
+							<h3 class="col-md-12">Les objectifs de l'année prochaine</h3>
+						</div>
+					<ul class="list-group">
+					<li class="list-group-item">
+						<div class="row">
+							<div class="col-md-1">
+								<strong>Catégorie</strong>
+							</div>
+							<div class="col-md-3">
+								<strong>Objectif</strong>
+							</div>
+							<div class="col-md-3">
+								<strong>Description</strong>
+							</div>
+							<div class="col-md-2">
+								<strong>Mesure </strong>
+							</div>
+							<div class="col-md-2">
+								<strong>Responsable Mesure</strong>
+							</div>
+							<div class="col-md-1">
+								<strong>Poids</strong>
+							</div>
+							
+
+
+						</div>
+					</li>
+
+					<div ng-repeat="o in bapCurrent.objectifsSortantes">
+						<li class="list-group-item" ng-repeat="d in o.descriptions">
+
+							<div class="row">
+								<div class="col-md-1">{{o.categorie}}</div>
+								<div class="col-md-3">{{o.objectif}}</div>
+								<div class="col-md-3">{{d.description}}</div>
+								<div class="col-md-2">{{d.mesure}}</div>
+								<div class="col-md-2">{{d.responsable.posteActuel}}</div>
+								<div class="col-md-1">{{d.poids}}%</div>
+								
+							</div>
+					</div>
+					</li>
+					<li class="list-group-item">
+						<div class="row">
+							<div class="col-md-1 col-md-offset-11">100 %</div>
+							
+						</div>
+					</li>
+					</ul>
+						<div class="row">
+							<h3 class="col-md-12">Remarques et Observations</h3>
+						</div>
+
+						<div class="row">
+							<div class="col-md-12">
+								<p>{{bapCurrent.decision}}</p>
+							</div>
+						</div>
+					
+				
+			</div>
+
+
+		</div>
+
+
+
+	</div>
+</div>
+
+
+
+
+
+
+<script>
+	$('.collaborateur').removeClass("active active-user");
+	$('#bap').addClass("active active-user");
+</script>

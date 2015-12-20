@@ -81,20 +81,20 @@
 
 							</tbody>
 						</table>
-						<nav>
-							<ul class="pagination">
-								<li ng-hide="first"><a href="" ng-click="getProjects(pageCurrent-1)"> <span
-										aria-hidden="true">&laquo;</span>
-								</a></li>
-								<li ng-class="{'active': pageCurrent==$index}"
-									ng-repeat="p in pages track by $index"><a href=""
-									ng-click="getProjects($index)">{{$index+1}}</a></li>
-
-								<li ng-hide="last"><a href="" aria-label="Next" ng-click="getProjects(pageCurrent+1)">
-										<span aria-hidden="true">&raquo;</span>
-								</a></li>
-							</ul>
-						</nav>
+						<center>
+							<div class="btn-group">
+								<button type="button" class="btn btn-white" ng-hide="first" ng-click="getProjects(pageCurrent-1)">
+									<i class="fa fa-chevron-left"></i>
+								</button>
+								<button class="btn btn-white" ng-class="{'active': pageCurrent==$index}"
+								ng-repeat="p in pages track by $index"
+								ng-click="getProjects($index)">{{$index+1}}</button>
+								
+								<button type="button" class="btn btn-white" ng-hide="last" ng-click="getProjects(pageCurrent+1)">
+									<i class="fa fa-chevron-right"></i>
+								</button>
+							</div>
+						</center>
 					</div>
 				</div>
 				<div class="ibox float-e-margins" ng-show="ajout">

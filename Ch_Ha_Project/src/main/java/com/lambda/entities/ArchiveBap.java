@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,29 +16,30 @@ public class ArchiveBap implements Serializable{
 	@Id
 	private Long idBap;
 	private Date dateBilan;
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="COL_ID")
 	private Collaborateur collaborateur;
-	@OneToMany
-	@JoinColumn(name="AR_BAP_ID")
+	@OneToMany(fetch=FetchType.EAGER)
+	@JoinColumn(name="AR_BAP_ID_E")
 	private Collection<Objectif> objectifsEntrantes;
 	private String decision;
-	@OneToMany
+	@OneToMany(fetch=FetchType.EAGER)
 	@JoinColumn(name="AR_BAP_ID")
 	private Collection<Feedback> feedbacks;
 	private boolean locked;
-	@OneToMany
-	@JoinColumn(name="AR_BAP_ID")
+	@OneToMany(fetch=FetchType.EAGER)
+	@JoinColumn(name="AR_BAP_ID_S")
 	private Collection<Objectif> objectifsSortantes;
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="MAG_ID")
 	private Manager manager;
+	private Integer noteGlobale;
 	
 	public ArchiveBap(){}
 
 	public ArchiveBap(Long idBap, Date dateBilan, Collaborateur collaborateur, Collection<Objectif> objectifsEntrantes,
 			String decision, Collection<Feedback> feedbacks, boolean locked, Collection<Objectif> objectifsSortantes,
-			Manager manger) {
+			Manager manger, Integer noteGlobale) {
 		super();
 		this.idBap = idBap;
 		this.dateBilan = dateBilan;
@@ -48,6 +50,7 @@ public class ArchiveBap implements Serializable{
 		this.locked = locked;
 		this.objectifsSortantes = objectifsSortantes;
 		this.manager = manger;
+		this.noteGlobale= noteGlobale;
 	}
 
 	public Long getIdBap() {
@@ -114,13 +117,23 @@ public class ArchiveBap implements Serializable{
 		this.objectifsSortantes = objectifsSortantes;
 	}
 
-	public Manager getManger() {
+	public Manager getManager() {
 		return manager;
 	}
 
-	public void setManger(Manager manger) {
-		this.manager = manger;
+	public void setManager(Manager manager) {
+		this.manager = manager;
 	}
+
+	public Integer getNoteGlobale() {
+		return noteGlobale;
+	}
+
+	public void setNoteGlobale(Integer noteGlobale) {
+		this.noteGlobale = noteGlobale;
+	}
+
+	
 	
 	
 

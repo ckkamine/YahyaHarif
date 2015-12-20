@@ -29,13 +29,16 @@ app
 							});
 							$stateProvider.state('admin.dashbord', {
 								url : '/admin',
-								controller : adminCtrl,
+								controller : dashbordCtrl,
 								templateUrl : 'partials/admin/dashbord.html'
 							});
+							
 							$stateProvider.state('admin.user', {
 								url : '/admin/profile',
-								templateUrl : 'partials/user/profile.html'
+								templateUrl : 'partials/user/profile.html',
+								controller: adminProfileCtrl
 							});
+							
 							$stateProvider.state('admin.bilan', {
 								url : '/admin/bilan',
 								templateUrl : 'partials/admin/bilan.html'
@@ -53,7 +56,8 @@ app
 							});
 							$stateProvider.state('admin.archive', {
 								url : '/admin/archives',
-								templateUrl : 'partials/admin/archive.html'
+								templateUrl : 'partials/admin/archive.html',
+								controller: archiveCtrl
 							});
 							$stateProvider.state('admin.parametre', {
 								url : '/admin/parametre',
@@ -76,8 +80,13 @@ app
 							});
 							$stateProvider.state('manager.dashbord', {
 								url : '/manager',
-								controller : managerCtrl,
+								controller : dashbordCtrl,
 								templateUrl : 'partials/manager/dashbord.html'
+							});
+							$stateProvider.state('manager.user', {
+								url : '/manager/profile',
+								templateUrl : 'partials/user/profile.html',
+								controller: adminProfileCtrl
 							});
 							$stateProvider.state('manager.bilan', {
 								url : '/manager/bilan',
@@ -87,6 +96,11 @@ app
 								url : '/manager/bilan/bap',
 								templateUrl : 'partials/admin/bap.html',
 								controller : bapCtrl
+							});
+							$stateProvider.state('manager.archive', {
+								url : '/manager/archives',
+								templateUrl : 'partials/admin/archive.html',
+								controller: archiveCtrl
 							});
 
 							$stateProvider
@@ -104,9 +118,80 @@ app
 											'collaborateur.dashbord',
 											{
 												url : '/collaborateur',
-												templateUrl : 'partials/collaborateur/dashbord.html'
+												templateUrl : 'partials/collaborateur/dashbord.html',
+												controller: dashbordColCtrl
 
 											});
+							$stateProvider
+							.state(
+									'collaborateur.newObjectifs',
+									{
+										url : '/collaborateur/nouveaux-objectifs',
+										templateUrl : 'partials/collaborateur/newObjectifs.html',
+										controller: newObjectifs
+
+									});
+							$stateProvider
+							.state(
+									'collaborateur.currentObjectifs',
+									{
+										url : '/collaborateur/objectifs',
+										templateUrl : 'partials/collaborateur/currentObjectifs.html',
+										controller: currentObjectifs
+
+									});
+							$stateProvider
+							.state(
+									'collaborateur.bap',
+									{
+										url : '/collaborateur/bap',
+										templateUrl : 'partials/collaborateur/bap.html',
+										controller: bapColCtrl
+
+									});
+							$stateProvider
+							.state(
+									'collaborateur.feedbacks',
+									{
+										url : '/collaborateur/feedbacks',
+										templateUrl : 'partials/collaborateur/feedbacks.html',
+										controller: feedbacksColCtrl
+									});
+							$stateProvider
+							.state(
+									'collaborateur.archive',
+									{
+										url : '/collaborateur/archive',
+										templateUrl : 'partials/collaborateur/archive.html'
+
+									});
+							$stateProvider
+							.state(
+									'collaborateur.archiveBaps',
+									{
+										url : '/collaborateur/archive/baps',
+										templateUrl : 'partials/collaborateur/archiveBaps.html',
+										controller: archiveBapsCtrl
+
+									});
+							$stateProvider
+							.state(
+									'collaborateur.archiveObjectifs',
+									{
+										url : '/collaborateur/archive/objectifs',
+										templateUrl : 'partials/collaborateur/archiveObjectifs.html',
+										controller: archiveObjectifsCtrl
+
+									});
+							$stateProvider
+							.state(
+									'collaborateur.archiveFeedbacks',
+									{
+										url : '/collaborateur/archive/feedbacks',
+										templateUrl : 'partials/collaborateur/archiveFeedbacks.html',
+										controller: archiveFeedbacksCtrl
+
+									});
 							$stateProvider.state('encadrant', {
 								templateUrl : 'partials/encadrant/index.html',
 								resolve : {
@@ -119,7 +204,8 @@ app
 											'encadrant.dashbord',
 											{
 												url : '/encadrant',
-												templateUrl : 'partials/encadrant/dashbord.html'
+												templateUrl : 'partials/encadrant/dashbord.html',
+												controller: dashbordEncCtrl
 											});
 							$stateProvider
 									.state(
@@ -129,6 +215,24 @@ app
 												controller : feedbackCtrl,
 												templateUrl : 'partials/encadrant/feedbacks.html'
 											});
+							$stateProvider
+							.state(
+									'encadrant.archiveFeedbacks',
+									{
+										url : '/encadrant/archive/feedbacks',
+										controller : archiveFeedbackCtrl,
+										templateUrl : 'partials/encadrant/archiveFeedbacks.html'
+									});
+							$stateProvider.state('collaborateur.user', {
+								url : '/collaborateur/profile',
+								templateUrl : 'partials/user/profile2.html',
+								controller: adminProfileCtrl
+							});
+							$stateProvider.state('encadrant.user', {
+								url : '/encadrant/profile',
+								templateUrl : 'partials/user/profile2.html',
+								controller: adminProfileCtrl
+							});
 							$httpProvider.interceptors
 									.push(function($q, $rootScope, $location,
 											$cookieStore) {
@@ -231,11 +335,458 @@ app
 					};
 					$rootScope.initialized = true;
 				});
-function adminCtrl($scope) {
+function adminProfileCtrl($scope, $http, $rootScope){
+	var role = $rootScope.user.role.toLowerCase();
+	switch(role){
+	case 'manager':
+		var manager = angular.element( document.querySelectorAll('li.manager'));
+		manager.removeClass("active active-manager");
+		break;
+	case 'admin':
+		var admin = angular.element(document.querySelectorAll('li.admin'));
+		admin.removeClass("active");
+	case 'collaborateur':
+		var collaborateur = angular.element(document.querySelectorAll('li.collaborateur'));
+		collaborateur.removeClass("active active-user");
+	case 'encadrant':
+		var encadrant = angular.element(document.querySelectorAll('li.encadrant'));
+		encadrant.removeClass("active active-encadrant");
+	}
+	$scope.errorSaisie= false;
+	$scope.changePasswordF= false;
+	$scope.isValid= false;
+	
+	$scope.change= function(){
+		$scope.changePasswordF=true;
+	}
+	$scope.retour= function(){
+		$scope.changePasswordF=false;
+	}
+	$scope.checkPassword = function() {
+		$http({
+			method : 'POST',
+			url : 'user/authenticate',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			data : serializeData({
+				username : $rootScope.user.username,
+				password : $scope.password
+			})
+		}).then(function(response) {
+			$scope.isValid=true;
+		}, function() {
+			$rootScope.logout();
+		});
 
+	};
+	$scope.checkIsValid= function(){
+		$scope.tap=true;
+		
+		if($scope.newPassword===$scope.newPassword2){
+			$scope.errorSaisie= false;
+		}else {
+			$scope.errorSaisie= true;
+		}
+	}
+	$scope.changePassword= function() {
+		
+		if (!$scope.errorSaisie && $scope.isValid) {
+			$http({
+				method : 'POST',
+				url : 'user/updatepassword',
+				headers : {
+					'Content-Type' : 'application/x-www-form-urlencoded'
+				},
+				data : serializeData({
+					matricule : $rootScope.user.matricule,
+					password : $scope.newPassword
+				})
+			}).then(function(response) {
+				$scope.changePasswordF = false;
+				$scope.tape= false;
+				$scope.errorSaisie = false;
+				$scope.isValid = false;
+			}, function() {
+				
+			});
+		}
+
+	};
+	
 }
-function managerCtrl($scope) {
 
+function archiveCtrl($scope, $http, $rootScope) {
+	var role = $rootScope.user.role.toLowerCase();
+	var archive = angular.element( document.querySelector('#archive') );
+	if(role=='manager'){
+		var manager = angular.element( document.querySelectorAll('li.manager') );
+		manager.removeClass("active active-manager");
+		archive.addClass("active active-manager");
+	}
+	if(role=='admin'){
+		var admin = angular.element(document.querySelectorAll('li.admin'));
+		admin.removeClass("active");
+		archive.addClass("active");
+		
+	}
+	$scope.detail=false;
+	$scope.feedbackF= false;
+	$scope.tab=0;
+	$scope.seeMore= function(b){
+		$scope.bapCurrent=b;
+		$scope.detail=true;
+	}
+	$scope.seeMoreFeedback= function(f) {
+		$scope.feedback=f;
+		$scope.feedbackF=true;
+	}
+	$scope.retour= function(){
+		$scope.detail=false;
+	}
+	$scope.retourFeedback= function(){
+		$scope.feedbackF=false;
+	}
+	$scope.getBaps= function(page){
+		$http({
+			method : 'GET',
+			url : 'rest/' + role + '/archives',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			params : {
+				page : page,
+				matricule: $rootScope.user.matricule
+			}
+		}).then(function(response) {
+			$scope.baps = response.data.content;
+			$scope.last = response.data.last;
+			$scope.first = response.data.first;
+			$scope.pages = new Array(response.data.totalPages);
+			$scope.pageCurrent = page;
+			$scope.vide= response.data.totalPages;
+		}, function() {
+
+		});
+	}
+	$scope.getBaps(0);
+}
+function dashbordCtrl($scope, $http, $rootScope) {
+	var role = $rootScope.user.role.toLowerCase();
+	$http({
+		  url: 'rest/'+role+'/enattenten',
+		  method: 'GET',
+		  params:{
+			  matricule: $rootScope.user.matricule
+		  },
+		  transformResponse: [function (data) {
+		      $scope.enattente= data;
+		      return data;
+		  }]
+		});
+	$http({
+		  url: 'rest/'+role+'/encoursn',
+		  method: 'GET',
+		  params:{
+			  matricule: $rootScope.user.matricule
+		  },
+		  transformResponse: [function (data) {
+		      $scope.encours= data;
+		      return data;
+		  }]
+		});
+	$http({
+		  url: 'rest/'+role+'/rejeten',
+		  method: 'GET',
+		  params:{
+			  matricule: $rootScope.user.matricule
+		  },
+		  transformResponse: [function (data) {
+		      $scope.rejete= data;
+		      return data;
+		  }]
+		});
+}
+function archiveFeedbackCtrl($scope, $http, $rootScope){
+	$scope.detail=false;
+	$scope.changeDetail= function(){
+		$scope.detail=false;
+	}
+	$scope.seeMore= function(f){
+		$scope.feedback=f;
+		$scope.detail=true;
+	}
+	$scope.getFeedbacks = function(page) {
+		$http({
+			method : 'GET',
+			url : 'rest/encadrant/feedbacksa',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			params : {
+				page : page,
+				matricule : $rootScope.user.matricule
+			}
+		}).then(function(response) {
+			$scope.feedbacks = response.data.content;
+			$scope.last = response.data.last;
+			$scope.first = response.data.first;
+			$scope.pages = new Array(response.data.totalPages);
+			$scope.pageCurrent = page;
+			$scope.vide= response.data.totalPages;
+		}, function() {
+
+		});
+	}
+	$scope.getFeedbacks(0);
+}
+function dashbordEncCtrl($scope, $http, $rootScope) {
+	$http({
+		  url: 'rest/encadrant/nombre',
+		  method: 'GET',
+		  params:{
+			  matricule: $rootScope.user.matricule
+		  },
+		  transformResponse: [function (data) {
+		      $scope.feedbacks= data;
+		      return data;
+		  }]
+		});
+}
+function archiveFeedbacksCtrl($http, $rootScope, $scope){
+	$scope.detail=false;
+	$scope.getFeedbacks= function(page){
+		$http({
+			method : 'GET',
+			url : 'rest/collaborateur/feedbacksa',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			params : {
+				matricule: $rootScope.user.matricule,
+				page : page
+			}
+		}).then(function(response) {
+			var feedbacks = response.data.content;
+			$scope.feedbacks= feedbacks;
+			$scope.last = response.data.last;
+			$scope.first = response.data.first;
+			$scope.pages = new Array(response.data.totalPages);
+			$scope.pageCurrent = page;
+			$scope.vide=response.data.totalPages;
+		}, function() {
+
+		});
+	}
+	$scope.getFeedbacks(0);
+	$scope.seeMore= function(f) {
+		$scope.feedback=f;
+		$scope.detail=true;
+	}
+	$scope.retour= function() {
+		$scope.detail=false;
+	}
+}
+function archiveBapsCtrl($http, $scope, $rootScope) {
+	$scope.detail=false;
+	$scope.getBaps= function(page){
+		$http({
+			method : 'GET',
+			url : 'rest/collaborateur/bapa',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			params : {
+				matricule: $rootScope.user.matricule,
+				page : page
+			}
+		}).then(function(response) {
+			var baps = response.data.content;
+			$scope.baps= baps;
+			$scope.last = response.data.last;
+			$scope.first = response.data.first;
+			$scope.pages = new Array(response.data.totalPages);
+			$scope.pageCurrent = page;
+			$scope.vide=response.data.totalPages;
+		}, function() {
+
+		});
+	}
+	$scope.getBaps(0);
+	$scope.seeMore= function(b) {
+		$scope.bapCurrent=b;
+		$scope.detail=true;
+	}
+	$scope.retour= function() {
+		$scope.detail=false;
+	}
+}
+function archiveObjectifsCtrl($http, $scope, $rootScope) {
+	$scope.getObjectifs= function(page){
+		$http({
+			method : 'GET',
+			url : 'rest/collaborateur/objectifsa',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			params : {
+				matricule: $rootScope.user.matricule,
+				page : page
+			}
+		}).then(function(response) {
+			var objectifs = response.data.content;
+			$scope.objectifs= objectifs;
+			$scope.last = response.data.last;
+			$scope.first = response.data.first;
+			$scope.pages = new Array(response.data.totalPages);
+			$scope.pageCurrent = page;
+			$scope.vide=response.data.totalPages;
+		}, function() {
+
+		});
+	}
+	$scope.getObjectifs(0);
+}
+function feedbacksColCtrl($http, $rootScope, $scope){
+	$scope.detail=false;
+		$http({
+			method : 'GET',
+			url : 'rest/collaborateur/bapc',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			params : {
+				matricule: $rootScope.user.matricule
+			}
+		}).then(function(response) {
+			$scope.feedbacks = response.data.feedbacks;
+		}, function() {
+
+		});
+		$scope.seeMore= function(f){
+			$scope.feedback=f;
+			$scope.detail=true;
+		}
+		$scope.changeDetail= function(){
+			$scope.detail=false;
+		}
+}
+function bapColCtrl($http, $rootScope, $scope){
+	$http({
+		method : 'GET',
+		url : 'rest/collaborateur/bapc',
+		headers : {
+			'Content-Type' : 'application/x-www-form-urlencoded'
+		},
+		params : {
+			matricule: $rootScope.user.matricule
+		}
+	}).then(function(response) {
+		$scope.bapCurrent = response.data;
+	}, function() {
+
+	});
+}
+function dashbordColCtrl($scope, $http, $rootScope) {
+	$http({
+		  url: 'rest/collaborateur/status',
+		  method: 'GET',
+		  params:{
+			  matricule: $rootScope.user.matricule
+		  },
+		  transformResponse: [function (data) {
+		      $scope.bap= data;
+		      return data;
+		  }]
+		});
+}
+function newObjectifs($scope, $http, $rootScope) {
+	$http({
+		  url: 'rest/collaborateur/compteur',
+		  method: 'GET',
+		  params:{
+			  matricule: $rootScope.user.matricule
+		  },
+		  transformResponse: [function (data) {
+		      $scope.compteur= data;
+		      return data;
+		  }]
+		});
+	$scope.getNewObjectifs = function() {
+		$http({
+			method : 'GET',
+			url : 'rest/collaborateur/objectifsn',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			params : {
+				matricule: $rootScope.user.matricule
+			}
+		}).then(function(response) {
+			$scope.objectifs = response.data;
+		}, function() {
+
+		});
+	}
+	$scope.getNewObjectifs();
+	$scope.validerOrRefuser = function(idObjectif) {
+		$http({
+			method : 'POST',
+			url : 'rest/collaborateur/validerorrefuser',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			params : {
+				idObjectif : idObjectif
+			}
+		}).then(function(response) {
+			$scope.getNewObjectifs();
+		}, function() {
+
+		});
+	}
+	$scope.envoyer = function() {
+		$http({
+			method : 'POST',
+			url : 'rest/collaborateur/envoyer',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			params : {
+				matricule : $rootScope.user.matricule
+			}
+		}).then(function(response) {
+			$scope.getNewObjectifs();
+		}, function() {
+
+		});
+		
+	}
+}
+function currentObjectifs($http, $scope, $rootScope, $state) {
+	$scope.getObjectifs= function(page){
+		$http({
+			method : 'GET',
+			url : 'rest/collaborateur/objectifsc',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			params : {
+				matricule: $rootScope.user.matricule,
+				page : page
+			}
+		}).then(function(response) {
+			var objectifs = response.data.content;
+			$scope.objectifs= objectifs;
+			$scope.last = response.data.last;
+			$scope.first = response.data.first;
+			$scope.pages = new Array(response.data.totalPages);
+			$scope.pageCurrent = page;
+		}, function() {
+
+		});
+	}
+	$scope.getObjectifs(0);
 }
 function bapCtrl($scope, $http, $rootScope) {
 	var role = $rootScope.user.role.toLowerCase();
@@ -355,6 +906,7 @@ function bapCtrl($scope, $http, $rootScope) {
 			$scope.first = response.data.first;
 			$scope.pages = new Array(response.data.totalPages);
 			$scope.pageCurrent = page;
+			$scope.vide= response.data.totalPages;
 		}, function() {
 
 		});
@@ -399,9 +951,7 @@ function bapCtrl($scope, $http, $rootScope) {
 				$scope.descriptions = [];
 				$scope.description = {};
 				$scope.objectif = {};
-				$scope.getBap($scope.bapCurrent.id);
-				$scope.getEncadrants();
-
+				$rootScope.reload();
 			}, function() {
 
 			});
@@ -534,6 +1084,40 @@ function bapCtrl($scope, $http, $rootScope) {
 		}
 		
 	}
+	$scope.validerBap= function(idBap){
+		
+			$http({
+				method : 'POST',
+				url : 'rest/' + role + '/valider',
+				headers : {
+					'Content-Type' : 'application/x-www-form-urlencoded'
+				},
+				params : {
+					idBap : idBap
+				}
+			}).then(function(response) {
+				$scope.getBaps(0);
+			}, function() {
+
+			});
+	}
+	$scope.annulerBap= function(idBap){
+		
+		$http({
+			method : 'POST',
+			url : 'rest/' + role + '/annuler',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			params : {
+				idBap : idBap
+			}
+		}).then(function(response) {
+			$scope.getBaps(0);
+		}, function() {
+
+		});
+}
 	
 }
 
@@ -874,7 +1458,7 @@ function projetCtrl($scope, $http) {
 	}
 }
 function loginCtrl($scope, $rootScope, $location, $cookieStore, $http, $state) {
-	$rootScope.rememberMe = true;
+	$rootScope.titre='Login';
 	$scope.inClick = function() {
 		delete $rootScope.error;
 	}
@@ -890,12 +1474,13 @@ function loginCtrl($scope, $rootScope, $location, $cookieStore, $http, $state) {
 				password : $rootScope.password
 			})
 		}).then(function(response) {
+			$rootScope.username='';
+			password : $rootScope.password='';
 			var user = response.data;
-			if ($rootScope.rememberMe) {
+			
 				$cookieStore.put('user', user);
 				$cookieStore.put('token', user.token);
-			}
-			;
+			
 			$rootScope.user = user;
 			isConnected = true;
 			$rootScope.redirectRole();
@@ -1023,6 +1608,7 @@ function feedbackCtrl($scope, $rootScope, $http) {
 
 		});
 	}
+	$scope.getCollaborateurs();
 	$scope.changeAdd = function() {
 		switch ($scope.add) {
 		case true:
@@ -1064,6 +1650,7 @@ function feedbackCtrl($scope, $rootScope, $http) {
 			$scope.first = response.data.first;
 			$scope.pages = new Array(response.data.totalPages);
 			$scope.pageCurrent = page;
+			$scope.vide= response.data.totalPages;
 		}, function() {
 
 		});

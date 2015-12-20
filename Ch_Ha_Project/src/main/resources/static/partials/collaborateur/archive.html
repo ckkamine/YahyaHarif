@@ -1,0 +1,71 @@
+<div
+	class="row wrapper border-bottom white-bg page-heading animated fadeInLeft">
+	<div class="col-sm-4">
+		<h2>Archives</h2>
+		
+		<ol class="breadcrumb">
+			<li><a href=""><i class="fa fa-folder-open-o"></i></a></li>
+			<li><a>Archives</a></li>
+		</ol>
+	</div>
+	<div class="col-sm-8">
+		<div class="title-action">
+			<a href="" class="btn btn-warning" ng-click="reload()"><i
+				class="fa fa-refresh"></i></a>
+		</div>
+	</div>
+</div>
+<div class="wrapper wrapper-content">
+	<div class="row">
+		<div class="col-md-4">
+		<a ui-sref="collaborateur.archiveObjectifs" href="">
+			<div class="widget style1 white-bg equal" style="height: 95px;">
+				<div class="row">
+					<div class="col-xs-4">
+						<i class="fa fa-briefcase text-success fa-5x"></i>
+					</div>
+					<div class="col-xs-8 text-right">
+						<span> Archives </span>
+						<h2 class="font-bold text-success">Objectifs.</h2>
+					</div>
+				</div>
+			</div>
+		</a>
+		</div>
+		<div class="col-md-4 ">
+		<a ui-sref="collaborateur.archiveFeedbacks" href="">
+			<div class="widget style1 white-bg equal" style="height: 95px;">
+				<div class="row">
+					<div class="col-xs-4">
+						<i class="fa fa-briefcase text-danger fa-5x"></i>
+					</div>
+					<div class="col-xs-8 text-right">
+						<span>Archives </span>
+						<h2 class="font-bold text-danger">Feedbacks</h2>
+					</div>
+				</div>
+			</div>
+		</a>
+		</div>
+		<div class="col-md-4 ">
+		<a ui-sref="collaborateur.archiveBaps" href="">
+			<div class="widget style1 white-bg equal" style="height: 95px;">
+				<div class="row">
+					<div class="col-xs-4">
+						<i class="fa fa-briefcase text-navy fa-5x"></i>
+					</div>
+					<div class="col-xs-8 text-right">
+						<span>Archives </span>
+						<h2 class="font-bold text-navy">BAP</h2>
+					</div>
+				</div>
+			</div>
+			</a>
+		</div>
+	</div>
+	
+</div>
+<script>
+		$('.collaborateur').removeClass("active active-user");
+		$('#archive').addClass("active active-user");
+	</script>

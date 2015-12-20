@@ -55,10 +55,7 @@ public class AdminRestService {
 		return adminMetier.addObjectif(objectif, idBap);
 	}
 
-	@RequestMapping(value="/bilan", method= RequestMethod.POST)
-	public Bilan addBilan(Bilan bilan) {
-		return adminMetier.addBilan(bilan);
-	}
+	
 
 	@RequestMapping(value="/bap", method= RequestMethod.POST)
 	public BAP addBap(BAP bap) {
@@ -66,10 +63,7 @@ public class AdminRestService {
 	}
 
 
-	@RequestMapping(value="/objectifs", method= RequestMethod.GET)
-	public Page<Objectif> getAllObjectifs(@RequestParam int page) {
-		return adminMetier.getAllObjectifs(page);
-	}
+	
 
 	@RequestMapping(value="/objectif", method= RequestMethod.GET)
 	public Objectif getObjectif(@RequestParam Long id) {
@@ -116,10 +110,7 @@ public class AdminRestService {
 		return adminMetier.updateBilan(bilan);
 	}
 
-	@RequestMapping(value="/bilan", method= RequestMethod.DELETE)
-	public void deleteBilan(@RequestParam Long id) {
-		adminMetier.deleteBilan(id);
-	}
+	
 
 	@RequestMapping(value="/usernames", method= RequestMethod.GET)
 	public List<String> getAllUsername() {
@@ -146,25 +137,7 @@ public class AdminRestService {
 		adminMetier.deleteUser(id);
 	}
 
-	@RequestMapping(value="/archivebap", method= RequestMethod.POST)
-	public ArchiveBap addArchiveBap(ArchiveBap archiveBap) {
-		return adminMetier.addArchiveBap(archiveBap);
-	}
-
-	@RequestMapping(value="/archivebap", method= RequestMethod.GET)
-	public ArchiveBap getArchiveBap(@RequestParam Long id) {
-		return adminMetier.getArchiveBap(id);
-	}
-
-	@RequestMapping(value="/archivebap", method= RequestMethod.PUT)
-	public ArchiveBap updateArchiveBap(@RequestBody ArchiveBap archiveBap) {
-		return adminMetier.updateArchiveBap(archiveBap);
-	}
-
-	@RequestMapping(value="/archivebap", method= RequestMethod.DELETE)
-	public void deleteArchiveBap(@RequestParam Long id) {
-		adminMetier.deleteArchiveBap(id);
-	}
+	
 
 	@RequestMapping(value="/userbymc", method= RequestMethod.GET)
 	public Page<User> findByMcUser(@RequestParam String mc,
@@ -178,11 +151,7 @@ public class AdminRestService {
 		return adminMetier.findByMcBap(mc, page);
 	}
 
-	@RequestMapping(value="/archivebymc", method= RequestMethod.GET)
-	public Page<ArchiveBap> findByMcArchiveBap(@RequestParam String mc,
-			@RequestParam int page) {
-		return adminMetier.findByMcArchiveBap(mc, page);
-	}
+
 
 	@RequestMapping(value="/projetbymc", method= RequestMethod.GET)
 	public Page<Projet> findByMcProjet(@RequestParam String mc,
@@ -190,11 +159,7 @@ public class AdminRestService {
 		return adminMetier.findByMcProjet(mc, page);
 	}
 
-	@RequestMapping(value="/objectifbymc", method= RequestMethod.GET)
-	public Page<Objectif> findByMcObjectif(@RequestParam String mc,
-			@RequestParam int page) {
-		return adminMetier.findByMcObjectif(mc, page);
-	}
+	
 	
 	@RequestMapping(value="/encadrants", method= RequestMethod.GET)
 	public List<Encadrant> getAllEncadrant() {
@@ -221,5 +186,30 @@ public class AdminRestService {
 		return adminMetier.openOrLockBap(id);
 	}
 
+	@RequestMapping(value="/valider", method= RequestMethod.POST)
+	public void validerBap(@RequestParam Long idBap) {
+		adminMetier.validerBap(idBap);
+	}
+
+	@RequestMapping(value="/annuler", method= RequestMethod.POST)
+	public void AnnulerBap(@RequestParam Long idBap) {
+		adminMetier.AnnulerBap(idBap);
+	}
+
+	@RequestMapping(value="/encoursn", method= RequestMethod.GET)
+	public Integer nombreEnCours(@RequestParam Long matricule) {
+		return adminMetier.nombreEnCours(matricule);
+	}
+
+	@RequestMapping(value="/rejeten", method= RequestMethod.GET)
+	public Integer nombreRejete(@RequestParam Long matricule) {
+		return adminMetier.nombreRejete(matricule);
+	}
+
+	@RequestMapping(value="/enattenten", method= RequestMethod.GET)
+	public Integer nombreEnAttente(@RequestParam Long matricule) {
+		return adminMetier.nombreEnAttente(matricule);
+	}
+	
 	
 }

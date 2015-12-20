@@ -1,35 +1,4 @@
-<div id="page-wrapper" class="gray-bg">
-	<div class="row border-bottom">
-		<nav class="navbar navbar-static-top  " role="navigation"
-			style="margin-bottom: 0">
-			<div class="navbar-header">
-				<a class="navbar-minimalize minimalize-styl-2 btn "
-					ng-class="{'btn-primary': user.role=='ADMIN', 'btn-cfb': user.role=='MANAGER'}"
-					href=""><i class="fa fa-search"></i> </a>
-				<form role="search" class="navbar-form-custom" action="">
-					<div class="form-group">
-						<input type="text" placeholder="Rechercher ..."
-							class="form-control">
-
-					</div>
-
-				</form>
-			</div>
-			<ul class="nav navbar-top-links navbar-right">
-
-				<li><span class="m-r-sm text-muted welcome-message">Bienvenue
-						<strong>{{user.firstName}} {{user.lastName}}</strong> - Vous êtes
-						connecté en tant que <span ng-if="user.role=='ADMIN'"><strong
-							class="text-navy">Administrateur</strong></span> <span
-						ng-if="user.role=='MANAGER'"><strong class="text-cfb">Manager</strong></span>.
-				</span></li>
-				<li><a href="" ng-click="logout()"> <i
-						class="fa fa-sign-out"></i> Déconnexion
-				</a></li>
-			</ul>
-		</nav>
-	</div>
-	<div
+<div
 		class="row wrapper border-bottom white-bg page-heading animated fadeInRight">
 		<div class="col-sm-4">
 			<h2>Profile</h2>
@@ -42,12 +11,12 @@
 		<div class="col-sm-8">
 			<div class="title-action">
 				<a href="" class="btn"
-					ng-class="{'btn-primary': user.role=='ADMIN', 'btn-cfb': user.role=='MANAGER'}"
+					ng-class="{'btn-warning': user.role=='COLLABORATEUR', 'btn-orchid': user.role=='ENCADRANT'}"
 					ng-click="reload()"><i class="fa fa-refresh"></i></a>
 			</div>
 		</div>
 	</div>
-	<div class="wrapper wrapper-content" ng-hide="changePasswordF">
+<div class="wrapper wrapper-content" ng-hide="changePasswordF">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="ibox float-e-margins">
@@ -60,15 +29,15 @@
 								<div class="contact-box">
 									<div class="row">
 										<div class="col-sm-2">
-											<div class="text-center" ng-if="user.role=='ADMIN'">
+											<div class="text-center" ng-if="user.role=='ENCADRANT'">
 											
 												<img alt="image" class="img-circle m-t-xs img-responsive"
-													src="img/user-admin-1.png">
+													src="img/user-encadrant-1.png">
 											</div>
-											<div class="text-center" ng-if="user.role=='MANAGER'">
+											<div class="text-center" ng-if="user.role=='COLLABORATEUR'">
 											
 												<img alt="image" class="img-circle m-t-xs img-responsive"
-													src="img/user-manager-1.png">
+													src="img/user-collaborateur-1.png">
 											</div>
 										</div>
 										<div class="col-sm-5">
@@ -108,7 +77,7 @@
 									</div>
 								</div>
 								<button type="button" ng-click="change()"
-								ng-class="{'btn-primary': user.role=='ADMIN', 'btn-cfb': user.role=='MANAGER'}"
+								ng-class="{'btn-warning': user.role=='COLLABORATEUR', 'btn-orchid': user.role=='ENCADRANT'}"
 									class="btn btn-outline font-bold pull-right">Changer
 									mon mot de passe</button>
 							</div>
@@ -125,7 +94,7 @@
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
 						<h5>Changez votre mot de passe</h5>
-						<a href="" ng-click="retour()" ng-class="{'btn-primary': user.role=='ADMIN', 'btn-cfb': user.role=='MANAGER'}"
+						<a href="" ng-click="retour()" ng-class="{'btn-warning': user.role=='COLLABORATEUR', 'btn-orchid': user.role=='ENCADRANT'}"
 							class="btn  btn-xs pull-right"><i
 							class="fa fa-arrow-left"></i> Retour</a>
 					</div>
@@ -204,13 +173,13 @@
 							<div class="row">
 								<div class="col-md-6" ng-show="isValid">
 									<button type="submit" class="btn  btn-sm pull-right"
-										ng-class="{'btn-primary': user.role=='ADMIN', 'btn-cfb': user.role=='MANAGER'}">
+										ng-class="{'btn-warning': user.role=='COLLABORATEUR', 'btn-orchid': user.role=='ENCADRANT'}">
 										<i class="fa fa-check"></i> Valider
 									</button>
 								</div>
 								<div class="col-md-6" ng-hide="isValid">
 									<button class="btn btn-sm pull-right"
-										ng-class="{'btn-primary': user.role=='ADMIN', 'btn-cfb': user.role=='MANAGER'}"
+										ng-class="{'btn-warning': user.role=='COLLABORATEUR', 'btn-orchid': user.role=='ENCADRANT'}"
 										ng-click="checkPassword()">
 										<i class="fa fa-check"></i> Valider
 									</button>
@@ -227,7 +196,3 @@
 		</div>
 
 	</div>
-
-
-</div>
-

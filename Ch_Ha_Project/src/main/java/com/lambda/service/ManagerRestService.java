@@ -56,45 +56,19 @@ public class ManagerRestService {
 		return managerMetier.getAllArchiveBapManager(matricule, page);
 	}
 
-	@RequestMapping(value="/bap", method= RequestMethod.GET)
-	public BAP getBap(@RequestBody Long idBap) {
-		return managerMetier.getBap(idBap);
-	}
+	
 
 	@RequestMapping(value="/collaborateur", method= RequestMethod.GET)
 	public List<Collaborateur> getAllCollaborateur() {
 		return managerMetier.getAllCollaborateur();
 	}
 
-	@RequestMapping(value="/fermerbap", method= RequestMethod.POST)
-	public void fermerBap(@RequestBody Long idBap) {
-		managerMetier.fermerBap(idBap);
-	}
-
-	@RequestMapping(value="/ouvrirbap", method= RequestMethod.POST)
-	public void ouvrirBap(@RequestBody Long idBap) {
-		managerMetier.ouvrirBap(idBap);
-	}
-
+	
 	@RequestMapping(value="/objectif", method= RequestMethod.POST)
 	public BAP addObjectif(@RequestBody Objectif objectif, @RequestParam Long idBap) {
 		return managerMetier.addObjectif(objectif, idBap);
 	}
 
-	@RequestMapping(value="/preparerbap", method= RequestMethod.POST)
-	public BAP preparerBap(@RequestBody Long idBap) {
-		return managerMetier.preparerBap(idBap);
-	}
-
-	@RequestMapping(value="/validerbap", method= RequestMethod.POST)
-	public void validerBap(@RequestBody Long idBap) {
-		managerMetier.validerBap(idBap);
-	}
-	
-	@RequestMapping(value="/bap", method= RequestMethod.POST)
-	public BAP addBap(BAP bap) {
-		return managerMetier.addBap(bap);
-	}
 	
 	@RequestMapping(value="/envoyer", method=RequestMethod.PUT)
 	public BAP envoyerObjectifs(@RequestParam Long id) {
@@ -106,5 +80,34 @@ public class ManagerRestService {
 		return managerMetier.openOrLockBap(id);
 	}
 
+	@RequestMapping(value="/valider", method= RequestMethod.POST)
+	public void validerBap(@RequestParam Long idBap) {
+		managerMetier.validerBap(idBap);
+	}
+
+	@RequestMapping(value="/annuler", method= RequestMethod.POST)
+	public void AnnulerBap(@RequestParam Long idBap) {
+		managerMetier.AnnulerBap(idBap);
+	}
+
+	@RequestMapping(value="/encoursn", method= RequestMethod.GET)
+	public Integer nombreEnCours(@RequestParam Long matricule) {
+		return managerMetier.nombreEnCours(matricule);
+	}
+
+	@RequestMapping(value="/rejeten", method= RequestMethod.GET)
+	public Integer nombreRejete(@RequestParam Long matricule) {
+		return managerMetier.nombreRejete(matricule);
+	}
+
+	@RequestMapping(value="/enattenten", method= RequestMethod.GET)
+	public Integer nombreEnAttente(@RequestParam Long matricule) {
+		return managerMetier.nombreEnAttente(matricule);
+	}
+	
+	@RequestMapping(value="/archives", method= RequestMethod.GET)
+	public Page<ArchiveBap> getAllArchiveBap(@RequestParam int page, @RequestParam Long matricule) {
+		return managerMetier.getAllArchiveBap(matricule, page);
+	}
 	
 }

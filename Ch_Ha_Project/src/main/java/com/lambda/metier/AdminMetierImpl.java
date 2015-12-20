@@ -18,6 +18,7 @@ import com.lambda.entities.BAP;
 import com.lambda.entities.Bilan;
 import com.lambda.entities.Collaborateur;
 import com.lambda.entities.Encadrant;
+import com.lambda.entities.Feedback;
 import com.lambda.entities.Manager;
 import com.lambda.entities.Objectif;
 import com.lambda.entities.Projet;
@@ -94,11 +95,6 @@ public class AdminMetierImpl implements AdminMetier{
 		return projetRepository.findAll(new PageRequest(page, 10));
 	}
 
-	@Override
-	public Page<Objectif> getAllObjectifs(int page) {
-		// TODO Auto-generated method stub
-		return objectifRepository.findAll(new PageRequest(page, 10));
-	}
 
 	@Override
 	public Objectif getObjectif(Long id) {
@@ -154,11 +150,7 @@ public class AdminMetierImpl implements AdminMetier{
 		
 	}
 
-	@Override
-	public void deleteBilan(Long id) {
-		bilanRepository.delete(id);
-		
-	}
+
 
 	@Override
 	public List<String> getAllUsername() {
@@ -209,27 +201,9 @@ public class AdminMetierImpl implements AdminMetier{
 	
 	}
 
-	@Override
-	public ArchiveBap addArchiveBap(ArchiveBap archiveBap) {
-		return archiveBapRepository.save(archiveBap);
-	}
+	
 
-	@Override
-	public ArchiveBap getArchiveBap(Long id) {
-		// TODO Auto-generated method stub
-		return archiveBapRepository.findOne(id);
-	}
-
-	@Override
-	public ArchiveBap updateArchiveBap(ArchiveBap archiveBap) {
-		// TODO Auto-generated method stub
-		return archiveBapRepository.save(archiveBap);
-	}
-
-	@Override
-	public void deleteArchiveBap(Long id) {
-		archiveBapRepository.delete(id);
-	}
+	
 
 	@Override
 	public Page<User> findByMcUser(String mc, int page) {
@@ -244,15 +218,9 @@ public class AdminMetierImpl implements AdminMetier{
 
 	@Override
 	public Page<BAP> findByMcBap(String mc, int page) {
-		// TODO Auto-generated method stub
 		return bapRepository.findByMcBap("%"+mc+"%", new PageRequest(page, 10));
 	}
 
-	@Override
-	public Page<ArchiveBap> findByMcArchiveBap(String mc, int page) {
-		// TODO Auto-generated method stub
-		return archiveBapRepository.findByMcArchiveBap("%"+mc+"%", new PageRequest(page, 10));
-	}
 
 	@Override
 	public Page<Projet> findByMcProjet(String mc, int page) {
@@ -266,11 +234,7 @@ public class AdminMetierImpl implements AdminMetier{
 		
 	}
 
-	@Override
-	public Page<Objectif> findByMcObjectif(String mc, int page) {
-		// TODO Auto-generated method stub
-		return objectifRepository.findByMcObjectif("%"+mc+"%", new PageRequest(page, 10));
-	}
+	
 
 	@Override
 	public List<Encadrant> getAllEncadrant() {
@@ -286,7 +250,6 @@ public class AdminMetierImpl implements AdminMetier{
 
 	@Override
 	public List<Manager> getAllManagers() {
-		// TODO Auto-generated method stub
 		return managerRepository.findAll();
 	}
 
@@ -295,15 +258,11 @@ public class AdminMetierImpl implements AdminMetier{
 		objectifRepository.save(objectif);
 		BAP bap= bapRepository.findOne(idBap);
 		bap.addObjectifSortantes(objectif);
-		bapRepository.save(bap);
-		return bapRepository.findOne(idBap);
+	
+		return bap;
 	}
 
-	@Override
-	public Bilan addBilan(Bilan bilan) {
-		return bilanRepository.save(bilan);
-	}
-
+	
 	@Override
 	public BAP addBap(BAP bap) {
 		return bapRepository.save(bap);
@@ -313,6 +272,12 @@ public class AdminMetierImpl implements AdminMetier{
 	public BAP envoyerObjectifs(Long id) {
 		BAP bap= bapRepository.findOne(id);
 		bap.setCompteur(bap.getCompteur()+1);
+		bap.setStatus(bap.EN_COURS);
+		if(bap.getCompteur()>=3){
+			for(Objectif f: bap.getObjectifsSortantes()){
+				f.setValide(true);
+			}
+		}
 		return bap;
 	}
 
@@ -321,12 +286,60 @@ public class AdminMetierImpl implements AdminMetier{
 		BAP bap= bapRepository.findOne(id);
 		if(bap.isLocked()){
 			bap.setLocked(false);
+			for(Feedback f: bap.getFeedbacks()){
+				f.setLocked(false);
+			}
 		}else{
 			bap.setLocked(true);
+			for(Feedback f: bap.getFeedbacks()){
+				f.setLocked(true);
+			}
 		}
+		bap= bapRepository.findOne(id);
 		return bap;
 	}
 
+	@Override
+	public void validerBap(Long idBap) {
+		BAP b= bapRepository.findOne(idBap);
+		for(Objectif o: b.getObjectifsEntrantes()){
+			o.setArchive(true);
+		}
+		for(Feedback f: b.getFeedbacks()){
+			f.setArchive(true);
+		}
+		ArchiveBap archive= new ArchiveBap(b.getId(), b.getDateBilan(), b.getCollaborateur(), b.getObjectifsEntrantes(), b.getDecision(), b.getFeedbacks(), b.isLocked(), b.getObjectifsSortantes(), b.getManager(), b.getNoteGlobale());
+		archiveBapRepository.save(archive);
+		Date date= new Date(b.getDateBilan().getYear()+1, b.getDateBilan().getMonth(), b.getDateBilan().getDate());
+		BAP newBap= new BAP(date, b.getCollaborateur(), b.getManager());
+		bapRepository.delete(b.getId());
+		bapRepository.save(newBap);
+		
+	}
+
+	@Override
+	public void AnnulerBap(Long idBap) {
+		BAP bap= bapRepository.findOne(idBap);
+		bap.setStatus(bap.ANNULE);
+	}
+
+	@Override
+	public Integer nombreEnCours(Long matricule) {
+		// TODO Auto-generated method stub
+		return bapRepository.nombreEnCours(matricule);
+	}
+
+	@Override
+	public Integer nombreRejete(Long matricule) {
+		// TODO Auto-generated method stub
+		return bapRepository.nombreRejete(matricule);
+	}
+
+	@Override
+	public Integer nombreEnAttente(Long matricule) {
+		// TODO Auto-generated method stub
+		return bapRepository.nombreEnAttente(matricule);
+	}
 	
 
 }

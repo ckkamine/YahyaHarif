@@ -47,12 +47,14 @@ public class Feedback implements Serializable{
 	private Collection<Qualification> qualifications;
 	private Date dateFeedback;
 	private boolean archive;
+	private boolean locked;
 	
 	
 	public Feedback() {
 		super();
 		this.archive=false;
 		this.dateFeedback= new Date();
+		this.locked= true;
 	}
 	public Feedback(Date debutInter, Date finInter, String role, String commentaire, Integer nombreJourValorise) {
 		super();
@@ -63,6 +65,15 @@ public class Feedback implements Serializable{
 		this.nombreJourValorise = nombreJourValorise;
 		this.archive= false;
 		this.dateFeedback= new Date();
+		this.locked= true;
+	}
+	
+	
+	public boolean isLocked() {
+		return locked;
+	}
+	public void setLocked(boolean locked) {
+		this.locked = locked;
 	}
 	public Long getIdFeedback() {
 		return idFeedback;

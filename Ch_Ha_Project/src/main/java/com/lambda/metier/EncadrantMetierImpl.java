@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.lambda.entities.BAP;
 import com.lambda.entities.Collaborateur;
+import com.lambda.entities.Encadrant;
 import com.lambda.entities.Feedback;
 import com.lambda.entities.Projet;
 import com.lambda.entities.Qualification;
@@ -62,13 +63,20 @@ public class EncadrantMetierImpl implements EncadrantMetier{
 		for(Qualification q: feedback.getQualifications()){
 			qualificationRepository.save(q);
 		}
-		feedbackRepository.save(feedback);
-		System.out.println(feedback.getCollaborateur().getMatricule());
+		
+		
 		BAP bap= bapRepository.findByCollaborateur(feedback.getCollaborateur().getMatricule());
+		if(bap.isLocked()){
+			feedback.setLocked(true);
+		}else{
+			feedback.setLocked(false);
+		}
+		feedbackRepository.save(feedback);
 		bap.addFeedback(feedback);
 		bapRepository.save(bap);
 		try {
 			mailCoponent.sendNvFeedback(bap.getManager().getEmail(), feedback.getCollaborateur().getFirstName(), feedback.getCollaborateur().getLastName(), feedback.getCollaborateur().getPosteActuel(), bap.getId(), new Date());
+			mailCoponent.sendNvFeedback(bap.getCollaborateur().getEmail(), feedback.getCollaborateur().getFirstName(), feedback.getCollaborateur().getLastName(), feedback.getCollaborateur().getPosteActuel(), bap.getId(), new Date());
 		} catch (MessagingException e) {
 			
 		}
@@ -89,8 +97,6 @@ public class EncadrantMetierImpl implements EncadrantMetier{
 				feedback= f;
 			}
 		}
-
-		
 		try {
 			BAP bap= bapRepository.findByCollaborateur(feedback.getCollaborateur().getMatricule());
 			bap.getFeedbacks().remove(feedback);
@@ -98,8 +104,20 @@ public class EncadrantMetierImpl implements EncadrantMetier{
 		} catch (Exception e) {
 			System.out.println("BAP non trouvé");
 		}
+		
 		feedbackRepository.delete(feedback);
 		
+	}
+
+	@Override
+	public Page<Feedback> getFeedbacksA(Long matricule, Integer page) {
+		// TODO Auto-generated method stub
+		return feedbackRepository.getFeedbacksA(matricule, new PageRequest(page, 10));
+	}
+
+	@Override
+	public Integer getNombreFeedback(Long matricule) {
+		return encadrantRepository.nombreFeedback(matricule);
 	}
 
 	

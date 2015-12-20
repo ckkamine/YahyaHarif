@@ -3,6 +3,7 @@ package com.lambda.metier;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.lambda.entities.User;
@@ -14,11 +15,14 @@ public class UserMetierImpl implements UserMetier{
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
 	@Override
 	public User updatePassword(Long matricule, String password) {
 		User user= userRepository.findOne(matricule);
-		user.setPassword(password);
+		user.setPassword(passwordEncoder.encode(password));
 		return user;
 	}
 	
@@ -28,9 +32,6 @@ public class UserMetierImpl implements UserMetier{
 		return user;
 	}
 
-	@Override
-	public User getUser(Long matricule) {
-		return userRepository.findOne(matricule);
-	}
+
 
 }

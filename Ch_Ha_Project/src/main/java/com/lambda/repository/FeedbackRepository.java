@@ -18,5 +18,10 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long>{
 	@Query("select f from Feedback f where f.encadrant.matricule=:matricule and archive= false")
 	List<Feedback> getFeedbacksList(@Param("matricule") Long matricule);
 	
+	@Query("select f from Feedback f where f.collaborateur.matricule=:matricule and archive= true and locked=false")
+	Page<Feedback> getFeedbacksArchiveCollaborateur(@Param("matricule") Long matricule, Pageable page);
+	
+	@Query("select f from Feedback f where f.encadrant.matricule=:matricule and archive= true")
+	Page<Feedback> getFeedbacksA(@Param("matricule") Long matricule, Pageable page);
 	
 }

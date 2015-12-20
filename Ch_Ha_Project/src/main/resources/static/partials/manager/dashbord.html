@@ -41,7 +41,7 @@
 	</div>
 
 	<div class="wrapper wrapper-content">
-		<div class="row">
+		<div class="row  animated fadeInLeft">
 			<div class="col-md-3">
 				<div class="widget style1 white-bg equal">
 					<div class="row">
@@ -52,7 +52,7 @@
 							<span> Nombre de <strong class="text-navy">BAP</strong> en
 								cours
 							</span>
-							<h2 class="font-bold text-navy">5</h2>
+							<h2 class="font-bold text-navy">{{encours}}</h2>
 						</div>
 					</div>
 				</div>
@@ -64,10 +64,10 @@
 							<i class="fa fa-line-chart text-success fa-5x"></i>
 						</div>
 						<div class="col-xs-8 text-right">
-							<span> Nombre de <strong class="text-success">BIP</strong>
-								en cours
+							<span> Nombre de <strong class="text-success">BAP</strong>
+								en attente
 							</span>
-							<h2 class="font-bold text-success">5</h2>
+							<h2 class="font-bold text-success">{{enattente}}</h2>
 						</div>
 					</div>
 				</div>
@@ -82,7 +82,7 @@
 							<span> Nombre de <strong class="text-danger">BAP</strong>
 								refusés
 							</span>
-							<h2 class="font-bold text-danger">5</h2>
+							<h2 class="font-bold text-danger">{{rejete}}</h2>
 						</div>
 					</div>
 				</div>

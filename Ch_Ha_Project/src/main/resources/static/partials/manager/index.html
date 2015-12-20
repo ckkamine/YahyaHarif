@@ -3,17 +3,19 @@
 		<div class="sidebar-collapse">
 			<ul class="nav metismenu">
 				<li class="nav-header">
+				<a  href="" ui-sref="manager.user">
 					<div class="dropdown profile-element text-center">
 						<span> <img alt="image" class="img-circle"
 							src="img/user-manager.png" />
-						</span> <a  href=""> <span
+						</span>  <span
 							class="clear"> <span class="block m-t-xs"> <strong
 									class="font-bold">{{user.firstName}} {{user.lastName}}</strong>
 							</span> <span class="text-muted text-xs block">{{user.posteActuel}}</span>
 						</span>
-						</a>
+						
 						
 					</div>
+					</a>
 					<div class="logo-element">L</div>
 				</li>
 				<li class="manager" id="dashbord"><a href="" ui-sref="manager.dashbord"><i
@@ -24,8 +26,8 @@
 				<li class="manager"><a href=""><i class="fa fa-group"></i> <span
 						class="nav-label">Collaborateurs</span></a></li>
 				
-				<li class="manager"><a href=""><i
-						class="fa fa-database"></i> Archives</a></li>
+				<li class="manager" id="archive"><a href="" ui-sref="manager.archive"><i
+						class="fa fa-archive"></i> Archives</a></li>
 			</ul>
 		</div>
 	</nav>

@@ -1,0 +1,99 @@
+<div
+	class="row wrapper border-bottom white-bg page-heading animated fadeInLeft">
+	<div class="col-sm-4">
+		<h2>Nouveaux objectifs</h2>
+
+		<ol class="breadcrumb">
+			<li><i class="fa fa-folder-open-o"></i></li>
+			<li><strong>Liste des nouveaux objectifs</strong></li>
+		</ol>
+	</div>
+	<div class="col-sm-8">
+		<div class="title-action">
+			<a href="" class="btn btn-warning" ng-click="reload()"><i
+				class="fa fa-refresh"></i></a>
+		</div>
+	</div>
+</div>
+<div class="wrapper wrapper-content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>Liste Objectifs à valider</h5>
+
+				</div>
+				<div class="ibox-content">
+					<h3 ng-hide="objectifs">La liste de vos objectifs est vide
+						pour le moment.</h3>
+					<ul class="list-group" ng-show="true">
+						<li class="list-group-item">
+							<div class="row">
+								<div class="col-md-1">
+									<strong>Catégorie</strong>
+								</div>
+								<div class="col-md-4">
+									<strong>Objectif</strong>
+								</div>
+								<div class="col-md-4">
+									<strong>Description</strong>
+								</div>
+								<div class="col-md-2">
+									<strong>Responsable Mesure</strong>
+								</div>
+								<div class="col-md-1">
+									<strong>Poids</strong>
+								</div>
+
+
+
+							</div>
+						</li>
+							
+						<div ng-repeat="o in objectifs">
+							<li class="list-group-item" ng-repeat="d in o.descriptions">
+
+								<div class="row">
+									<div class="col-md-1">{{o.categorie}}</div>
+									<div class="col-md-4">{{o.objectif}}</div>
+									<div class="col-md-4">{{d.description}}</div>
+									<div class="col-md-2">{{d.responsable.posteActuel}}</div>
+									<div class="col-md-1">{{d.poids}}%</div>
+
+								</div>
+							</li>
+						</div>
+
+					</ul>
+					<div class="row">
+						<center>
+							<div class="btn-group">
+								<button type="button" class="btn btn-white" ng-hide="first" ng-click="getObjectifs(pageCurrent-1)">
+									<i class="fa fa-chevron-left"></i>
+								</button>
+								<button class="btn btn-white" ng-class="{'active': pageCurrent==$index}"
+								ng-repeat="p in pages track by $index"
+								ng-click="getObjectifs($index)">{{$index+1}}</button>
+								
+								<button type="button" class="btn btn-white" ng-hide="last" ng-click="getObjectifs(pageCurrent+1)">
+									<i class="fa fa-chevron-right"></i>
+								</button>
+							</div>
+						</center>
+					</div>
+
+				
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<script>
+	$('.collaborateur').removeClass("active active-user");
+	$('#currentObjectifs').addClass("active active-user");
+</script>

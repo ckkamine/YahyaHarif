@@ -1,0 +1,107 @@
+<div
+	class="row wrapper border-bottom white-bg page-heading animated fadeInLeft">
+	<div class="col-sm-4">
+		<h2>Nouveaux objectifs</h2>
+
+		<ol class="breadcrumb">
+			<li><i class="fa fa-folder-open-o"></i></li>
+			<li><strong>Liste des nouveaux objectifs</strong></li>
+		</ol>
+	</div>
+	<div class="col-sm-8">
+		<div class="title-action">
+			<a href="" class="btn btn-warning" ng-click="reload()"><i
+				class="fa fa-refresh"></i></a>
+		</div>
+	</div>
+</div>
+<div class="wrapper wrapper-content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>Liste Objectifs à valider</h5>
+
+				</div>
+				<div class="ibox-content">
+					<h3 ng-hide="objectifs">La liste de vos nouveaux objectifs est vide pour le moment.</h3>
+					<ul class="list-group" ng-show="objectifs">
+						<li class="list-group-item">
+							<div class="row">
+								<div class="col-md-1">
+									<strong>Catégorie</strong>
+								</div>
+								<div class="col-md-3">
+									<strong>Objectif</strong>
+								</div>
+								<div class="col-md-3">
+									<strong>Description</strong>
+								</div>
+								<div class="col-md-2">
+									<strong>Responsable Mesure</strong>
+								</div>
+								<div class="col-md-1">
+									<strong>Poids</strong>
+								</div>
+								<div class="col-md-2">
+									<strong>Etat</strong>
+								</div>
+
+
+							</div>
+						</li>
+
+						<div ng-repeat="o in objectifs">
+							<li class="list-group-item" ng-repeat="d in o.descriptions">
+
+								<div class="row">
+									<div class="col-md-1">{{o.categorie}}</div>
+									<div class="col-md-3">{{o.objectif}}</div>
+									<div class="col-md-3">{{d.description}}</div>
+									<div class="col-md-2">{{d.responsable.posteActuel}}</div>
+									<div class="col-md-1">{{d.poids}}%</div>
+									<div class="col-md-2">
+										<div class="row">
+											<div class="col-md-6">
+												<span ng-if="o.valide==true"><i class="fa fa-2x text-navy fa-check"></i></span>
+												<span ng-if="o.valide==false"><i class="fa fa-2x text-danger fa-times"></i></span>
+											</div>
+											<div class="col-md-6" ng-show="compteur<3">
+												<button class="btn btn-xs btn-warning"
+													ng-click="validerOrRefuser(o.idObjectif)">
+													<i class="fa fa-edit"></i>
+												</button>
+											</div>
+
+
+										</div>
+									</div>
+								</div>
+							</li>
+						</div>
+						<li ng-show="compteur<3 && objectifs">
+							<div class="row">
+										<center>
+											<a href="" class="btn btn-xs btn-warning btn-outline"
+												ng-click="envoyer()"><i class="fa fa-send"></i>&nbsp;Soumettre
+												Objectifs</a>
+										</center>
+									</div>
+						</li>
+					</ul>
+					
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<script>
+	$('.collaborateur').removeClass("active active-user");
+	$('#newObjectifs').addClass("active active-user");
+</script>

@@ -2,7 +2,7 @@ package com.lambda.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -13,6 +13,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 
 import com.lambda.entities.Objectif;
 
@@ -28,13 +32,15 @@ public class BAP extends Bilan implements Serializable{
 	public static final String ANNULE= "Annulé";
 	public static final String REJETE= "Rejeté";
 
-	@OneToMany(fetch=FetchType.EAGER)
+	@OneToMany(fetch=FetchType.LAZY)
 	@JoinColumn(name="BAP_ID")
-	private Collection<Feedback> feedbacks;
+	private List<Feedback> feedbacks;
 	private boolean locked;
-	@OneToMany(fetch= FetchType.LAZY, cascade=CascadeType.MERGE)
+	@OneToMany(fetch= FetchType.EAGER, cascade=CascadeType.MERGE)
+	@LazyToOne(LazyToOneOption.FALSE)	
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name="BAP_ID_S")
-	private Collection<Objectif> objectifsSortantes;
+	private List<Objectif> objectifsSortantes;
 	private String status;
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="MAG_ID")
@@ -65,25 +71,15 @@ public class BAP extends Bilan implements Serializable{
 
 	
 
-	public boolean isEnvoye() {
-		return envoye;
-	}
 
 
-
-	public void setEnvoye(boolean envoye) {
-		this.envoye = envoye;
-	}
-
-
-
-	public Collection<Feedback> getFeedbacks() {
+	public List<Feedback> getFeedbacks() {
 		return feedbacks;
 	}
 
 
 
-	public void setFeedbacks(Collection<Feedback> feedbacks) {
+	public void setFeedbacks(List<Feedback> feedbacks) {
 		this.feedbacks = feedbacks;
 	}
 
@@ -101,13 +97,13 @@ public class BAP extends Bilan implements Serializable{
 
 
 
-	public Collection<Objectif> getObjectifsSortantes() {
+	public List<Objectif> getObjectifsSortantes() {
 		return objectifsSortantes;
 	}
 
 
 
-	public void setObjectifsSortantes(Collection<Objectif> objectifsSortantes) {
+	public void setObjectifsSortantes(List<Objectif> objectifsSortantes) {
 		this.objectifsSortantes = objectifsSortantes;
 	}
 
@@ -145,6 +141,30 @@ public class BAP extends Bilan implements Serializable{
 
 	public void setCompteur(int compteur) {
 		this.compteur = compteur;
+	}
+
+
+
+	public Integer getNoteGlobale() {
+		return noteGlobale;
+	}
+
+
+
+	public void setNoteGlobale(Integer noteGlobale) {
+		this.noteGlobale = noteGlobale;
+	}
+
+
+
+	public boolean isEnvoye() {
+		return envoye;
+	}
+
+
+
+	public void setEnvoye(boolean envoye) {
+		this.envoye = envoye;
 	}
 
 
@@ -198,14 +218,5 @@ public class BAP extends Bilan implements Serializable{
 	}
 	
 
-	public Integer getNoteGlobale() {
-		return noteGlobale;
-	}
-
-
-
-	public void setNoteGlobale(Integer noteGlobale) {
-		this.noteGlobale = noteGlobale;
-	}
 	
 }

@@ -98,10 +98,14 @@
 										class="fa fa-search"></i></a>
 								</span> <span
 									ng-if="b.status== 'En cours' && b.manager.matricule == $root.user.matricule">
-									<a href="" class="btn btn-outline btn-primary btn-xs"><i
+									<a href="" class="btn btn-outline btn-primary btn-xs" ng-click="validerBap(b.id)"><i
 										class="fa fa-check"></i></a>
 								</span>
-								<!--                                                                            <a href="#" class="btn btn-outline btn-danger btn-xs"><i class="fa fa-close"></i></a> -->
+								<span
+									ng-if="b.manager.matricule == $root.user.matricule && b.status !== 'Annulé'">
+									<a href="" class="btn btn-outline btn-default btn-xs" ng-click="annulerBap(b.id)"><i
+										class="fa fa-times"></i></a>
+								</span>                                                                           
 							</div>
 						</div>
 					</li>
@@ -241,7 +245,7 @@
 					</div>
 				</div>
 				<br />
-				<div class="ibox-content" ng-show="bapCurrent.status=='En cours'">
+				<div class="" ng-show="bapCurrent.status =='En cours' || bapCurrent.status =='Rejeté'">
 
 					<ul class="list-group">
 						<li class="list-group-item">
@@ -323,7 +327,7 @@
 
 				</div>
 				<br />
-				<div class="row" ng-show="bapCurrent.status=='En cours'">
+				<div class="row" ng-show="bapCurrent.status =='En cours' || bapCurrent.status =='Rejeté'">
 					<div class="col-md-11">
 						<div class="tabs-container">
 							<ul class="nav nav-tabs">
@@ -432,15 +436,18 @@
 													ng-class="{'text-danger': somme!==100}">{{somme}}%
 												</strong> <strong class="text-danger">{{$scope.error}} </strong>
 											</div>
+											<div ng-show="bapCurrent.manager.matricule==$root.user.matricule">
 											<div class="col-md-3 col-md-offset-3"
 												ng-hide="somme==0 || bapCurrent.envoye==true">
 												<button class="btn btn-xs" ng-hide="ajuster"
 													ng-class="{'btn-primary': user.role=='ADMIN', 'btn-cfb': user.role=='MANAGER'}"
 													ng-click="ajuster=true">Ajuster les poids</button>
-												<button class="btn btn-xs btn-primary" ng-show="ajuster"
+												<button class="btn btn-xs" ng-show="ajuster"
+												ng-class="{'btn-primary': user.role=='ADMIN', 'btn-cfb': user.role=='MANAGER'}"
 													ng-click="updatePoids()">Valider</button>
 
 
+											</div>
 											</div>
 										</div>
 									</div>
@@ -448,9 +455,9 @@
 
 									<div class="row"
 										ng-show="bapCurrent.manager.matricule==$root.user.matricule"
-										ng-hide="somme==0 || bapCurrent.envoye==true">
+										>
 										<center>
-											<a href="" class="btn btn-xs btn-success btn-outline"
+											<a href="" class="btn btn-xs btn-success btn-outline" ng-hide="somme==0 || bapCurrent.envoye==true"
 												ng-click="sendObjectif()"><i class="fa fa-send"></i>&nbsp;Soumettre
 												Objectifs</a>
 										</center>
@@ -810,12 +817,12 @@
 													<div class="contact-box">
 														<div class="progress progress-striped active">
 															<div
-																style="width: {{(feedback.noteGlobal/feedback.nombreThemeCalifie)*100}}%"
+																style="width: {{(feedback.noteGlobal/3)*100}}%"
 																role="progressbar" class="progress-bar"
-																ng-class="{'progress-bar-danger': ((feedback.noteGlobal/feedback.nombreThemeCalifie)*100)<=25,
-											'progress-bar-warning': ((feedback.noteGlobal/feedback.nombreThemeCalifie)*100)<=50 && ((feedback.noteGlobal/feedback.nombreThemeCalifie)*100)>25,
-											'progress-bar-success': ((feedback.noteGlobal/feedback.nombreThemeCalifie)*100)<=75 && ((feedback.noteGlobal/feedback.nombreThemeCalifie)*100)>50,
-											'progress-bar-primary': ((feedback.noteGlobal/feedback.nombreThemeCalifie)*100)<=100}"></div>
+																ng-class="{'progress-bar-danger': ((feedback.noteGlobal/3)*100)<=25,
+											'progress-bar-warning': ((feedback.noteGlobal/3)*100)<=50 && ((feedback.noteGlobal/3)*100)>25,
+											'progress-bar-success': ((feedback.noteGlobal/3)*100)<=75 && ((feedback.noteGlobal/3)*100)>50,
+											'progress-bar-primary': ((feedback.noteGlobal/3)*100)<=100}"></div>
 
 														</div>
 														<div class="row text-center">
@@ -855,7 +862,7 @@
 															<div class="col-xs-8 text-right">
 																<span> Note Globale </span>
 																<h2 class="font-bold text-success">{{feedback.noteGlobal|
-																	number: 2}} / {{feedback.nombreThemeCalifie}}</h2>
+																	number: 2}}</h2>
 															</div>
 														</div>
 													</div>

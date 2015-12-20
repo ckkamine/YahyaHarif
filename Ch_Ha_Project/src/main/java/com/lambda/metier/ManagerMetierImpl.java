@@ -1,5 +1,6 @@
 package com.lambda.metier;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import com.lambda.entities.ArchiveBap;
 import com.lambda.entities.BAP;
 import com.lambda.entities.Collaborateur;
 import com.lambda.entities.Encadrant;
+import com.lambda.entities.Feedback;
 import com.lambda.entities.Manager;
 import com.lambda.entities.Objectif;
 import com.lambda.repository.ArchiveBapRepository;
@@ -55,39 +57,20 @@ public class ManagerMetierImpl implements ManagerMetier {
 		return archiveBapRepository.findByManager(matricule, new PageRequest(page, 10));
 	}
 
-	@Override
-	public BAP getBap(Long idBap) {
-		// TODO Auto-generated method stub
-		return bapRepository.findOne(idBap);
-	}
-
+	
 	@Override
 	public List<Collaborateur> getAllCollaborateur() {
 		// TODO Auto-generated method stub
 		return collaborateurRepository.findAll();
 	}
 
-	@Override
-	public void fermerBap(Long idBap) {
-		BAP b= bapRepository.findOne(idBap);
-		b.setLocked(true);
-
-	}
-
-	@Override
-	public void ouvrirBap(Long idBap) {
-		BAP b= bapRepository.findOne(idBap);
-		b.setLocked(false);
-
-	}
 
 	@Override
 	public BAP addObjectif(Objectif objectif, Long idBap) {
 		objectifRepository.save(objectif);
 		BAP bap= bapRepository.findOne(idBap);
 		bap.addObjectifSortantes(objectif);
-		bapRepository.save(bap);
-		return bapRepository.findOne(idBap);
+		return bap;
 	}
 
 	
@@ -95,28 +78,26 @@ public class ManagerMetierImpl implements ManagerMetier {
 	@Override
 	public void validerBap(Long idBap) {
 		BAP b= bapRepository.findOne(idBap);
-		for(Objectif o: b.getObjectifsSortantes()){
-			o.setEmploye(b.getCollaborateur());
+		for(Objectif o: b.getObjectifsEntrantes()){
+			o.setArchive(true);
 		}
-		ArchiveBap a= new ArchiveBap(b.getId(), b.getDateBilan(), b.getCollaborateur(), b.getObjectifsEntrantes(), b.getDecision(), b.getFeedbacks(), b.isLocked(), b.getObjectifsSortantes(), b.getManager());
-		archiveBapRepository.save(a);
-		BAP newB= new BAP(b.getDateBilan(), b.getCollaborateur(), b.getManager());// à Regler la date
-		bapRepository.save(newB);
-		bapRepository.delete(b);
+		for(Feedback f: b.getFeedbacks()){
+			f.setArchive(true);
+		}
+		for(Objectif o: b.getObjectifsSortantes()){
+			System.out.println(o.getIdObjectif());
+		}
+		ArchiveBap archive= new ArchiveBap(b.getId(), b.getDateBilan(), b.getCollaborateur(), b.getObjectifsEntrantes(), b.getDecision(), b.getFeedbacks(), b.isLocked(), b.getObjectifsSortantes(), b.getManager(), b.getNoteGlobale());
+		archiveBapRepository.save(archive);
+		Date date= new Date(b.getDateBilan().getYear()+1, b.getDateBilan().getMonth(), b.getDateBilan().getDate());
+		BAP newBap= new BAP(date, b.getCollaborateur(), b.getManager());
+		bapRepository.delete(b.getId());
+		bapRepository.save(newBap);
 		
 	}
 
-	@Override
-	public BAP preparerBap(Long idBap) {
-		BAP b= bapRepository.findOne(idBap);
-		b.setStatus(b.EN_COURS);
-		return b;
-	}
-
-	@Override
-	public BAP addBap(BAP bap) {
-		return bapRepository.save(bap);
-	}
+	
+	
 
 	@Override
 	public List<Encadrant> getAllEncadrant() {
@@ -146,6 +127,13 @@ public class ManagerMetierImpl implements ManagerMetier {
 		BAP bap= bapRepository.findOne(id);
 		bap.setEnvoye(true);
 		bap.setCompteur(bap.getCompteur()+1);
+		bap.setStatus(bap.EN_COURS);
+		if(bap.getCompteur()>=3){
+			for(Objectif f: bap.getObjectifsSortantes()){
+				f.setValide(true);
+			}
+			
+		}
 		return bap;
 	}
 
@@ -154,10 +142,46 @@ public class ManagerMetierImpl implements ManagerMetier {
 		BAP bap= bapRepository.findOne(id);
 		if(bap.isLocked()){
 			bap.setLocked(false);
+			for(Feedback f: bap.getFeedbacks()){
+				f.setLocked(false);
+			}
 		}else{
 			bap.setLocked(true);
+			for(Feedback f: bap.getFeedbacks()){
+				f.setLocked(true);
+			}
 		}
 		return bap;
+	}
+
+	@Override
+	public void AnnulerBap(Long idBap) {
+		BAP bap= bapRepository.findOne(idBap);
+		bap.setStatus(bap.ANNULE);
+	}
+
+	@Override
+	public Integer nombreEnCours(Long matricule) {
+		// TODO Auto-generated method stub
+		return bapRepository.nombreEnCours(matricule);
+	}
+
+	@Override
+	public Integer nombreRejete(Long matricule) {
+		// TODO Auto-generated method stub
+		return bapRepository.nombreRejete(matricule);
+	}
+
+	@Override
+	public Integer nombreEnAttente(Long matricule) {
+		// TODO Auto-generated method stub
+		return bapRepository.nombreEnAttente(matricule);
+	}
+
+	@Override
+	public Page<ArchiveBap> getAllArchiveBap(Long matricule, int page) {
+		// TODO Auto-generated method stub
+		return archiveBapRepository.findByManager(matricule, new PageRequest(page, 10));
 	}
 
 	

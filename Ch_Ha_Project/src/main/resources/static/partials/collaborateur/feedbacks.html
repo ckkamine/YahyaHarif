@@ -1,0 +1,301 @@
+<div
+	class="row wrapper border-bottom white-bg page-heading animated fadeInLeft">
+	<div class="col-sm-4">
+		<h2>Feedbacks</h2>
+		<ol class="breadcrumb">
+			<li><a href=""><i class="fa fa-folder-open-o"></i></a></li>
+			<li><strong>Liste des Feedbacks courantes</strong></li>
+		</ol>
+	</div>
+	<div class="col-sm-8">
+		<div class="title-action">
+			<a href="" class="btn btn-warning" ng-click="reload()"><i
+				class="fa fa-refresh"></i></a>
+		</div>
+	</div>
+</div>
+<div class="wrapper wrapper-content" ng-hide="detail">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>Liste des Feedbacks</h5>
+
+				</div>
+				<div class="ibox-content" ng-hide="feedbacks">
+					<h3>Votre bilan est privé &nbsp;&nbsp;<i class="fa fa-lock text-danger fa-2x"></i>&nbsp;&nbsp; ou la liste des Feedbacks est vide</h3>
+				</div>
+				<div class="ibox-content" ng-show="feedbacks">
+					<div class="table-responsive">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Collaborateur</th>
+									<th>Projet</th>
+									<th>Note Globale</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="f in feedbacks">
+									<td>{{f.idFeedback}}</td>
+									<td>{{f.collaborateur.firstName}}
+										{{f.collaborateur.lastName}}</td>
+									<td>{{f.projet.nom}}</td>
+									<td class="text-navy font-bold">{{f.noteGlobal | number:
+										2}}</td>
+									<td><a href="" class="btn btn-outline btn-success btn-xs"
+									ng-click="seeMore(f)"><i
+											class="fa fa-search-plus"></i></a> </td>
+								</tr>
+
+							</tbody>
+						</table>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</div>
+<div class="wrapper wrapper-content" ng-show="detail && feedbacks">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>Liste des Feedbacks</h5>
+					<a href="" ng-click="changeDetail()"
+							class="btn btn-warning btn-xs pull-right"><i
+							class="fa fa-arrow-left"></i> Retour</a>
+				</div>
+				
+				<div class="ibox-content">
+			<div class="row">
+				<div class="col-md-4 col-md-offset-4">
+					<div class="content-box equal">
+						<h2 class="text-center">Fiche Feedback</h2>
+						<p class="text-center">
+							<strong>{{feedback.dateFeedback | date: 'MMMM yyyy'}}</strong>
+						</p>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-sm-12 col-md-4">
+					<div class="contact-box">
+						<a href="profile.html">
+							<div class="col-sm-4">
+								<div class="text-center">
+									<img alt="image" class="img-circle m-t-xs img-responsive"
+										src="img/user-collaborateur-1.png">
+									<div class="m-t-xs font-bold">{{feedback.collaborateur.posteActuel}}</div>
+								</div>
+							</div>
+							<div class="col-sm-8">
+								<h3>
+									<strong>{{feedback.collaborateur.firstName}} {{feedback.collaborateur.lastName}}</strong>
+								</h3>
+								<p>
+									<i class="fa fa-calendar">&nbsp;</i> {{feedback.collaborateur.dateRecrutement | date: 'dd/MM/yyyy'}}
+								</p>
+								<p>
+									<i class="fa fa-envelope-o">&nbsp;</i> {{feedback.collaborateur.email}}
+								</p>
+								<p>
+									<i class="fa fa-phone">&nbsp;</i> {{feedback.collaborateur.telephone}}
+								</p>
+							</div>
+							<div class="clearfix"></div>
+						</a>
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-4">
+					<div class="contact-box">
+						<a href="">
+							<h3 class="text-center">
+								<strong>{{feedback.projet.nom}}</strong>
+							</h3>
+							<div class="col-sm-6">
+								<p>
+									<i class="fa fa-hashtag">&nbsp;</i> {{feedback.projet.idProjet}}
+								</p>
+								<p>
+									<i class="fa fa-calendar-o">&nbsp;</i> {{feedback.debutInter | date :' dd/MM/yy'}}
+								</p>
+								<p>
+									<i class="fa fa-calendar">&nbsp;</i> {{feedback.finInter | date :' dd/MM/yy'}}
+								</p>
+							</div>
+							<div class="col-sm-6">
+								<p>
+									<i class="fa fa-user-md">&nbsp;</i> {{feedback.role}}
+								</p>
+								<p>
+									<i class="fa fa-hourglass-end">&nbsp;</i> {{feedback.nombreJourValorise}} Jours
+								</p>
+							</div>
+							<div class="clearfix"></div>
+						</a>
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-4">
+					<div class="contact-box">
+						<a href="">
+							<div class="col-sm-4">
+								<div class="text-center">
+									<img alt="image" class="img-circle m-t-xs img-responsive"
+										src="img/user-encadrant-1.png">
+									<div class="m-t-xs font-bold">Encadrant</div>
+								</div>
+							</div>
+							<div class="col-sm-8">
+								<h3>
+									<strong>{{feedback.encadrant.firstName}} {{feedback.encadrant.lastName}}</strong>
+								</h3>
+								<p>
+									<i class="fa fa-calendar">&nbsp;</i> {{feedback.encadrant.dateRecrutement |date: 'dd/MM/yy'}}
+								</p>
+								<p>
+									<i class="fa fa-envelope-o">&nbsp;</i> {{feedback.encadrant.email}}
+								</p>
+								<p>
+									<i class="fa fa-phone">&nbsp;</i> {{feedback.encadrant.telephone}}
+								</p>
+							</div>
+							<div class="clearfix"></div>
+						</a>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-8">
+					<div class="table-responsive">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>Libellé</th>
+									<th>Qualification</th>
+									<th>Remarque</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="q in feedback.qualifications">
+									<td>{{q.theme}}</td>
+									<td><span ng-if="q.qualification==0" class="font-bold text-danger"> Critique </span>
+										<span ng-if="q.qualification==1" class="font-bold text-warning"> À développer </span>
+										<span ng-if="q.qualification==2" class="font-bold text-success"> Selon Attentes </span>
+										<span ng-if="q.qualification==3" class="font-bold text-navy"> Démontre des forces </span>
+										<span ng-if="q.qualification=='na'" class="font-bold"> NA </span>
+									</td>
+									<td>{{q.remarque}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="table-responsive">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>Qualification</th>
+									<th>Poids</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Critique</td>
+									<td class="font-bold text-danger">0</td>
+								</tr>
+								<tr>
+									<td>À développer</td>
+									<td class="font-bold text-warning">1</td>
+								</tr>
+								<tr>
+									<td>Selon Attentes</td>
+									<td class="font-bold text-success">2</td>
+								</tr>
+								<tr>
+									<td>Démontre des forces</td>
+									<td class="font-bold text-navy">3</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-8">
+				
+					<div class="contact-box">
+						<div class="progress progress-striped active">
+							<div style="width: {{(feedback.noteGlobal/3)*100}}%" role="progressbar"
+								class="progress-bar"
+								ng-class="{'progress-bar-danger': ((feedback.noteGlobal/3)*100)<=25,
+											'progress-bar-warning': ((feedback.noteGlobal/3)*100)<=50 && ((feedback.noteGlobal/3)*100)>25,
+											'progress-bar-success': ((feedback.noteGlobal/3)*100)<=75 && ((feedback.noteGlobal/3)*100)>50,
+											'progress-bar-primary': ((feedback.noteGlobal/3)*100)<=100}"></div>
+								
+						</div>
+						<div class="row text-center">
+							<div class="col-md-3 font-bold">
+								<i class="fa fa-caret-up text-danger"></i> <br />Critique
+							</div>
+							<div class="col-md-3 font-bold">
+								<i class="fa fa-caret-up text-warning"></i> <br />À développer
+							</div>
+							<div class="col-md-3 font-bold">
+								<i class="fa fa-caret-up text-success"></i> <br />Selon Attentes
+							</div>
+							<div class="col-md-3 font-bold">
+								<i class="fa fa-caret-up text-navy"></i> <br />Démontre des
+								forces
+							</div>
+						</div>
+						<div class="hr-line-dashed"></div>
+						<div class="row">
+							<div class="col-md-3">
+								<span class="font-bold">Remarque Générale</span>
+							</div>
+							<div class="col-md-9">
+								<p class="text-justify">{{feedback.commentaire}}</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="widget style1">
+						<div class="row">
+							<div class="col-xs-4 text-center">
+								<i class="fa fa-bar-chart-o fa-5x text-success"></i>
+							</div>
+							<div class="col-xs-8 text-right">
+								<span> Note Globale </span>
+								<h2 class="font-bold text-success">{{feedback.noteGlobal| number: 2}}</h2>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12"></div>
+			</div>
+		</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</div>
+
+	<script>
+		$('.collaborateur').removeClass("active active-user");
+		$('#feedbacks').addClass("active active-user");
+	</script>
