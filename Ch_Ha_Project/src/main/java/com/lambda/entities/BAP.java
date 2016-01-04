@@ -35,9 +35,7 @@ public class BAP extends Bilan implements Serializable {
 	@JoinColumn(name = "BAP_ID")
 	private List<Feedback> feedbacks;
 	private boolean locked;
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-	@LazyToOne(LazyToOneOption.FALSE)
-	@Fetch(FetchMode.JOIN)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JoinColumn(name = "BAP_ID_S")
 	private List<Objectif> objectifsSortantes;
 	private String status;

@@ -41,6 +41,7 @@ public class SecurityConfiguration {
 			http.headers().cacheControl().disable();
 
 			http.authorizeRequests().antMatchers(HttpMethod.GET, "/").permitAll();
+			http.authorizeRequests().antMatchers(HttpMethod.POST, "/user/updatepassword").authenticated();
 			http.authorizeRequests().antMatchers("/user/**").permitAll();
 			http.authorizeRequests().antMatchers("/rest/admin/**").hasRole(User.ROLE_ADMIN);
 			http.authorizeRequests().antMatchers("/rest/encadrant/**").hasRole(User.ROLE_EVALUATEUR);

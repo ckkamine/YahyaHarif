@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.lambda.entities.ArchiveBap;
 import com.lambda.entities.BAP;
 import com.lambda.entities.Collaborateur;
+import com.lambda.entities.Description;
 import com.lambda.entities.Encadrant;
 import com.lambda.entities.Feedback;
 import com.lambda.entities.Manager;
@@ -242,7 +243,11 @@ public class AdminMetierImpl implements AdminMetier {
 		objectifRepository.save(objectif);
 		BAP bap = bapRepository.findOne(idBap);
 		bap.addObjectifSortantes(objectif);
-
+		for(Objectif f: bap.getObjectifsSortantes()){
+			for(Description d: f.getDescriptions()){
+				System.out.println(d.getDescription());
+			}
+		}
 		return bap;
 	}
 
@@ -255,11 +260,17 @@ public class AdminMetierImpl implements AdminMetier {
 	@Override
 	public BAP envoyerObjectifs(Long id) {
 		BAP bap = bapRepository.findOne(id);
+		bap.setEnvoye(true);
 		bap.setCompteur(bap.getCompteur() + 1);
 		bap.setStatus(bap.EN_COURS);
 		if (bap.getCompteur() >= 3) {
 			for (Objectif f : bap.getObjectifsSortantes()) {
 				f.setValide(true);
+			}
+		}
+		for(Objectif f: bap.getObjectifsSortantes()){
+			for(Description d: f.getDescriptions()){
+				System.out.println(d.getDescription());
 			}
 		}
 		return bap;

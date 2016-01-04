@@ -50,7 +50,7 @@ public class CollaborateurMetierImpl implements CollaborateurMetier {
 		if (b.getCompteur() < 3) {
 			b.setEnvoye(false);
 		}
-		for (Objectif f : b.getObjectifsEntrantes()) {
+		for (Objectif f : b.getObjectifsSortantes()) {
 			if (!f.isValide()) {
 				b.setStatus(b.REJETE);
 			}
