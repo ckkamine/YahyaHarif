@@ -19,11 +19,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.lambda.security.SaltedSHA256PasswordEncoder;
 
-
 /**
- * @author Choukoukou Amine & Yahya
+ * @author Choukoukou Amine & HARIF Yahya
  *
  */
+
+// Main
 @ComponentScan
 @EnableAutoConfiguration
 @EnableTransactionManagement
@@ -32,31 +33,30 @@ import com.lambda.security.SaltedSHA256PasswordEncoder;
 @SpringBootApplication
 public class ChHaProjectApplication {
 
-    public static void main(String[] args) {
-    	ApplicationContext applicationContext= SpringApplication.run(ChHaProjectApplication.class, args);
-    	applicationContext.getBean(DataBaseInit.class).init();
-    }
+	public static void main(String[] args) {
+		ApplicationContext applicationContext = SpringApplication.run(ChHaProjectApplication.class, args);
+		applicationContext.getBean(DataBaseInit.class).init();
+	}
 }
+
+// Servlet Initializer
 class ServletInitializer extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(ChHaProjectApplication.class);
 	}
-	
-
-
-
 }
+
+// Password Encoder
 @EnableSpringDataWebSupport
 @EnableTransactionManagement
 @Configuration
 class CommonConfiguration {
 
 	@Bean
-	public SaltedSHA256PasswordEncoder saltedSHA256PasswordEncoder(
-			Environment environment) throws NoSuchAlgorithmException {
-		return new SaltedSHA256PasswordEncoder(
-				environment.getProperty("secret"));
+	public SaltedSHA256PasswordEncoder saltedSHA256PasswordEncoder(Environment environment)
+			throws NoSuchAlgorithmException {
+		return new SaltedSHA256PasswordEncoder(environment.getProperty("secret"));
 	}
 }

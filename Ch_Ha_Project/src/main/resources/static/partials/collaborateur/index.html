@@ -3,78 +3,98 @@
 		<div class="sidebar-collapse">
 			<ul class="nav metismenu" id="side-menu">
 				<li class="nav-header">
-				<a  href="" ui-sref="collaborateur.user">
-					<div class="dropdown profile-element text-center">
-						<span> <img alt="image" class="img-circle"
-							src="img/user-collaborateur.png" />
-						</span> <span class="clear"> <span class="block m-t-xs"> <strong
-								class="font-bold text-white">{{user.firstName}}
-									{{user.lastName}}</strong>
-						</span> <span class="text-muted text-xs block">{{user.posteActuel}}
-
-						</span>
-						</span>
-
-
-					</div>
-					<div class="logo-element">L</div>
+					<a href="" ui-sref="collaborateur.user">
+						<div class="dropdown profile-element text-center">
+							<span>
+								<img alt="image" class="img-circle" src="img/user-collaborateur.png" />
+							</span>
+							<span class="clear">
+								<span class="block m-t-xs">
+									<strong class="font-bold text-white">{{user.firstName}} {{user.lastName}}</strong>
+								</span>
+								<span class="text-muted text-xs block">{{user.posteActuel}} </span>
+							</span>
+						</div>
+						<div class="logo-element">L</div>
 					</a>
 				</li>
-				<li class="collaborateur" id="dashbord"><a href="" ui-sref="collaborateur.dashbord"><i
-						class="fa fa-dashboard"></i> <span class="nav-label">Tableau
-							de bord</span></a></li>
-				<li class="collaborateur" id="newObjectifs"><a href="" ui-sref="collaborateur.newObjectifs"><i
-						class="fa fa-calendar-o"></i> <span class="nav-label">Nouveaux Objectifs</span></a></li>
-				<li class="collaborateur" id="currentObjectifs"><a href="" ui-sref="collaborateur.currentObjectifs"><i
-						class="fa fa-calendar"></i> <span class="nav-label">Objectifs</span></a></li>
-				<li class="collaborateur" id="bap"><a href="" ui-sref="collaborateur.bap"><i
-						class="fa fa-line-chart"></i> Bilans Performance</a></li>
-				<li class="collaborateur" id="feedbacks"><a href="" ui-sref="collaborateur.feedbacks"><i class="fa fa-files-o"></i> <span
-						class="nav-label">Feedbacks</span></a></li>
-				<li class="collaborateur" id="archive"><a href="" ui-sref="collaborateur.archive"><i class="fa fa-archive"></i>
-						Archives</a></li>
-				
+				<li class="collaborateur" id="dashbord">
+					<a href="" ui-sref="collaborateur.dashbord">
+						<i class="fa fa-dashboard"></i>
+						<span class="nav-label">Tableau de bord</span>
+					</a>
+				</li>
+				<li class="collaborateur" id="newObjectifs">
+					<a href="" ui-sref="collaborateur.newObjectifs">
+						<i class="fa fa-calendar-o"></i>
+						<span class="nav-label">Nouveaux Objectifs</span>
+					</a>
+				</li>
+				<li class="collaborateur" id="currentObjectifs">
+					<a href="" ui-sref="collaborateur.currentObjectifs">
+						<i class="fa fa-calendar"></i>
+						<span class="nav-label">Objectifs</span>
+					</a>
+				</li>
+				<li class="collaborateur" id="bap">
+					<a href="" ui-sref="collaborateur.bap">
+						<i class="fa fa-line-chart"></i>
+						Bilans Performance
+					</a>
+				</li>
+				<li class="collaborateur" id="feedbacks">
+					<a href="" ui-sref="collaborateur.feedbacks">
+						<i class="fa fa-files-o"></i>
+						<span class="nav-label">Feedbacks</span>
+					</a>
+				</li>
+				<li class="collaborateur" id="archive">
+					<a href="" ui-sref="collaborateur.archive">
+						<i class="fa fa-archive"></i>
+						Archives
+					</a>
+				</li>
 			</ul>
 		</div>
 	</nav>
 	<div id="page-wrapper" class="gray-bg">
 		<div class="row border-bottom">
-			<nav class="navbar navbar-static-top  " role="navigation"
-				style="margin-bottom: 0">
+			<nav class="navbar navbar-static-top  " role="navigation" style="margin-bottom: 0">
 				<div class="navbar-header">
-					<a class="navbar-minimalize minimalize-styl-2 btn btn-warning"
-						href=""><i class="fa fa-search"></i> </a>
-					<form role="search" class="navbar-form-custom"
-						action="search_results.html">
+					<a class="navbar-minimalize minimalize-styl-2 btn btn-warning" href="">
+						<i class="fa fa-search"></i>
+					</a>
+					<form role="search" class="navbar-form-custom" action="search_results.html">
 						<div class="form-group">
-							<input type="text" placeholder="Rechercher ..."
-								class="form-control">
-
+							<input type="text" placeholder="Rechercher ..." class="form-control">
 						</div>
-
 					</form>
 				</div>
 				<ul class="nav navbar-top-links navbar-right">
-
-					<li><span class="m-r-sm text-muted welcome-message">Bienvenue
-							<strong>{{user.firstName}} {{user.lastName}}</strong> - Vous êtes
-							connecté en tant que <strong class="text-warning">Collaborateur</strong>.
-					</span></li>
-					<li><a href="" ng-click="logout()"> <i
-							class="fa fa-sign-out"></i> Déconnexion
-					</a></li>
+					<li>
+						<span class="m-r-sm text-muted welcome-message">
+							Bienvenue
+							<strong>{{user.firstName}} {{user.lastName}}</strong>
+							- Vous êtes connecté en tant que
+							<strong class="text-warning">Collaborateur</strong>
+							.
+						</span>
+					</li>
+					<li>
+						<a href="" ng-click="logout()">
+							<i class="fa fa-sign-out"></i>
+							Déconnexion
+						</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
-
 		<div ui-view></div>
 	</div>
 </div>
 <script>
-                $(document).ready(function() {
-                        $('.equal').matchHeight();
-                        $('#summernote').summernote();
-                        $('#user').addClass("active-user");
-                        $('.pace-progress').css("background", "#f8ac59");
-                });
-        </script>
+	$(document).ready(function() {
+		$('#user').addClass("active-user");
+		$('.pace-progress').css("background", "#f8ac59");
+	});
+</script>

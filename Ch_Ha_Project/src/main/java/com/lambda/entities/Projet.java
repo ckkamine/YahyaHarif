@@ -14,18 +14,19 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@SuppressWarnings("serial")
 @Entity
-public class Projet implements Serializable{
+public class Projet implements Serializable {
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idProjet;
 	private String nom;
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="CHEF_ID")
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "CHEF_ID")
 	private Encadrant chefProjet;
-	@ManyToMany(mappedBy="projets", fetch=FetchType.EAGER)
+	@ManyToMany(mappedBy = "projets", fetch = FetchType.EAGER)
 	private Collection<Collaborateur> collaborateurs;
-	
+
 	public Projet(String nom) {
 		super();
 		this.nom = nom;
@@ -68,7 +69,5 @@ public class Projet implements Serializable{
 	public void setCollaborateurs(Collection<Collaborateur> collaborateurs) {
 		this.collaborateurs = collaborateurs;
 	}
-	
-	
 
 }

@@ -18,70 +18,74 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
+@SuppressWarnings("serial")
 @Entity
 @Inheritance
-@DiscriminatorColumn(name="TYPE",discriminatorType=DiscriminatorType.STRING, length=3)
-
-@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.PROPERTY, property="type")
-@JsonSubTypes({
-		@Type(name="BAP", value=BAP.class),
-		@Type(name="BIP", value=BIP.class)
-})
-public abstract class Bilan implements Serializable{
+@DiscriminatorColumn(name = "TYPE", discriminatorType = DiscriminatorType.STRING, length = 3)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({ @Type(name = "BAP", value = BAP.class), @Type(name = "BIP", value = BIP.class) })
+public abstract class Bilan implements Serializable {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private Date dateBilan;
-	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="COLL_ID")
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "COLL_ID")
 	private Collaborateur collaborateur;
-	@OneToMany(fetch=FetchType.LAZY, cascade= CascadeType.MERGE)
-	@JoinColumn(name="B_ID_E")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	@JoinColumn(name = "B_ID_E")
 	private List<Objectif> objectifsEntrantes;
 	private String decision;
+
 	public Bilan() {
 		super();
-		
+
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public Date getDateBip() {
 		return dateBilan;
 	}
+
 	public void setDateBip(Date dateBip) {
 		this.dateBilan = dateBip;
 	}
+
 	public Collaborateur getCollaborateur() {
 		return collaborateur;
 	}
+
 	public void setCollaborateur(Collaborateur collaborateur) {
 		this.collaborateur = collaborateur;
 	}
+
 	public String getDecision() {
 		return decision;
 	}
+
 	public void setDecision(String decision) {
 		this.decision = decision;
 	}
+
 	public Date getDateBilan() {
 		return dateBilan;
 	}
+
 	public void setDateBilan(Date dateBilan) {
 		this.dateBilan = dateBilan;
 	}
-	
 
 	public List<Objectif> getObjectifsEntrantes() {
 		return objectifsEntrantes;
@@ -96,7 +100,5 @@ public abstract class Bilan implements Serializable{
 		this.dateBilan = dateBilan;
 		this.collaborateur = collaborateur;
 	}
-	
-	
 
 }

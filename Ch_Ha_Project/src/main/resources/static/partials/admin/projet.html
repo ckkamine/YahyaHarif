@@ -34,7 +34,7 @@
 			<ol class="breadcrumb">
 				<li><a href=""><i class="fa fa-folder-open-o"></i></a></li>
 				<li><strong> Projets </strong></li>
-				
+
 			</ol>
 		</div>
 		<div class="col-sm-8">
@@ -73,24 +73,27 @@
 									<td><span ng-show="p.chefProjet">{{p.chefProjet.matricule}}
 											: {{p.chefProjet.firstName}} {{p.chefProjet.lastName}}</span></td>
 
-									<td><a href=""
-										ng-click="deleteProject(p.idProjet)"> <i
+									<td><a href="" ng-click="deleteProject(p.idProjet)"> <i
 											class="fa fa-trash text-danger"></i></a> &nbsp; <a href=""
-										ng-click="updateProject(p)"> <i class="fa fa-edit text-navy"></i></a></td>
+										ng-click="updateProject(p)"> <i
+											class="fa fa-edit text-navy"></i></a></td>
 								</tr>
 
 							</tbody>
 						</table>
 						<center>
 							<div class="btn-group">
-								<button type="button" class="btn btn-white" ng-hide="first" ng-click="getProjects(pageCurrent-1)">
+								<button type="button" class="btn btn-white" ng-hide="first"
+									ng-click="getProjects(pageCurrent-1)">
 									<i class="fa fa-chevron-left"></i>
 								</button>
-								<button class="btn btn-white" ng-class="{'active': pageCurrent==$index}"
-								ng-repeat="p in pages track by $index"
-								ng-click="getProjects($index)">{{$index+1}}</button>
-								
-								<button type="button" class="btn btn-white" ng-hide="last" ng-click="getProjects(pageCurrent+1)">
+								<button class="btn btn-white"
+									ng-class="{'active': pageCurrent==$index}"
+									ng-repeat="p in pages track by $index"
+									ng-click="getProjects($index)">{{$index+1}}</button>
+
+								<button type="button" class="btn btn-white" ng-hide="last"
+									ng-click="getProjects(pageCurrent+1)">
 									<i class="fa fa-chevron-right"></i>
 								</button>
 							</div>
@@ -111,7 +114,8 @@
 								<label class="col-sm-2 control-label">Nom du Projet: </label>
 
 								<div class="col-sm-7">
-									<input type="text" class="form-control" ng-model="projet.nom" required="required">
+									<input type="text" class="form-control" ng-model="projet.nom"
+										required="required">
 								</div>
 							</div>
 							<div class="hr-line-dashed"></div>
@@ -120,25 +124,30 @@
 									du projet :</label>
 
 								<div class="col-sm-7">
-									<select class="form-control m-b" ng-model="projet.chefProjet.matricule">
+									<select class="form-control m-b"
+										ng-model="projet.chefProjet.matricule">
 										<option ng-repeat="c in encadrants">{{c.matricule}}</option>
 									</select>
-									
+
 								</div>
-								
+
 
 							</div>
-						
-						<div class="row">
-							<div class="col-md-2 col-md-offset-8">
-								<a href="" class="btn btn-white btn-sm pull-right " ng-click="ajouter()"><i class="fa fa-close"></i> Annuler</a>
+
+							<div class="row">
+								<div class="col-md-2 col-md-offset-8">
+									<a href="" class="btn btn-white btn-sm pull-right "
+										ng-click="ajouter()"><i class="fa fa-close"></i> Annuler</a>
+								</div>
+
+								<div class="col-md-2">
+									<button type="submit" class="btn btn-primary btn-sm "
+										ng-click="addProject()">
+										<i class="fa fa-check"></i> Valider
+									</button>
+
+								</div>
 							</div>
-							
-							<div class="col-md-2">
-								<button type="submit" class="btn btn-primary btn-sm " ng-click="addProject()"><i class="fa fa-check"></i> Valider</button>
-								
-							</div>
-						</div>
 						</form>
 					</div>
 				</div>
@@ -149,7 +158,6 @@
 	<script>
 		$('.admin').removeClass("active");
 		$('#projet').addClass("active");
-		
 	</script>
 </div>
 

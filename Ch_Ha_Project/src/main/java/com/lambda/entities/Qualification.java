@@ -7,16 +7,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+@SuppressWarnings("serial")
 @Entity
-public class Qualification implements Serializable{
+public class Qualification implements Serializable {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idQualification;
 	private String theme;
 	private String qualification;
 	private String remarque;
-	
-	public Qualification(){}
+
+	public Qualification() {
+	}
 
 	public Qualification(String theme, String qualification, String remarque) {
 		super();
@@ -56,7 +58,5 @@ public class Qualification implements Serializable{
 	public void setRemarque(String remarque) {
 		this.remarque = remarque;
 	}
-	
-	
-	
+
 }

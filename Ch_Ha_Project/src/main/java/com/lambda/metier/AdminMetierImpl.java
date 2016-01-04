@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import com.lambda.entities.ArchiveBap;
 import com.lambda.entities.BAP;
-import com.lambda.entities.Bilan;
 import com.lambda.entities.Collaborateur;
 import com.lambda.entities.Encadrant;
 import com.lambda.entities.Feedback;
@@ -37,44 +36,44 @@ import com.lambda.repository.UserRepository;
 
 @Service
 @Transactional
-public class AdminMetierImpl implements AdminMetier{
+public class AdminMetierImpl implements AdminMetier {
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	MailComponent mailService;
-	
+
 	@Autowired
 	BapRepository bapRepository;
-	
+
 	@Autowired
 	ArchiveBapRepository archiveBapRepository;
-	
+
 	@Autowired
 	ManagerRepository managerRepository;
-	
+
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	ObjectifRepository objectifRepository;
-	
+
 	@Autowired
 	ProjetRepository projetRepository;
-	
+
 	@Autowired
 	BilanRepository bilanRepository;
-	
+
 	@Autowired
 	CollaborateurRepository collaborateurRepository;
-	
+
 	@Autowired
 	EncadrantRepository encadrantRepository;
-	
+
 	@Autowired
 	DescriptionRepository descriptionRepository;
 
-	public Page<User> getAllUsers(int page) {	
+	public Page<User> getAllUsers(int page) {
 		return userRepository.findAll(new PageRequest(page, 10));
 	}
 
@@ -85,58 +84,52 @@ public class AdminMetierImpl implements AdminMetier{
 
 	@Override
 	public Page<ArchiveBap> getAllArchiveBap(int page) {
-		// TODO Auto-generated method stub
 		return archiveBapRepository.findAll(new PageRequest(page, 10));
 	}
 
 	@Override
 	public Page<Projet> getAllProjets(int page) {
-		// TODO Auto-generated method stub
 		return projetRepository.findAll(new PageRequest(page, 10));
 	}
 
-
 	@Override
 	public Objectif getObjectif(Long id) {
-		
+
 		return objectifRepository.findOne(id);
 	}
 
 	@Override
 	public Objectif updateObjectif(Objectif objectif) {
-		// TODO Auto-generated method stub
 		return objectifRepository.save(objectif);
 	}
 
 	@Override
 	public void deleteObjectif(Long id) {
-		
+
 		objectifRepository.delete(id);
 	}
 
 	@Override
 	public Projet addProjet(Projet projet) {
-		Encadrant e= encadrantRepository.findOne(projet.getChefProjet().getMatricule());
+		Encadrant e = encadrantRepository.findOne(projet.getChefProjet().getMatricule());
 		projet.setChefProjet(e);
 		return projetRepository.save(projet);
 	}
 
 	@Override
 	public Projet getProjet(Long id) {
-		// TODO Auto-generated method stub
 		return projetRepository.findOne(id);
 	}
 
 	@Override
 	public Projet updateProjet(Projet projet) {
-		// TODO Auto-generated method stub
 		return projetRepository.save(projet);
 	}
 
 	@Override
 	public void deleteProjet(Long id) {
 		projetRepository.delete(id);
-		
+
 	}
 
 	@Override
@@ -147,10 +140,8 @@ public class AdminMetierImpl implements AdminMetier{
 	@Override
 	public BAP updateBilan(BAP bilan) {
 		return bapRepository.save(bilan);
-		
+
 	}
-
-
 
 	@Override
 	public List<String> getAllUsername() {
@@ -162,14 +153,17 @@ public class AdminMetierImpl implements AdminMetier{
 		String generatedPassword = RandomStringUtils.randomAlphabetic(8);
 		user.setPassword(passwordEncoder.encode(generatedPassword));
 		try {
-			mailService.sendUserpass(user.getEmail(), user.getFirstName(), user.getLastName(), user.getUsername(), generatedPassword);
+			mailService.sendUserpass(user.getEmail(), user.getFirstName(), user.getLastName(), user.getUsername(),
+					generatedPassword);
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
 		System.out.println(generatedPassword);
-		if(user instanceof Collaborateur){
-			Manager m= managerRepository.findOne(matricule);
-			BAP bap = new BAP(new Date(user.getDateRecrutement().getYear()+1, user.getDateRecrutement().getMonth(), 1),
+		if (user instanceof Collaborateur) {
+			Manager m = managerRepository.findOne(matricule);
+			@SuppressWarnings("deprecation")
+			BAP bap = new BAP(
+					new Date(user.getDateRecrutement().getYear() + 1, user.getDateRecrutement().getMonth(), 1),
 					(Collaborateur) user, m);
 			userRepository.save(user);
 			bapRepository.save(bap);
@@ -185,7 +179,7 @@ public class AdminMetierImpl implements AdminMetier{
 
 	@Override
 	public User updateUser(User user) {
-		User u= userRepository.findOne(user.getMatricule());
+		User u = userRepository.findOne(user.getMatricule());
 		u.setFirstName(user.getFirstName());
 		u.setLastName(user.getLastName());
 		u.setEmail(user.getEmail());
@@ -197,54 +191,44 @@ public class AdminMetierImpl implements AdminMetier{
 
 	@Override
 	public void deleteUser(Long id) {
-		
-	
+
 	}
-
-	
-
-	
 
 	@Override
 	public Page<User> findByMcUser(String mc, int page) {
 		try {
-			Long id= Long.parseLong(mc, 10);
+			Long id = Long.parseLong(mc, 10);
 			return userRepository.findByMcUsersId(id, new PageRequest(page, 10));
 		} catch (NumberFormatException e) {
-			return userRepository.findByMcUsers("%"+mc+"%", new PageRequest(page, 10));
+			return userRepository.findByMcUsers("%" + mc + "%", new PageRequest(page, 10));
 		}
-		
+
 	}
 
 	@Override
 	public Page<BAP> findByMcBap(String mc, int page) {
-		return bapRepository.findByMcBap("%"+mc+"%", new PageRequest(page, 10));
+		return bapRepository.findByMcBap("%" + mc + "%", new PageRequest(page, 10));
 	}
-
 
 	@Override
 	public Page<Projet> findByMcProjet(String mc, int page) {
 		try {
-			Long id= Long.parseLong(mc, 10);
+			Long id = Long.parseLong(mc, 10);
 			return projetRepository.findByIdProjet(id, new PageRequest(page, 10));
 		} catch (NumberFormatException e) {
 			System.out.println(mc);
-			return projetRepository.findByMcProjet("%"+mc+"%", new PageRequest(page, 10));
+			return projetRepository.findByMcProjet("%" + mc + "%", new PageRequest(page, 10));
 		}
-		
-	}
 
-	
+	}
 
 	@Override
 	public List<Encadrant> getAllEncadrant() {
-		// TODO Auto-generated method stub
 		return encadrantRepository.findAll();
 	}
 
 	@Override
 	public List<Collaborateur> getAllCollaborateur() {
-		// TODO Auto-generated method stub
 		return collaborateurRepository.findAll();
 	}
 
@@ -256,25 +240,25 @@ public class AdminMetierImpl implements AdminMetier{
 	@Override
 	public BAP addObjectif(Objectif objectif, Long idBap) {
 		objectifRepository.save(objectif);
-		BAP bap= bapRepository.findOne(idBap);
+		BAP bap = bapRepository.findOne(idBap);
 		bap.addObjectifSortantes(objectif);
-	
+
 		return bap;
 	}
 
-	
 	@Override
 	public BAP addBap(BAP bap) {
 		return bapRepository.save(bap);
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
 	public BAP envoyerObjectifs(Long id) {
-		BAP bap= bapRepository.findOne(id);
-		bap.setCompteur(bap.getCompteur()+1);
+		BAP bap = bapRepository.findOne(id);
+		bap.setCompteur(bap.getCompteur() + 1);
 		bap.setStatus(bap.EN_COURS);
-		if(bap.getCompteur()>=3){
-			for(Objectif f: bap.getObjectifsSortantes()){
+		if (bap.getCompteur() >= 3) {
+			for (Objectif f : bap.getObjectifsSortantes()) {
 				f.setValide(true);
 			}
 		}
@@ -283,63 +267,63 @@ public class AdminMetierImpl implements AdminMetier{
 
 	@Override
 	public BAP openOrLockBap(Long id) {
-		BAP bap= bapRepository.findOne(id);
-		if(bap.isLocked()){
+		BAP bap = bapRepository.findOne(id);
+		if (bap.isLocked()) {
 			bap.setLocked(false);
-			for(Feedback f: bap.getFeedbacks()){
+			for (Feedback f : bap.getFeedbacks()) {
 				f.setLocked(false);
 			}
-		}else{
+		} else {
 			bap.setLocked(true);
-			for(Feedback f: bap.getFeedbacks()){
+			for (Feedback f : bap.getFeedbacks()) {
 				f.setLocked(true);
 			}
 		}
-		bap= bapRepository.findOne(id);
+		bap = bapRepository.findOne(id);
 		return bap;
 	}
 
 	@Override
 	public void validerBap(Long idBap) {
-		BAP b= bapRepository.findOne(idBap);
-		for(Objectif o: b.getObjectifsEntrantes()){
+		BAP b = bapRepository.findOne(idBap);
+		for (Objectif o : b.getObjectifsEntrantes()) {
 			o.setArchive(true);
 		}
-		for(Feedback f: b.getFeedbacks()){
+		for (Feedback f : b.getFeedbacks()) {
 			f.setArchive(true);
 		}
-		ArchiveBap archive= new ArchiveBap(b.getId(), b.getDateBilan(), b.getCollaborateur(), b.getObjectifsEntrantes(), b.getDecision(), b.getFeedbacks(), b.isLocked(), b.getObjectifsSortantes(), b.getManager(), b.getNoteGlobale());
+		ArchiveBap archive = new ArchiveBap(b.getId(), b.getDateBilan(), b.getCollaborateur(),
+				b.getObjectifsEntrantes(), b.getDecision(), b.getFeedbacks(), b.isLocked(), b.getObjectifsSortantes(),
+				b.getManager(), b.getNoteGlobale());
 		archiveBapRepository.save(archive);
-		Date date= new Date(b.getDateBilan().getYear()+1, b.getDateBilan().getMonth(), b.getDateBilan().getDate());
-		BAP newBap= new BAP(date, b.getCollaborateur(), b.getManager());
+		@SuppressWarnings("deprecation")
+		Date date = new Date(b.getDateBilan().getYear() + 1, b.getDateBilan().getMonth(), b.getDateBilan().getDate());
+		BAP newBap = new BAP(date, b.getCollaborateur(), b.getManager());
 		bapRepository.delete(b.getId());
 		bapRepository.save(newBap);
-		
+
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
 	public void AnnulerBap(Long idBap) {
-		BAP bap= bapRepository.findOne(idBap);
+		BAP bap = bapRepository.findOne(idBap);
 		bap.setStatus(bap.ANNULE);
 	}
 
 	@Override
 	public Integer nombreEnCours(Long matricule) {
-		// TODO Auto-generated method stub
 		return bapRepository.nombreEnCours(matricule);
 	}
 
 	@Override
 	public Integer nombreRejete(Long matricule) {
-		// TODO Auto-generated method stub
 		return bapRepository.nombreRejete(matricule);
 	}
 
 	@Override
 	public Integer nombreEnAttente(Long matricule) {
-		// TODO Auto-generated method stub
 		return bapRepository.nombreEnAttente(matricule);
 	}
-	
 
 }

@@ -1,14 +1,12 @@
 package com.lambda.service;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -29,60 +27,66 @@ public class MailService {
 
 	@Autowired
 	BapRepository br;
-	
+
 	@Autowired
 	ProjetRepository projetRepository;
 
 	@Autowired
 	EncadrantRepository encadrantRepository;
-	
+
 	@Autowired
 	BapRepository bapRepository;
-	
+
 	@Autowired
 	ObjectifRepository objectifRepository;
-	
+
+	@SuppressWarnings("static-access")
 	@RequestMapping("/user/bilan")
-	//@Scheduled(cron = "0 0/1 * * * *") //1 minute
-	//@Scheduled(cron = "0 0 5 1 1/1 *") 1 mois
+	// @Scheduled(cron = "0 0/1 * * * *") 1 minute
+	// @Scheduled(cron = "0 0 5 1 1/1 *") 1 mois
 	public void preparer() throws MessagingException {
-		Calendar date= Calendar.getInstance();
+		Calendar date = Calendar.getInstance();
 		List<BAP> baps = br.findAll();
-		Integer mois = date.get(Calendar.MONTH)+1;
-		Integer annee= date.get(Calendar.YEAR);
-		if(mois==12){
-			mois=0;
+		Integer mois = date.get(Calendar.MONTH) + 1;
+		Integer annee = date.get(Calendar.YEAR);
+		if (mois == 12) {
+			mois = 0;
 			annee++;
 		}
-		for(BAP b: baps){
-			System.out.println("BAP - "+b.getId()+" -- PREPARER");
-			Collaborateur collaborateur= b.getCollaborateur();
+		for (BAP b : baps) {
+			System.out.println("BAP - " + b.getId() + " -- PREPARER");
+			Collaborateur collaborateur = b.getCollaborateur();
 			Calendar bapDate = Calendar.getInstance();
 			bapDate.setTime(b.getDateBilan());
-			if((bapDate.get(Calendar.MONTH)==mois)&&(bapDate.get(Calendar.YEAR)==annee)){
+			if ((bapDate.get(Calendar.MONTH) == mois) && (bapDate.get(Calendar.YEAR) == annee)) {
 				b.setStatus(b.EN_COURS);
 				// Transmettre les Objectifs
-				List<Objectif> objectifsEntrantes= objectifRepository.getObjectifsCList(b.getCollaborateur().getMatricule());
+				List<Objectif> objectifsEntrantes = objectifRepository
+						.getObjectifsCList(b.getCollaborateur().getMatricule());
 				b.setObjectifsEntrantes(objectifsEntrantes);
-				mailComponent.sendPreparer(b.getManager().getEmail(), b.getCollaborateur().getFirstName(), b.getCollaborateur().getLastName(), b.getCollaborateur().getPosteActuel(), b.getId(), b.getDateBilan());
-				for(Projet p: b.getCollaborateur().getProjets()){
+				mailComponent.sendPreparer(b.getManager().getEmail(), b.getCollaborateur().getFirstName(),
+						b.getCollaborateur().getLastName(), b.getCollaborateur().getPosteActuel(), b.getId(),
+						b.getDateBilan());
+				for (Projet p : b.getCollaborateur().getProjets()) {
 					System.out.println("--------------------------");
-					System.out.println("Projet - "+p.getIdProjet());
-					Encadrant e= p.getChefProjet();
-					System.out.println(e.getCollaborateursCurrent().size()+" ===> "+e.getMatricule());
-					if(!e.getCollaborateursCurrent().contains(collaborateur)){
+					System.out.println("Projet - " + p.getIdProjet());
+					Encadrant e = p.getChefProjet();
+					System.out.println(e.getCollaborateursCurrent().size() + " ===> " + e.getMatricule());
+					if (!e.getCollaborateursCurrent().contains(collaborateur)) {
 						System.out.println("ACTION");
 						e.getCollaborateursCurrent().add(collaborateur);
 						encadrantRepository.save(e);
-						mailComponent.sendFeedback(e.getEmail(), b.getCollaborateur().getFirstName(), b.getCollaborateur().getLastName(), b.getCollaborateur().getPosteActuel(), b.getId(), b.getDateBilan());
-					
+						mailComponent.sendFeedback(e.getEmail(), b.getCollaborateur().getFirstName(),
+								b.getCollaborateur().getLastName(), b.getCollaborateur().getPosteActuel(), b.getId(),
+								b.getDateBilan());
+
 					}
 
 					System.out.println("--------------------------");
-					List<Collaborateur> listCol= encadrantRepository.findColloborateurCurrent(e.getMatricule());
-					for(int i=0; listCol.size()>i;i++){
+					List<Collaborateur> listCol = encadrantRepository.findColloborateurCurrent(e.getMatricule());
+					for (int i = 0; listCol.size() > i; i++) {
 						try {
-							if(listCol.get(i).equals(listCol.get(i+1))){
+							if (listCol.get(i).equals(listCol.get(i + 1))) {
 								listCol.remove(i);
 							}
 						} catch (Exception e1) {
@@ -90,40 +94,37 @@ public class MailService {
 					}
 					e.setCollaborateursCurrent(listCol);
 					encadrantRepository.save(e);
-					listCol= encadrantRepository.findColloborateurCurrent(e.getMatricule());
-					for(int i=0; listCol.size()>i;i++){
-						System.out.println(listCol.get(i).getMatricule()+"  -  "+listCol.get(i).getUsername());
+					listCol = encadrantRepository.findColloborateurCurrent(e.getMatricule());
+					for (int i = 0; listCol.size() > i; i++) {
+						System.out.println(listCol.get(i).getMatricule() + "  -  " + listCol.get(i).getUsername());
 					}
 				}
 			}
 			bapRepository.save(b);
 		}
-		
-		
+
 	}
 
-	
-
-	//@Scheduled(cron = "0/10 * * * * *") 10 secondes
-	//@Scheduled(cron = "0 0 5 1 1/1 *") 1 mois
-	//@Scheduled(cron = "30 0/1 * * * *") //1 minute
+	// @Scheduled(cron = "0 0 5 1 1/1 *") 1 mois
+	// @Scheduled(cron = "30 0/1 * * * *") //1 minute
 	@RequestMapping("/user/bian2")
 	public void realiser() throws MessagingException {
-		Calendar date= Calendar.getInstance();
+		Calendar date = Calendar.getInstance();
 		List<BAP> baps = br.findAll();
 		Integer mois = date.get(Calendar.MONTH);
-		Integer annee= date.get(Calendar.YEAR);
-		for(BAP b: baps){
-			System.out.println("BAP - "+b.getId()+" -- REALISER");
+		Integer annee = date.get(Calendar.YEAR);
+		for (BAP b : baps) {
+			System.out.println("BAP - " + b.getId() + " -- REALISER");
 			Calendar bapDate = Calendar.getInstance();
 			bapDate.setTime(b.getDateBilan());
-			if((bapDate.get(Calendar.MONTH)==mois)&&(bapDate.get(Calendar.YEAR)==annee)){
-				mailComponent.sendRealiser(b.getManager().getEmail(), b.getCollaborateur().getFirstName(), b.getCollaborateur().getLastName(), b.getCollaborateur().getPosteActuel(), b.getId(), b.getDateBilan());
-				System.out.println("Mail===> "+b.getManager().getUsername());
+			if ((bapDate.get(Calendar.MONTH) == mois) && (bapDate.get(Calendar.YEAR) == annee)) {
+				mailComponent.sendRealiser(b.getManager().getEmail(), b.getCollaborateur().getFirstName(),
+						b.getCollaborateur().getLastName(), b.getCollaborateur().getPosteActuel(), b.getId(),
+						b.getDateBilan());
+				System.out.println("Mail===> " + b.getManager().getUsername());
 			}
 		}
-				
+
 	}
 
-	
 }

@@ -1,22 +1,14 @@
 package com.lambda.entities;
 
-import java.util.Collection;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+@SuppressWarnings("serial")
 @Entity
 @DiscriminatorValue("MAG")
-public class Manager extends User{
-	
-	
-	
-	public Manager(){
+public class Manager extends User {
+
+	public Manager() {
 		this.setRole(ROLE_MANAGER);
 	}
 
@@ -30,8 +22,5 @@ public class Manager extends User{
 		super(username, password, firstName, lastName, email, adresse, telephone);
 		this.setRole(ROLE_MANAGER);
 	}
-
-	
-	
 
 }

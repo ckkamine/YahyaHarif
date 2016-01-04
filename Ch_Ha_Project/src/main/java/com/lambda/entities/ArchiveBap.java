@@ -11,31 +11,33 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+@SuppressWarnings("serial")
 @Entity
-public class ArchiveBap implements Serializable{
+public class ArchiveBap implements Serializable {
 	@Id
 	private Long idBap;
 	private Date dateBilan;
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="COL_ID")
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "COL_ID")
 	private Collaborateur collaborateur;
-	@OneToMany(fetch=FetchType.EAGER)
-	@JoinColumn(name="AR_BAP_ID_E")
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "AR_BAP_ID_E")
 	private Collection<Objectif> objectifsEntrantes;
 	private String decision;
-	@OneToMany(fetch=FetchType.EAGER)
-	@JoinColumn(name="AR_BAP_ID")
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "AR_BAP_ID")
 	private Collection<Feedback> feedbacks;
 	private boolean locked;
-	@OneToMany(fetch=FetchType.EAGER)
-	@JoinColumn(name="AR_BAP_ID_S")
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "AR_BAP_ID_S")
 	private Collection<Objectif> objectifsSortantes;
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="MAG_ID")
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "MAG_ID")
 	private Manager manager;
 	private Integer noteGlobale;
-	
-	public ArchiveBap(){}
+
+	public ArchiveBap() {
+	}
 
 	public ArchiveBap(Long idBap, Date dateBilan, Collaborateur collaborateur, Collection<Objectif> objectifsEntrantes,
 			String decision, Collection<Feedback> feedbacks, boolean locked, Collection<Objectif> objectifsSortantes,
@@ -50,7 +52,7 @@ public class ArchiveBap implements Serializable{
 		this.locked = locked;
 		this.objectifsSortantes = objectifsSortantes;
 		this.manager = manger;
-		this.noteGlobale= noteGlobale;
+		this.noteGlobale = noteGlobale;
 	}
 
 	public Long getIdBap() {
@@ -132,9 +134,5 @@ public class ArchiveBap implements Serializable{
 	public void setNoteGlobale(Integer noteGlobale) {
 		this.noteGlobale = noteGlobale;
 	}
-
-	
-	
-	
 
 }

@@ -10,20 +10,20 @@ import org.springframework.data.repository.query.Param;
 
 import com.lambda.entities.User;
 
-public interface UserRepository extends JpaRepository<User, Long>{
+public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Query("select u from User u")
 	Page<User> getAllUsers(Pageable page);
-	
+
 	@Query("select u from User u where u.firstName like :x or "
 			+ "u.lastName like :x or u.email like :x or u.telephone like :x or u.adresse like :x or u.posteActuel like :x or u.username like :x")
 	Page<User> findByMcUsers(@Param("x") String mc, Pageable page);
-	
+
 	@Query("select u from User u where u.matricule like :x ")
 	Page<User> findByMcUsersId(@Param("x") Long mc, Pageable page);
-	
+
 	@Query("select u.username from User u")
 	List<String> getAllUsername();
-	
+
 	User findByUsername(String username);
 }

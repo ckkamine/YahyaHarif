@@ -1,16 +1,14 @@
 package com.lambda.entities;
 
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
+@SuppressWarnings("serial")
 @Entity
 @DiscriminatorValue("ADM")
-public class Administrateur extends Manager{
-	
-	
-	
-	public Administrateur(){
+public class Administrateur extends Manager {
+
+	public Administrateur() {
 		this.setRole(ROLE_ADMIN);
 	}
 
@@ -24,9 +22,5 @@ public class Administrateur extends Manager{
 		super(username, password, email);
 		this.setRole(ROLE_ADMIN);
 	}
-	
-	
 
-	
-	
 }

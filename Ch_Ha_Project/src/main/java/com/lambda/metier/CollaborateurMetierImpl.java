@@ -10,35 +10,31 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lambda.entities.ArchiveBap;
 import com.lambda.entities.BAP;
-import com.lambda.entities.Collaborateur;
 import com.lambda.entities.Feedback;
 import com.lambda.entities.Objectif;
 import com.lambda.repository.ArchiveBapRepository;
 import com.lambda.repository.BapRepository;
-import com.lambda.repository.CollaborateurRepository;
 import com.lambda.repository.FeedbackRepository;
 import com.lambda.repository.ObjectifRepository;
 
-
 @Service
 @Transactional
-public class CollaborateurMetierImpl implements CollaborateurMetier{
+public class CollaborateurMetierImpl implements CollaborateurMetier {
 
 	@Autowired
 	BapRepository bapRepository;
-	
+
 	@Autowired
 	ArchiveBapRepository archiveBapRepository;
-	
+
 	@Autowired
 	ObjectifRepository objectifRepository;
-	
+
 	@Autowired
 	FeedbackRepository feedbackRepository;
-	
+
 	@Override
 	public BAP getBapCourrant(Long matricule) {
-		// TODO Auto-generated method stub
 		return bapRepository.findByCollaborateurPublic(matricule);
 	}
 
@@ -47,21 +43,18 @@ public class CollaborateurMetierImpl implements CollaborateurMetier{
 		return archiveBapRepository.findByCollaborateur(matricule, new PageRequest(page, 10));
 	}
 
-
-	
-
+	@SuppressWarnings("static-access")
 	@Override
 	public void envoyerObjectifs(Long matricule) {
-		BAP b= bapRepository.findByCollaborateur(matricule);
-		if(b.getCompteur() < 3){
+		BAP b = bapRepository.findByCollaborateur(matricule);
+		if (b.getCompteur() < 3) {
 			b.setEnvoye(false);
 		}
-		for(Objectif f: b.getObjectifsEntrantes()){
-			if(!f.isValide()){
+		for (Objectif f : b.getObjectifsEntrantes()) {
+			if (!f.isValide()) {
 				b.setStatus(b.REJETE);
 			}
 		}
-		//Mail 
 	}
 
 	@Override
@@ -76,8 +69,8 @@ public class CollaborateurMetierImpl implements CollaborateurMetier{
 
 	@Override
 	public List<Objectif> getNewObjectif(Long matricule) {
-		BAP bap= bapRepository.findByCollaborateur(matricule);
-		if(bap.isEnvoye()){
+		BAP bap = bapRepository.findByCollaborateur(matricule);
+		if (bap.isEnvoye()) {
 			return (List<Objectif>) bap.getObjectifsSortantes();
 		}
 		return null;
@@ -85,32 +78,28 @@ public class CollaborateurMetierImpl implements CollaborateurMetier{
 
 	@Override
 	public Page<Feedback> getAllFeedbacksArchives(Long matricule, int page) {
-		// TODO Auto-generated method stub
 		return feedbackRepository.getFeedbacksArchiveCollaborateur(matricule, new PageRequest(page, 10));
 	}
 
 	@Override
 	public String getBapStatus(Long matricule) {
-		// TODO Auto-generated method stub
 		return bapRepository.findByCollaborateurStatus(matricule);
 	}
 
 	@Override
 	public void validerOrRefuserObjectif(Long idObjectif) {
-		Objectif o= objectifRepository.findOne(idObjectif);
-		if(o.isValide()){
+		Objectif o = objectifRepository.findOne(idObjectif);
+		if (o.isValide()) {
 			o.setValide(false);
-		}else{
+		} else {
 			o.setValide(true);
 		}
-		
+
 	}
 
 	@Override
 	public Integer getNombreDeRefus(Long matricule) {
-		// TODO Auto-generated method stub
 		return bapRepository.findByCollaborateurCompteur(matricule);
 	}
-	
 
 }

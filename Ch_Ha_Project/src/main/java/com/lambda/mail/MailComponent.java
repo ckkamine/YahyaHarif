@@ -6,9 +6,6 @@ import java.util.Locale;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -25,15 +22,6 @@ public class MailComponent {
 	@Autowired
 	private SpringTemplateEngine templateEngine;
 
-	@Autowired
-	private HttpServletRequest request;
-
-	@Autowired
-	private HttpServletResponse response;
-
-	@Autowired
-	private ServletContext servletContext;
-	
 	SimpleDateFormat dateFormat = new SimpleDateFormat("EEEEE dd MMMMM yyyy ", Locale.FRENCH);
 
 	public void sendPreparer(String email, String nom, String prenom, String posteActuel, Long id, Date date)
@@ -131,7 +119,7 @@ public class MailComponent {
 		javaMailSender.send(message);
 
 	}
-	
+
 	public void sendUserpass(String email, String nom, String prenom, String username, String password)
 			throws MessagingException {
 

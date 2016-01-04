@@ -27,26 +27,23 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+@SuppressWarnings("serial")
 @Entity
-@Inheritance(strategy= InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="TYPE", discriminatorType=DiscriminatorType.STRING, length=3)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "TYPE", discriminatorType = DiscriminatorType.STRING, length = 3)
 
-@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.PROPERTY, property="type")
-@JsonSubTypes({
-		@Type(name="MAG", value=Manager.class),
-		@Type(name="ENC", value=Encadrant.class),
-		@Type(name="COL", value=Collaborateur.class),
-		@Type(name="ADM", value=Administrateur.class)
-})
-public class User implements Serializable, UserDetails{
-	
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({ @Type(name = "MAG", value = Manager.class), @Type(name = "ENC", value = Encadrant.class),
+		@Type(name = "COL", value = Collaborateur.class), @Type(name = "ADM", value = Administrateur.class) })
+public class User implements Serializable, UserDetails {
+
 	public static final String ROLE_ADMIN = "ADMIN";
-    public static final String ROLE_MANAGER = "MANAGER";
-    public static final String ROLE_COLLABORATEUR = "COLLABORATEUR";
-    public static final String ROLE_EVALUATEUR = "ENCADRANT";
-	
+	public static final String ROLE_MANAGER = "MANAGER";
+	public static final String ROLE_COLLABORATEUR = "COLLABORATEUR";
+	public static final String ROLE_EVALUATEUR = "ENCADRANT";
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long matricule;
 	@NotNull
 	private String username;
@@ -62,7 +59,7 @@ public class User implements Serializable, UserDetails{
 	private String posteActuel;
 	private String role;
 	private String token;
-	
+
 	public User() {
 		super();
 	}
@@ -72,10 +69,8 @@ public class User implements Serializable, UserDetails{
 		this.username = username;
 		this.password = password;
 		this.email = email;
-		this.dateRecrutement= new Date();
+		this.dateRecrutement = new Date();
 	}
-	
-	
 
 	public User(String username, String password, String firstName, String lastName, String email, String adresse,
 			String telephone) {
@@ -87,7 +82,7 @@ public class User implements Serializable, UserDetails{
 		this.email = email;
 		this.adresse = adresse;
 		this.telephone = telephone;
-		this.dateRecrutement= new Date();
+		this.dateRecrutement = new Date();
 	}
 
 	public Long getMatricule() {
@@ -98,10 +93,10 @@ public class User implements Serializable, UserDetails{
 		this.matricule = matricule;
 	}
 
-	public String role(String r){
-		return "ROLE_"+r;
+	public String role(String r) {
+		return "ROLE_" + r;
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
@@ -109,6 +104,7 @@ public class User implements Serializable, UserDetails{
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
 	@JsonIgnore
 	public String getPassword() {
 		return password;
@@ -182,7 +178,7 @@ public class User implements Serializable, UserDetails{
 		if (role == null) {
 			return Collections.emptyList();
 		}
-		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();	
+		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 		authorities.add(new SimpleGrantedAuthority(role(role)));
 		return authorities;
 	}
@@ -337,7 +333,5 @@ public class User implements Serializable, UserDetails{
 			return false;
 		return true;
 	}
-	
-	
 
 }

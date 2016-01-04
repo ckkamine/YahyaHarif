@@ -10,10 +10,10 @@ import com.lambda.entities.Collaborateur;
 import com.lambda.entities.Encadrant;
 
 public interface EncadrantRepository extends JpaRepository<Encadrant, Long> {
-	
+
 	@Query("select e.collaborateursCurrent from Encadrant e where e.matricule=:m")
 	List<Collaborateur> findColloborateurCurrent(@Param("m") Long matricule);
-	
+
 	@Query("select count(c) from Encadrant e left join e.collaborateursCurrent as c where e.matricule=:m")
 	Integer nombreFeedback(@Param("m") Long matricule);
 
