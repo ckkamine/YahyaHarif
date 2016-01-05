@@ -17,7 +17,6 @@ import com.lambda.metier.UserMetier;
 import com.lambda.security.TokenUtils;
 
 @RestController
-@RequestMapping("/user")
 public class UserRessource {
 
 	@Autowired
@@ -32,12 +31,12 @@ public class UserRessource {
 	@Autowired
 	private AuthenticationManager authManager;
 
-	@RequestMapping(value = "/updatepassword", method = RequestMethod.POST)
+	@RequestMapping(value = "/rest/updatepassword", method = RequestMethod.POST)
 	public User updatePassword(@RequestParam String password, @RequestParam Long matricule) {
 		return userMetier.updatePassword(matricule, password);
 	}
 
-	@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/authenticate", method = RequestMethod.POST)
+	@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/user/authenticate", method = RequestMethod.POST)
 	public User authenticate(@RequestParam("username") String username, @RequestParam("password") String password) {
 
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,

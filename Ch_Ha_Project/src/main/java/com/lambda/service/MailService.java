@@ -7,7 +7,9 @@ import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.lambda.mail.MailComponent;
@@ -19,7 +21,7 @@ import com.lambda.entities.*;
 
 @Controller
 @EnableScheduling
-
+@Transactional
 public class MailService {
 
 	@Autowired
@@ -43,7 +45,7 @@ public class MailService {
 	@SuppressWarnings("static-access")
 	@RequestMapping("/user/bilan")
 	// @Scheduled(cron = "0 0/1 * * * *") 1 minute
-	// @Scheduled(cron = "0 0 5 1 1/1 *") 1 mois
+	@Scheduled(cron = "0 0 5 1 1/1 *") //1 mois
 	public void preparer() throws MessagingException {
 		Calendar date = Calendar.getInstance();
 		List<BAP> baps = br.findAll();
@@ -105,9 +107,9 @@ public class MailService {
 
 	}
 
-	// @Scheduled(cron = "0 0 5 1 1/1 *") 1 mois
+	@Scheduled(cron = "0 0 5 1 1/1 *") //1 mois
 	// @Scheduled(cron = "30 0/1 * * * *") //1 minute
-	@RequestMapping("/user/bian2")
+	//@RequestMapping("/user/bian2")
 	public void realiser() throws MessagingException {
 		Calendar date = Calendar.getInstance();
 		List<BAP> baps = br.findAll();

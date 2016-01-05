@@ -70,6 +70,9 @@ public class ManagerMetierImpl implements ManagerMetier {
 	@Override
 	public void validerBap(Long idBap) {
 		BAP b = bapRepository.findOne(idBap);
+		for(Objectif o: b.getObjectifsSortantes()){
+			o.setEmploye(b.getCollaborateur());
+		}
 		for (Objectif o : b.getObjectifsEntrantes()) {
 			o.setArchive(true);
 		}
