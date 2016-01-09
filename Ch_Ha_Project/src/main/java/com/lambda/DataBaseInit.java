@@ -80,6 +80,8 @@ public class DataBaseInit {
 		Manager m = new Manager("manager1", passwordEncoder.encode("manager1"), "TEST1", "MANAGER1",
 				"yahya.harif@gmail.com", "adresse", "06 00 00 00 00");
 		mR.save(m);
+		
+		
 		Administrateur a2 = new Administrateur("admin2", passwordEncoder.encode("admin2"), "AMINE2", "CHOUKOUKOU2",
 				"choukoukouamine@gmail.com", "adresse", "06 00 00 00 00");
 		aR.save(a2);
@@ -94,7 +96,7 @@ public class DataBaseInit {
 		mR.save(m2);
 
 		@SuppressWarnings("deprecation")
-		BAP b1 = new BAP(new Date(116, 1, 1), c2, m2);
+		BAP b1 = new BAP(new Date(116, 1, 1), c, a);
 		br.save(b1);
 
 		int i = 0;
@@ -119,33 +121,42 @@ public class DataBaseInit {
 			cR.save(c2);
 			i++;
 		}
-		i = 0;
-		@SuppressWarnings("deprecation")
-		BAP b = new BAP(new Date(115, 11, 1), c, a);
-		b.setStatus(b.EN_COURS);
-		b.setObjectifsEntrantes(new ArrayList<Objectif>());
-		while (i < 2) {
-			Objectif p = new Objectif("objectif" + i, "categorie");
-			for (int j = 0; j < 2; j++) {
-				Description d = new Description("description" + j, "mesure" + j, 50, 23);
-				d.setResponsable(e);
-				p.addDescription(d);
-			}
-			b.getObjectifsEntrantes().add(p);
-			p.setEmploye(c);
-			or.save(p);
-			i++;
-		}
+//		i = 0;
+//		@SuppressWarnings("deprecation")
+//		BAP b = new BAP(new Date(115, 11, 1), c, a);
+//		b.setStatus(b.EN_COURS);
+//		b.setObjectifsEntrantes(new ArrayList<Objectif>());
+//		while (i < 2) {
+//			Objectif p = new Objectif("objectif" + i, "categorie");
+//			for (int j = 0; j < 2; j++) {
+//				Description d = new Description("description" + j, "mesure" + j, 50, 23);
+//				d.setResponsable(e);
+//				p.addDescription(d);
+//			}
+//			b.getObjectifsEntrantes().add(p);
+//			p.setEmploye(c);
+//			or.save(p);
+//			i++;
+//		}
 
-		Objectif o = new Objectif("objectif", "categorie");
+		Objectif o = new Objectif("objectifS", "categorieS");
 		for (int j = 0; j < 2; j++) {
-			Description d = new Description("description" + j, "mesure" + j, 50, 23);
+			Description d = new Description("descriptionS " + j, "mesureS " + j, 50, 23);
 			d.setResponsable(e);
 			o.addDescription(d);
 		}
+		Objectif o2 = new Objectif("objectifE", "categorieE");
+		for (int j = 0; j < 2; j++) {
+			Description d = new Description("descriptionE " + j, "mesureE " + j, 50, 23);
+			d.setResponsable(e);
+			o2.addDescription(d);
+		}
+		o2.setEmploye(c);
 		or.save(o);
-		b.addObjectifSortantes(o);
-		br.save(b);
+		or.save(o2);
+		
+		b1.addObjectifSortantes(o);
+		br.save(b1);
 
 		System.out.println(
 				"---------------------------------------------- Fin ----------------------------------------------");

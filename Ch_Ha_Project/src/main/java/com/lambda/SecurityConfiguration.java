@@ -50,8 +50,7 @@ public class SecurityConfiguration {
 
 			// Token Configuration
 			http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-			SecurityConfigurer<DefaultSecurityFilterChain, HttpSecurity> securityConfigurerAdapter = new XAuthTokenConfigurer(
-					userDetailsService);
+			SecurityConfigurer<DefaultSecurityFilterChain, HttpSecurity> securityConfigurerAdapter = new XAuthTokenConfigurer(userDetailsService);
 			http.apply(securityConfigurerAdapter);
 		}
 

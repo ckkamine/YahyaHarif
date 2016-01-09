@@ -11,12 +11,12 @@ import com.lambda.entities.User;
 import com.lambda.metier.UserMetier;
 
 @Component
-public class ExampleUserDetailsService implements UserDetailsService {
+public class NotreUserDetailsService implements UserDetailsService {
 
 	private UserMetier userMetier;
 
 	@Autowired
-	public ExampleUserDetailsService(UserMetier repository) {
+	public NotreUserDetailsService(UserMetier repository) {
 		this.userMetier = repository;
 	}
 

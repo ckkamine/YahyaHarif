@@ -25,11 +25,7 @@ import com.lambda.security.SaltedSHA256PasswordEncoder;
  */
 
 // Main
-@ComponentScan
-@EnableAutoConfiguration
 @EnableTransactionManagement
-@EnableScheduling
-@EnableAsync
 @SpringBootApplication
 public class ChHaProjectApplication {
 

@@ -44,7 +44,7 @@ public class MailService {
 
 	@SuppressWarnings("static-access")
 	@RequestMapping("/user/bilan")
-	// @Scheduled(cron = "0 0/1 * * * *") 1 minute
+	//@Scheduled(cron = "0 0/1 * * * *") //1 minute
 	@Scheduled(cron = "0 0 5 1 1/1 *") //1 mois
 	public void preparer() throws MessagingException {
 		Calendar date = Calendar.getInstance();
